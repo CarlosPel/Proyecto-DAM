@@ -13,17 +13,27 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 50,)
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+          
+              // Logo
+              const Icon(
+                Icons.lock,
+                size: 100,
+              ),
 
-            // Logo
-            Icon(Icons.lock,
-            size: 100,
-            ),
+              const SizedBox(height: 50),
+          
+              // Welcome Text
+              const Text(
+                'Welcome back you\'ve been missed'
+              ),
 
-            
-          ],
+              const SizedBox(height: 25),
+            ],
+          ),
         ),
       ),
     );
