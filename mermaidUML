@@ -1,0 +1,931 @@
+classDiagram
+class Login
+Login : +createState() _LoginState
+StatefulWidget <|-- Login
+
+class _LoginState
+_LoginState : +build() Widget
+_LoginState : +buildForm() dynamic
+State <|-- _LoginState
+
+class ProfilePicture
+ProfilePicture : +createState() _ProfilePictureState
+StatefulWidget <|-- ProfilePicture
+
+class _ProfilePictureState
+_ProfilePictureState : +build() Widget
+_ProfilePictureState : +showImageChoices() dynamic
+State <|-- _ProfilePictureState
+
+class Register
+Register : +createState() _RegisterState
+StatefulWidget <|-- Register
+
+class _RegisterState
+_RegisterState : +build() Widget
+_RegisterState : +buildForm() dynamic
+State <|-- _RegisterState
+
+class Conversation
+Conversation : +userId String
+Conversation : +chatId String
+Conversation : +createState() _ConversationState
+StatefulWidget <|-- Conversation
+
+class _ConversationState
+_ConversationState : +focusNode FocusNode
+_ConversationState o-- FocusNode
+_ConversationState : +scrollController ScrollController
+_ConversationState o-- ScrollController
+_ConversationState : +messageController TextEditingController
+_ConversationState o-- TextEditingController
+_ConversationState : +isFirst bool
+_ConversationState : +chatId String?
+_ConversationState : +initState() void
+_ConversationState : +setTyping() dynamic
+_ConversationState : +build() Widget
+_ConversationState : -_buildOnlineText() dynamic
+_ConversationState : +buildUserName() dynamic
+_ConversationState : +showPhotoOptions() dynamic
+_ConversationState : +sendMessage() dynamic
+_ConversationState : +getUser() String
+_ConversationState : +messageListStream() Stream<dynamic>
+State <|-- _ConversationState
+
+class Chats
+Chats : +build() Widget
+Chats : +userChatsStream() Stream<dynamic>
+Chats : +messageListStream() Stream<dynamic>
+StatelessWidget <|-- Chats
+
+class ChatBubbleWidget
+ChatBubbleWidget : +message String?
+ChatBubbleWidget : +type dynamic
+ChatBubbleWidget : +time dynamic
+ChatBubbleWidget : +isMe bool?
+ChatBubbleWidget : +createState() _ChatBubbleWidgetState
+StatefulWidget <|-- ChatBubbleWidget
+
+class _ChatBubbleWidgetState
+_ChatBubbleWidgetState : +chatBubbleColor() Color?
+_ChatBubbleWidgetState : +chatBubbleReplyColor() Color?
+_ChatBubbleWidgetState : +build() Widget
+State <|-- _ChatBubbleWidgetState
+
+class ChatItem
+ChatItem : +userId String?
+ChatItem : +time dynamic
+ChatItem : +msg String?
+ChatItem : +messageCount int?
+ChatItem : +chatId String?
+ChatItem : +type dynamic
+ChatItem : +currentUserId String?
+ChatItem : +build() Widget
+ChatItem : +buildCounter() dynamic
+ChatItem : +messageBodyStream() Stream<dynamic>
+StatelessWidget <|-- ChatItem
+
+class CustomCard
+CustomCard : +child Widget?
+CustomCard o-- Widget
+CustomCard : +onTap dynamic Function
+CustomCard o-- dynamic Function
+CustomCard : +borderRadius BorderRadius?
+CustomCard o-- BorderRadius
+CustomCard : +elevated bool
+CustomCard : +build() Widget
+StatelessWidget <|-- CustomCard
+
+class CustomImage
+CustomImage : +imageUrl String?
+CustomImage : +height double
+CustomImage : +width double
+CustomImage : +fit BoxFit
+CustomImage o-- BoxFit
+CustomImage : +build() Widget
+StatelessWidget <|-- CustomImage
+
+class FabContainer
+FabContainer : +page Widget?
+FabContainer o-- Widget
+FabContainer : +icon IconData
+FabContainer o-- IconData
+FabContainer : +mini bool
+FabContainer : +build() Widget
+FabContainer : +chooseUpload() dynamic
+StatelessWidget <|-- FabContainer
+
+class LifecycleEventHandler
+LifecycleEventHandler : +resumeCallBack Function
+LifecycleEventHandler : +detachedCallBack Function
+LifecycleEventHandler : +didChangeAppLifecycleState() dynamic
+WidgetsBindingObserver <|-- LifecycleEventHandler
+
+class ActivityStreamWrapper
+ActivityStreamWrapper : +stream Stream~dynamic~?
+ActivityStreamWrapper o-- Stream~dynamic~
+ActivityStreamWrapper : +itemBuilder Widget FunctionBuildContext, dynamic
+ActivityStreamWrapper o-- Widget FunctionBuildContext, dynamic
+ActivityStreamWrapper : +scrollDirection Axis
+ActivityStreamWrapper o-- Axis
+ActivityStreamWrapper : +shrinkWrap bool
+ActivityStreamWrapper : +physics ScrollPhysics
+ActivityStreamWrapper o-- ScrollPhysics
+ActivityStreamWrapper : +padding EdgeInsets
+ActivityStreamWrapper o-- EdgeInsets
+ActivityStreamWrapper : +build() Widget
+StatelessWidget <|-- ActivityStreamWrapper
+
+class PasswordFormBuilder
+PasswordFormBuilder : +initialValue String?
+PasswordFormBuilder : +enabled bool?
+PasswordFormBuilder : +hintText String?
+PasswordFormBuilder : +textInputType TextInputType?
+PasswordFormBuilder o-- TextInputType
+PasswordFormBuilder : +controller TextEditingController?
+PasswordFormBuilder o-- TextEditingController
+PasswordFormBuilder : +textInputAction TextInputAction?
+PasswordFormBuilder o-- TextInputAction
+PasswordFormBuilder : +focusNode FocusNode?
+PasswordFormBuilder o-- FocusNode
+PasswordFormBuilder : +nextFocusNode FocusNode?
+PasswordFormBuilder o-- FocusNode
+PasswordFormBuilder : +submitAction void Function?
+PasswordFormBuilder o-- void Function
+PasswordFormBuilder : +obscureText bool
+PasswordFormBuilder : +validateFunction String? FunctionString??
+PasswordFormBuilder o-- String FunctionString
+PasswordFormBuilder : +onSaved void FunctionString?
+PasswordFormBuilder o-- void FunctionString
+PasswordFormBuilder : +onChange void FunctionString?
+PasswordFormBuilder o-- void FunctionString
+PasswordFormBuilder : +key Key?
+PasswordFormBuilder o-- Key
+PasswordFormBuilder : +prefix IconData?
+PasswordFormBuilder o-- IconData
+PasswordFormBuilder : +suffix IconData?
+PasswordFormBuilder o-- IconData
+PasswordFormBuilder : +createState() _PasswordFormBuilderState
+StatefulWidget <|-- PasswordFormBuilder
+
+class _PasswordFormBuilderState
+_PasswordFormBuilderState : +error String?
+_PasswordFormBuilderState : +obscureText bool
+_PasswordFormBuilderState : +build() Widget
+_PasswordFormBuilderState : +border() dynamic
+_PasswordFormBuilderState : +focusBorder() dynamic
+State <|-- _PasswordFormBuilderState
+
+class StreamBuilderWrapper
+StreamBuilderWrapper : +stream Stream~dynamic~?
+StreamBuilderWrapper o-- Stream~dynamic~
+StreamBuilderWrapper : +itemBuilder Widget FunctionBuildContext, dynamic
+StreamBuilderWrapper o-- Widget FunctionBuildContext, dynamic
+StreamBuilderWrapper : +scrollDirection Axis
+StreamBuilderWrapper o-- Axis
+StreamBuilderWrapper : +shrinkWrap bool
+StreamBuilderWrapper : +physics ScrollPhysics
+StreamBuilderWrapper o-- ScrollPhysics
+StreamBuilderWrapper : +padding EdgeInsets
+StreamBuilderWrapper o-- EdgeInsets
+StreamBuilderWrapper : +query dynamic
+StreamBuilderWrapper : +build() Widget
+StatelessWidget <|-- StreamBuilderWrapper
+
+class CommentsStreamWrapper
+CommentsStreamWrapper : +stream Stream~dynamic~?
+CommentsStreamWrapper o-- Stream~dynamic~
+CommentsStreamWrapper : +itemBuilder Widget FunctionBuildContext, dynamic
+CommentsStreamWrapper o-- Widget FunctionBuildContext, dynamic
+CommentsStreamWrapper : +scrollDirection Axis
+CommentsStreamWrapper o-- Axis
+CommentsStreamWrapper : +shrinkWrap bool
+CommentsStreamWrapper : +physics ScrollPhysics
+CommentsStreamWrapper o-- ScrollPhysics
+CommentsStreamWrapper : +padding EdgeInsets
+CommentsStreamWrapper o-- EdgeInsets
+CommentsStreamWrapper : +build() Widget
+StatelessWidget <|-- CommentsStreamWrapper
+
+class StreamGridWrapper
+StreamGridWrapper : +stream Stream~dynamic~?
+StreamGridWrapper o-- Stream~dynamic~
+StreamGridWrapper : +itemBuilder Widget FunctionBuildContext, dynamic
+StreamGridWrapper o-- Widget FunctionBuildContext, dynamic
+StreamGridWrapper : +scrollDirection Axis
+StreamGridWrapper o-- Axis
+StreamGridWrapper : +shrinkWrap bool
+StreamGridWrapper : +physics ScrollPhysics
+StreamGridWrapper o-- ScrollPhysics
+StreamGridWrapper : +padding EdgeInsets
+StreamGridWrapper o-- EdgeInsets
+StreamGridWrapper : +build() Widget
+StatelessWidget <|-- StreamGridWrapper
+
+class StreamStoriesWrapper
+StreamStoriesWrapper : +stream Stream~dynamic~?
+StreamStoriesWrapper o-- Stream~dynamic~
+StreamStoriesWrapper : +itemBuilder Widget FunctionBuildContext, dynamic
+StreamStoriesWrapper o-- Widget FunctionBuildContext, dynamic
+StreamStoriesWrapper : +scrollDirection Axis
+StreamStoriesWrapper o-- Axis
+StreamStoriesWrapper : +shrinkWrap bool
+StreamStoriesWrapper : +reverse bool?
+StreamStoriesWrapper : +physics ScrollPhysics
+StreamStoriesWrapper o-- ScrollPhysics
+StreamStoriesWrapper : +padding EdgeInsets
+StreamStoriesWrapper o-- EdgeInsets
+StreamStoriesWrapper : +build() Widget
+StreamStoriesWrapper : +buildUploadButton() dynamic
+StatelessWidget <|-- StreamStoriesWrapper
+
+class TextFormBuilder
+TextFormBuilder : +initialValue String?
+TextFormBuilder : +enabled bool?
+TextFormBuilder : +hintText String?
+TextFormBuilder : +textInputType TextInputType?
+TextFormBuilder o-- TextInputType
+TextFormBuilder : +controller TextEditingController?
+TextFormBuilder o-- TextEditingController
+TextFormBuilder : +textInputAction TextInputAction?
+TextFormBuilder o-- TextInputAction
+TextFormBuilder : +obscureText bool
+TextFormBuilder : +focusNode FocusNode?
+TextFormBuilder o-- FocusNode
+TextFormBuilder : +nextFocusNode FocusNode?
+TextFormBuilder o-- FocusNode
+TextFormBuilder : +submitAction void Function?
+TextFormBuilder o-- void Function
+TextFormBuilder : +validateFunction String? FunctionString??
+TextFormBuilder o-- String FunctionString
+TextFormBuilder : +onSaved void FunctionString?
+TextFormBuilder o-- void FunctionString
+TextFormBuilder : +onChange void FunctionString?
+TextFormBuilder o-- void FunctionString
+TextFormBuilder : +key Key?
+TextFormBuilder o-- Key
+TextFormBuilder : +prefix IconData?
+TextFormBuilder o-- IconData
+TextFormBuilder : +suffix IconData?
+TextFormBuilder o-- IconData
+TextFormBuilder : +createState() _TextFormBuilderState
+StatefulWidget <|-- TextFormBuilder
+
+class _TextFormBuilderState
+_TextFormBuilderState : +error String?
+_TextFormBuilderState : +build() Widget
+_TextFormBuilderState : +border() dynamic
+_TextFormBuilderState : +focusBorder() dynamic
+State <|-- _TextFormBuilderState
+
+class TextTime
+TextTime : +child Widget?
+TextTime o-- Widget
+TextTime : +createState() _TextTimeState
+StatefulWidget <|-- TextTime
+
+class _TextTimeState
+_TextTimeState : +initState() void
+_TextTimeState : +build() Widget
+State <|-- _TextTimeState
+
+class Landing
+Landing : +createState() _LandingState
+StatefulWidget <|-- Landing
+
+class _LandingState
+_LandingState : +build() Widget
+State <|-- _LandingState
+
+class MyApp
+MyApp : +createState() _MyAppState
+StatefulWidget <|-- MyApp
+
+class _MyAppState
+_MyAppState : +initState() void
+_MyAppState : +build() Widget
+_MyAppState : +themeData() ThemeData
+State <|-- _MyAppState
+
+class CommentModel
+CommentModel : +username String?
+CommentModel : +comment String?
+CommentModel : +timestamp dynamic
+CommentModel : +userDp String?
+CommentModel : +userId String?
+CommentModel : +toJson() Map<String, dynamic>
+
+class MessageType
+<<enumeration>> MessageType
+MessageType : +index int
+MessageType : +values$ List~MessageType~
+MessageType : +TEXT$ MessageType
+MessageType o-- MessageType
+MessageType : +IMAGE$ MessageType
+MessageType o-- MessageType
+Enum <|.. MessageType
+
+class Message
+Message : +content String?
+Message : +senderUid String?
+Message : +messageId String?
+Message : +type dynamic
+Message : +time dynamic
+Message : +toJson() Map<String, dynamic>
+
+class ActivityModel
+ActivityModel : +type String?
+ActivityModel : +username String?
+ActivityModel : +userId String?
+ActivityModel : +userDp String?
+ActivityModel : +postId String?
+ActivityModel : +mediaUrl String?
+ActivityModel : +commentData String?
+ActivityModel : +timestamp dynamic
+ActivityModel : +toJson() Map<String, dynamic>
+
+class PostModel
+PostModel : +id String?
+PostModel : +postId String?
+PostModel : +ownerId String?
+PostModel : +username String?
+PostModel : +location String?
+PostModel : +description String?
+PostModel : +mediaUrl String?
+PostModel : +timestamp dynamic
+PostModel : +toJson() Map<String, dynamic>
+
+class Register
+Register : +username String?
+Register : +email String?
+Register : +gender String?
+Register : +country String?
+Register : +password String?
+Register : +passwordConfirmation String?
+Register : +publicEmail bool
+Register : +toJson() Map<String, dynamic>
+
+class StatusModel
+StatusModel : +caption String?
+StatusModel : +url String?
+StatusModel : +status String?
+StatusModel : +statusId String?
+StatusModel : +type dynamic
+StatusModel : +viewers List~dynamic~?
+StatusModel : +time dynamic
+StatusModel : +toJson() Map<String, dynamic>
+
+class Status
+Status : +uid String
+Status : +username String
+Status : +description List~String~?
+Status : +photoUrl List~String~
+Status : +createdAt dynamic
+Status : +profilePic String
+Status : +statusId String
+Status : +whoCanSee List~String~
+Status : +toMap() Map<String, dynamic>
+
+class UserModel
+UserModel : +username String?
+UserModel : +email String?
+UserModel : +photoUrl String?
+UserModel : +country String?
+UserModel : +bio String?
+UserModel : +id String?
+UserModel : +signedUpAt dynamic
+UserModel : +lastSeen dynamic
+UserModel : +isOnline bool?
+UserModel : +toJson() Map<String, dynamic>
+
+class Feeds
+Feeds : +createState() _FeedsState
+StatefulWidget <|-- Feeds
+
+class _FeedsState
+_FeedsState : +scaffoldKey GlobalKey~ScaffoldState~
+_FeedsState o-- GlobalKey~ScaffoldState~
+_FeedsState : +page int
+_FeedsState : +loadingMore bool
+_FeedsState : +scrollController ScrollController
+_FeedsState o-- ScrollController
+_FeedsState : +wantKeepAlive bool
+_FeedsState : +initState() void
+_FeedsState : +build() Widget
+State <|-- _FeedsState
+AutomaticKeepAliveClientMixin <|-- _FeedsState
+
+class Activities
+Activities : +createState() _ActivitiesState
+StatefulWidget <|-- Activities
+
+class _ActivitiesState
+_ActivitiesState : +currentUserId() dynamic
+_ActivitiesState : +build() Widget
+_ActivitiesState : +getActivities() dynamic
+_ActivitiesState : +deleteAllItems() dynamic
+State <|-- _ActivitiesState
+
+class Profile
+Profile : +profileId dynamic
+Profile : +createState() _ProfileState
+StatefulWidget <|-- Profile
+
+class _ProfileState
+_ProfileState : +user dynamic
+_ProfileState : +isLoading bool
+_ProfileState : +postCount int
+_ProfileState : +followersCount int
+_ProfileState : +followingCount int
+_ProfileState : +isFollowing bool
+_ProfileState : +users dynamic
+_ProfileState : +timestamp DateTime
+_ProfileState : +controller ScrollController
+_ProfileState o-- ScrollController
+_ProfileState : +currentUserId() dynamic
+_ProfileState : +initState() void
+_ProfileState : +checkIfFollowing() dynamic
+_ProfileState : +build() Widget
+_ProfileState : +buildCount() dynamic
+_ProfileState : +buildProfileButton() dynamic
+_ProfileState : +buildButton() dynamic
+_ProfileState : +handleUnfollow() dynamic
+_ProfileState : +handleFollow() dynamic
+_ProfileState : +buildPostView() dynamic
+_ProfileState : +buildGridPost() dynamic
+_ProfileState : +buildLikeButton() dynamic
+State <|-- _ProfileState
+
+class Search
+Search : +createState() _SearchState
+StatefulWidget <|-- Search
+
+class _SearchState
+_SearchState : +user dynamic
+_SearchState : +searchController TextEditingController
+_SearchState o-- TextEditingController
+_SearchState : +auth dynamic
+_SearchState : +firestore dynamic
+_SearchState : +users List~dynamic~
+_SearchState : +filteredUsers List~dynamic~
+_SearchState : +loading bool
+_SearchState : +wantKeepAlive bool
+_SearchState : +currentUserId() dynamic
+_SearchState : +getUsers() dynamic
+_SearchState : +search() dynamic
+_SearchState : +removeFromList() dynamic
+_SearchState : +initState() void
+_SearchState : +build() Widget
+_SearchState : +buildSearch() dynamic
+_SearchState : +buildUsers() dynamic
+_SearchState : +showProfile() dynamic
+_SearchState : +getUser() String
+State <|-- _SearchState
+AutomaticKeepAliveClientMixin <|-- _SearchState
+
+class CreatePost
+CreatePost : +createState() _CreatePostState
+StatefulWidget <|-- CreatePost
+
+class _CreatePostState
+_CreatePostState : +build() Widget
+_CreatePostState : +showImageChoices() dynamic
+State <|-- _CreatePostState
+
+class ConfirmStatus
+ConfirmStatus : +createState() State<ConfirmStatus>
+StatefulWidget <|-- ConfirmStatus
+
+class _ConfirmStatusState
+_ConfirmStatusState : +loading bool
+_ConfirmStatusState : +build() Widget
+_ConfirmStatusState : +uploadMedia() dynamic
+State <|-- _ConfirmStatusState
+
+class StatusScreen
+StatusScreen : +initPage dynamic
+StatusScreen : +statusId dynamic
+StatusScreen : +storyId dynamic
+StatusScreen : +userId dynamic
+StatusScreen : +createState() State<StatusScreen>
+StatefulWidget <|-- StatusScreen
+
+class _StatusScreenState
+_StatusScreenState : +build() Widget
+_StatusScreenState : +getImage() dynamic
+State <|-- _StatusScreenState
+
+class Comments
+Comments : +post dynamic
+Comments : +createState() _CommentsState
+StatefulWidget <|-- Comments
+
+class _CommentsState
+_CommentsState : +user dynamic
+_CommentsState : +services dynamic
+_CommentsState : +timestamp DateTime
+_CommentsState : +commentsTEC TextEditingController
+_CommentsState o-- TextEditingController
+_CommentsState : +currentUserId() dynamic
+_CommentsState : +build() Widget
+_CommentsState : +buildFullPost() dynamic
+_CommentsState : +buildComments() dynamic
+_CommentsState : +buildLikeButton() dynamic
+_CommentsState : +buildLikesCount() dynamic
+_CommentsState : +addLikesToNotification() dynamic
+_CommentsState : +removeLikeFromNotification() dynamic
+State <|-- _CommentsState
+
+class EditProfile
+EditProfile : +user dynamic
+EditProfile : +createState() _EditProfileState
+StatefulWidget <|-- EditProfile
+
+class _EditProfileState
+_EditProfileState : +user dynamic
+_EditProfileState : +currentUid() String
+_EditProfileState : +build() Widget
+_EditProfileState : +buildForm() dynamic
+State <|-- _EditProfileState
+
+class ListPosts
+ListPosts : +userId dynamic
+ListPosts : +username dynamic
+ListPosts : +createState() State<ListPosts>
+StatefulWidget <|-- ListPosts
+
+class _ListPostsState
+_ListPostsState : +build() Widget
+State <|-- _ListPostsState
+
+class TabScreen
+TabScreen : +createState() _TabScreenState
+StatefulWidget <|-- TabScreen
+
+class _TabScreenState
+_TabScreenState : -_page int
+_TabScreenState : +pages List~dynamic~
+_TabScreenState : +build() Widget
+_TabScreenState : +buildFab() dynamic
+_TabScreenState : +navigationTapped() void
+State <|-- _TabScreenState
+
+class Setting
+Setting : +createState() _SettingState
+StatefulWidget <|-- Setting
+
+class _SettingState
+_SettingState : +build() Widget
+State <|-- _SettingState
+
+class ViewImage
+ViewImage : +post dynamic
+ViewImage : +createState() _ViewImageState
+StatefulWidget <|-- ViewImage
+
+class _ViewImageState
+_ViewImageState : +build() Widget
+_ViewImageState : +buildImage() dynamic
+_ViewImageState : +addLikesToNotification() dynamic
+_ViewImageState : +removeLikeFromNotification() dynamic
+_ViewImageState : +buildLikeButton() dynamic
+State <|-- _ViewImageState
+
+class AuthService
+AuthService : +getCurrentUser() dynamic
+AuthService : +createUser() dynamic
+AuthService : +saveUserToFirestore() dynamic
+AuthService : +loginUser() dynamic
+AuthService : +forgotPassword() dynamic
+AuthService : +logOut() dynamic
+AuthService : +handleFirebaseAuthError() String
+
+class ChatService
+ChatService : +storage dynamic
+ChatService : +sendMessage() dynamic
+ChatService : +sendFirstMessage() dynamic
+ChatService : +uploadImage() dynamic
+ChatService : +setUserRead() dynamic
+ChatService : +setUserTyping() dynamic
+
+class PostService
+PostService : +postId String
+PostService : +uploadProfilePicture() dynamic
+PostService : +uploadPost() dynamic
+PostService : +uploadComment() dynamic
+PostService : +addCommentToNotification() dynamic
+PostService : +addLikesToNotification() dynamic
+PostService : +removeLikeFromNotification() dynamic
+
+class Service
+<<abstract>> Service
+Service : +uploadImage() dynamic
+
+class StatusService
+StatusService : +statusId String
+StatusService : +userService dynamic
+StatusService : +showSnackBar() void
+StatusService : +sendStatus() dynamic
+StatusService : +sendFirstStatus() dynamic
+StatusService : +uploadImage() dynamic
+
+class UserService
+UserService : +currentUid() String
+UserService : +setUserStatus() dynamic
+UserService : +updateProfile() dynamic
+
+class Config
+Config : +initFirebase()$ dynamic
+
+class Constants
+Constants : +appName$ String
+Constants : +lightPrimary$ Color
+Constants o-- Color
+Constants : +darkPrimary$ Color
+Constants o-- Color
+Constants : +lightAccent$ Color
+Constants o-- Color
+Constants : +darkAccent$ Color
+Constants o-- Color
+Constants : +lightBG$ Color
+Constants o-- Color
+Constants : +darkBG$ Color
+Constants o-- Color
+Constants : +lightTheme$ ThemeData
+Constants o-- ThemeData
+Constants : +darkTheme$ ThemeData
+Constants o-- ThemeData
+Constants : +map()$ List<T>
+
+class FileUtils
+FileUtils : +getFileExtension()$ String
+FileUtils : +getFileSize()$ String
+FileUtils : +formatBytes()$ String
+
+class Permissions
+Permissions : +cameraMicrophoneAndStoragePermissionGranted()$ dynamic
+Permissions : +getCameraPermission()$ dynamic
+Permissions : +getMicrophonePermission()$ dynamic
+Permissions : +getStoragePermission()$ dynamic
+Permissions : -_handleInvalidPermission()$ void
+
+class Validations
+Validations : +validateName()$ String?
+Validations : +validateEmail()$ String?
+Validations : +validatePassword()$ String?
+
+class LoginViewModel
+LoginViewModel : +scaffoldKey GlobalKey~ScaffoldState~
+LoginViewModel o-- GlobalKey~ScaffoldState~
+LoginViewModel : +formKey GlobalKey~FormState~
+LoginViewModel o-- GlobalKey~FormState~
+LoginViewModel : +validate bool
+LoginViewModel : +loading bool
+LoginViewModel : +email String?
+LoginViewModel : +password String?
+LoginViewModel : +emailFN FocusNode
+LoginViewModel o-- FocusNode
+LoginViewModel : +passFN FocusNode
+LoginViewModel o-- FocusNode
+LoginViewModel : +auth dynamic
+LoginViewModel : +login() dynamic
+LoginViewModel : +forgotPassword() dynamic
+LoginViewModel : +setEmail() dynamic
+LoginViewModel : +setPassword() dynamic
+LoginViewModel : +showInSnackBar() void
+ChangeNotifier <|-- LoginViewModel
+
+class PostsViewModel
+PostsViewModel : +userService dynamic
+PostsViewModel : +postService dynamic
+PostsViewModel : +scaffoldKey GlobalKey~ScaffoldState~
+PostsViewModel o-- GlobalKey~ScaffoldState~
+PostsViewModel : +formKey GlobalKey~FormState~
+PostsViewModel o-- GlobalKey~FormState~
+PostsViewModel : +loading bool
+PostsViewModel : +username String?
+PostsViewModel : +mediaUrl File?
+PostsViewModel o-- File
+PostsViewModel : +picker dynamic
+PostsViewModel : +location String?
+PostsViewModel : +position dynamic
+PostsViewModel : +placemark dynamic
+PostsViewModel : +bio String?
+PostsViewModel : +description String?
+PostsViewModel : +email String?
+PostsViewModel : +commentData String?
+PostsViewModel : +ownerId String?
+PostsViewModel : +userId String?
+PostsViewModel : +type String?
+PostsViewModel : +userDp File?
+PostsViewModel o-- File
+PostsViewModel : +imgLink String?
+PostsViewModel : +edit bool
+PostsViewModel : +id String?
+PostsViewModel : +locationTEC TextEditingController
+PostsViewModel o-- TextEditingController
+PostsViewModel : +setEdit() dynamic
+PostsViewModel : +setPost() dynamic
+PostsViewModel : +setUsername() dynamic
+PostsViewModel : +setDescription() dynamic
+PostsViewModel : +setLocation() dynamic
+PostsViewModel : +setBio() dynamic
+PostsViewModel : +pickImage() dynamic
+PostsViewModel : +getLocation() dynamic
+PostsViewModel : +uploadPosts() dynamic
+PostsViewModel : +uploadProfilePicture() dynamic
+PostsViewModel : +resetPost() dynamic
+PostsViewModel : +showInSnackBar() void
+ChangeNotifier <|-- PostsViewModel
+
+class RegisterViewModel
+RegisterViewModel : +scaffoldKey GlobalKey~ScaffoldState~
+RegisterViewModel o-- GlobalKey~ScaffoldState~
+RegisterViewModel : +formKey GlobalKey~FormState~
+RegisterViewModel o-- GlobalKey~FormState~
+RegisterViewModel : +validate bool
+RegisterViewModel : +loading bool
+RegisterViewModel : +username String?
+RegisterViewModel : +email String?
+RegisterViewModel : +country String?
+RegisterViewModel : +password String?
+RegisterViewModel : +cPassword String?
+RegisterViewModel : +usernameFN FocusNode
+RegisterViewModel o-- FocusNode
+RegisterViewModel : +emailFN FocusNode
+RegisterViewModel o-- FocusNode
+RegisterViewModel : +countryFN FocusNode
+RegisterViewModel o-- FocusNode
+RegisterViewModel : +passFN FocusNode
+RegisterViewModel o-- FocusNode
+RegisterViewModel : +cPassFN FocusNode
+RegisterViewModel o-- FocusNode
+RegisterViewModel : +auth dynamic
+RegisterViewModel : +register() dynamic
+RegisterViewModel : +setEmail() dynamic
+RegisterViewModel : +setPassword() dynamic
+RegisterViewModel : +setName() dynamic
+RegisterViewModel : +setConfirmPass() dynamic
+RegisterViewModel : +setCountry() dynamic
+RegisterViewModel : +showInSnackBar() void
+ChangeNotifier <|-- RegisterViewModel
+
+class ConversationViewModel
+ConversationViewModel : +scaffoldKey GlobalKey~ScaffoldState~
+ConversationViewModel o-- GlobalKey~ScaffoldState~
+ConversationViewModel : +chatService dynamic
+ConversationViewModel : +uploadingImage bool
+ConversationViewModel : +picker dynamic
+ConversationViewModel : +image File?
+ConversationViewModel o-- File
+ConversationViewModel : +sendMessage() dynamic
+ConversationViewModel : +sendFirstMessage() dynamic
+ConversationViewModel : +setReadCount() dynamic
+ConversationViewModel : +setUserTyping() dynamic
+ConversationViewModel : +pickImage() dynamic
+ConversationViewModel : +showInSnackBar() void
+ChangeNotifier <|-- ConversationViewModel
+
+class EditProfileViewModel
+EditProfileViewModel : +scaffoldKey GlobalKey~ScaffoldState~
+EditProfileViewModel o-- GlobalKey~ScaffoldState~
+EditProfileViewModel : +formKey GlobalKey~FormState~
+EditProfileViewModel o-- GlobalKey~FormState~
+EditProfileViewModel : +validate bool
+EditProfileViewModel : +loading bool
+EditProfileViewModel : +userService dynamic
+EditProfileViewModel : +picker dynamic
+EditProfileViewModel : +user dynamic
+EditProfileViewModel : +country String?
+EditProfileViewModel : +username String?
+EditProfileViewModel : +bio String?
+EditProfileViewModel : +image File?
+EditProfileViewModel o-- File
+EditProfileViewModel : +imgLink String?
+EditProfileViewModel : +setUser() dynamic
+EditProfileViewModel : +setImage() dynamic
+EditProfileViewModel : +setCountry() dynamic
+EditProfileViewModel : +setBio() dynamic
+EditProfileViewModel : +setUsername() dynamic
+EditProfileViewModel : +editProfile() dynamic
+EditProfileViewModel : +pickImage() dynamic
+EditProfileViewModel : +clear() dynamic
+EditProfileViewModel : +showInSnackBar() void
+ChangeNotifier <|-- EditProfileViewModel
+
+class StatusViewModel
+StatusViewModel : +userService dynamic
+StatusViewModel : +postService dynamic
+StatusViewModel : +statusService dynamic
+StatusViewModel : +scaffoldKey GlobalKey~ScaffoldState~
+StatusViewModel o-- GlobalKey~ScaffoldState~
+StatusViewModel : +formKey GlobalKey~FormState~
+StatusViewModel o-- GlobalKey~FormState~
+StatusViewModel : +loading bool
+StatusViewModel : +username String?
+StatusViewModel : +mediaUrl File?
+StatusViewModel o-- File
+StatusViewModel : +picker dynamic
+StatusViewModel : +description String?
+StatusViewModel : +email String?
+StatusViewModel : +userDp String?
+StatusViewModel : +userId String?
+StatusViewModel : +imgLink String?
+StatusViewModel : +edit bool
+StatusViewModel : +id String?
+StatusViewModel : +pageIndex int
+StatusViewModel : +setDescription() dynamic
+StatusViewModel : +pickImage() dynamic
+StatusViewModel : +sendStatus() dynamic
+StatusViewModel : +sendFirstStatus() dynamic
+StatusViewModel : +resetPost() dynamic
+StatusViewModel : +showInSnackBar() void
+ChangeNotifier <|-- StatusViewModel
+
+class ThemeProvider
+ThemeProvider : +key String
+ThemeProvider : -_prefs dynamic
+ThemeProvider : -_darkTheme bool
+ThemeProvider : +dark bool
+ThemeProvider : +AppProvider() dynamic
+ThemeProvider : +toggleTheme() dynamic
+ThemeProvider : -_initPrefs() dynamic
+ThemeProvider : -_loadfromPrefs() dynamic
+ThemeProvider : -_saveToPrefs() dynamic
+ChangeNotifier <|-- ThemeProvider
+
+class UserViewModel
+UserViewModel : +user dynamic
+UserViewModel : +auth dynamic
+UserViewModel : +setUser() dynamic
+ChangeNotifier <|-- UserViewModel
+
+class IconBadge
+IconBadge : +icon IconData
+IconBadge o-- IconData
+IconBadge : +size double?
+IconBadge : +color Color?
+IconBadge o-- Color
+IconBadge : +createState() _IconBadgeState
+StatefulWidget <|-- IconBadge
+
+class _IconBadgeState
+_IconBadgeState : +initState() void
+_IconBadgeState : +build() Widget
+_IconBadgeState : +buildCount() dynamic
+_IconBadgeState : +buildTextWidget() dynamic
+State <|-- _IconBadgeState
+
+class ActivityItems
+ActivityItems : +activity dynamic
+ActivityItems : +createState() _ActivityItemsState
+StatefulWidget <|-- ActivityItems
+
+class _ActivityItemsState
+_ActivityItemsState : +build() Widget
+_ActivityItemsState : +stackBehindDismiss() Widget
+_ActivityItemsState : +delete() dynamic
+_ActivityItemsState : +previewConfiguration() dynamic
+_ActivityItemsState : +buildTextConfiguration() dynamic
+_ActivityItemsState : +buildPreviewImage() dynamic
+State <|-- _ActivityItemsState
+
+class PostTile
+PostTile : +post dynamic
+PostTile : +createState() _PostTileState
+StatefulWidget <|-- PostTile
+
+class _PostTileState
+_PostTileState : +build() Widget
+State <|-- _PostTileState
+
+class StoryWidget
+StoryWidget : +build() Widget
+StoryWidget : -_buildStatusAvatar() dynamic
+StoryWidget : +userChatsStream() Stream<dynamic>
+StoryWidget : +messageListStream() Stream<dynamic>
+StatelessWidget <|-- StoryWidget
+
+class UserPost
+UserPost : +post dynamic
+UserPost : +timestamp DateTime
+UserPost : +services dynamic
+UserPost : +currentUserId() dynamic
+UserPost : +build() Widget
+UserPost : +buildLikeButton() dynamic
+UserPost : +addLikesToNotification() dynamic
+UserPost : +buildLikesCount() dynamic
+UserPost : +buildCommentsCount() dynamic
+UserPost : +buildUser() dynamic
+UserPost : +showProfile() dynamic
+StatelessWidget <|-- UserPost
+
+class ViewActivityDetails
+ViewActivityDetails : +activity dynamic
+ViewActivityDetails : +createState() _ViewActivityDetailsState
+StatefulWidget <|-- ViewActivityDetails
+
+class _ViewActivityDetailsState
+_ViewActivityDetailsState : +build() Widget
+_ViewActivityDetailsState : +buildImage() dynamic
+State <|-- _ViewActivityDetailsState
