@@ -1,0 +1,1087 @@
+@startuml
+set namespaceSeparator ::
+
+class "flutter_application_1::auth::login::login.dart::Login" {
+  +_LoginState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::auth::login::login.dart::Login"
+
+class "flutter_application_1::auth::login::login.dart::_LoginState" {
+  +Widget build()
+  +dynamic buildForm()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::auth::login::login.dart::_LoginState"
+
+class "flutter_application_1::auth::register::profile_pic.dart::ProfilePicture" {
+  +_ProfilePictureState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::auth::register::profile_pic.dart::ProfilePicture"
+
+class "flutter_application_1::auth::register::profile_pic.dart::_ProfilePictureState" {
+  +Widget build()
+  +dynamic showImageChoices()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::auth::register::profile_pic.dart::_ProfilePictureState"
+
+class "flutter_application_1::auth::register::register.dart::Register" {
+  +_RegisterState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::auth::register::register.dart::Register"
+
+class "flutter_application_1::auth::register::register.dart::_RegisterState" {
+  +Widget build()
+  +dynamic buildForm()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::auth::register::register.dart::_RegisterState"
+
+class "flutter_application_1::chats::conversation.dart::Conversation" {
+  +String userId
+  +String chatId
+  +_ConversationState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::chats::conversation.dart::Conversation"
+
+class "flutter_application_1::chats::conversation.dart::_ConversationState" {
+  +FocusNode focusNode
+  +ScrollController scrollController
+  +TextEditingController messageController
+  +bool isFirst
+  +String? chatId
+  +void initState()
+  +dynamic setTyping()
+  +Widget build()
+  -dynamic _buildOnlineText()
+  +dynamic buildUserName()
+  +dynamic showPhotoOptions()
+  +dynamic sendMessage()
+  +String getUser()
+  +Stream<dynamic> messageListStream()
+}
+
+"flutter_application_1::chats::conversation.dart::_ConversationState" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"flutter_application_1::chats::conversation.dart::_ConversationState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter_application_1::chats::conversation.dart::_ConversationState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::chats::conversation.dart::_ConversationState"
+
+class "flutter_application_1::chats::recent_chats.dart::Chats" {
+  +Widget build()
+  +Stream<dynamic> userChatsStream()
+  +Stream<dynamic> messageListStream()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::chats::recent_chats.dart::Chats"
+
+class "flutter_application_1::components::chat_bubble.dart::ChatBubbleWidget" {
+  +String? message
+  +dynamic type
+  +dynamic time
+  +bool? isMe
+  +_ChatBubbleWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::components::chat_bubble.dart::ChatBubbleWidget"
+
+class "flutter_application_1::components::chat_bubble.dart::_ChatBubbleWidgetState" {
+  +Color? chatBubbleColor()
+  +Color? chatBubbleReplyColor()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::components::chat_bubble.dart::_ChatBubbleWidgetState"
+
+class "flutter_application_1::components::chat_item.dart::ChatItem" {
+  +String? userId
+  +dynamic time
+  +String? msg
+  +int? messageCount
+  +String? chatId
+  +dynamic type
+  +String? currentUserId
+  +Widget build()
+  +dynamic buildCounter()
+  +Stream<dynamic> messageBodyStream()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::chat_item.dart::ChatItem"
+
+class "flutter_application_1::components::custom_card.dart::CustomCard" {
+  +Widget? child
+  +dynamic Function() onTap
+  +BorderRadius? borderRadius
+  +bool elevated
+  +Widget build()
+}
+
+"flutter_application_1::components::custom_card.dart::CustomCard" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter_application_1::components::custom_card.dart::CustomCard" o-- "null::dynamic Function()"
+"flutter_application_1::components::custom_card.dart::CustomCard" o-- "flutter::src::painting::border_radius.dart::BorderRadius"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::custom_card.dart::CustomCard"
+
+class "flutter_application_1::components::custom_image.dart::CustomImage" {
+  +String? imageUrl
+  +double height
+  +double width
+  +BoxFit fit
+  +Widget build()
+}
+
+"flutter_application_1::components::custom_image.dart::CustomImage" o-- "flutter::src::painting::box_fit.dart::BoxFit"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::custom_image.dart::CustomImage"
+
+class "flutter_application_1::components::fab_container.dart::FabContainer" {
+  +Widget? page
+  +IconData icon
+  +bool mini
+  +Widget build()
+  +dynamic chooseUpload()
+}
+
+"flutter_application_1::components::fab_container.dart::FabContainer" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter_application_1::components::fab_container.dart::FabContainer" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::fab_container.dart::FabContainer"
+
+class "flutter_application_1::components::life_cycle_event_handler.dart::LifecycleEventHandler" {
+  +Function resumeCallBack
+  +Function detachedCallBack
+  +dynamic didChangeAppLifecycleState()
+}
+
+"flutter::src::widgets::binding.dart::WidgetsBindingObserver" <|-- "flutter_application_1::components::life_cycle_event_handler.dart::LifecycleEventHandler"
+
+class "flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper" {
+  +Stream<dynamic>? stream
+  +Widget Function(BuildContext, dynamic) itemBuilder
+  +Axis scrollDirection
+  +bool shrinkWrap
+  +ScrollPhysics physics
+  +EdgeInsets padding
+  +Widget build()
+}
+
+"flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper" o-- "dart::async::Stream<dynamic>"
+"flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper" o-- "flutter_application_1::components::notification_stream_wrapper.dart::Widget Function(BuildContext, dynamic)"
+"flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper" o-- "flutter::src::painting::basic_types.dart::Axis"
+"flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper" o-- "flutter::src::widgets::scroll_physics.dart::ScrollPhysics"
+"flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper" o-- "flutter::src::painting::edge_insets.dart::EdgeInsets"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::notification_stream_wrapper.dart::ActivityStreamWrapper"
+
+class "flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" {
+  +String? initialValue
+  +bool? enabled
+  +String? hintText
+  +TextInputType? textInputType
+  +TextEditingController? controller
+  +TextInputAction? textInputAction
+  +FocusNode? focusNode
+  +FocusNode? nextFocusNode
+  +void Function()? submitAction
+  +bool obscureText
+  +String? Function(String?)? validateFunction
+  +void Function(String)? onSaved
+  +void Function(String)? onChange
+  +Key? key
+  +IconData? prefix
+  +IconData? suffix
+  +_PasswordFormBuilderState createState()
+}
+
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::services::text_input.dart::TextInputType"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::services::text_input.dart::TextInputAction"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "dart::ui::void Function()"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::widgets::form.dart::String Function(String)"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "null::void Function(String)"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::foundation::key.dart::Key"
+"flutter_application_1::components::password_text_field.dart::PasswordFormBuilder" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::components::password_text_field.dart::PasswordFormBuilder"
+
+class "flutter_application_1::components::password_text_field.dart::_PasswordFormBuilderState" {
+  +String? error
+  +bool obscureText
+  +Widget build()
+  +dynamic border()
+  +dynamic focusBorder()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::components::password_text_field.dart::_PasswordFormBuilderState"
+
+class "flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper" {
+  +Stream<dynamic>? stream
+  +Widget Function(BuildContext, dynamic) itemBuilder
+  +Axis scrollDirection
+  +bool shrinkWrap
+  +ScrollPhysics physics
+  +EdgeInsets padding
+  +dynamic query
+  +Widget build()
+}
+
+"flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper" o-- "dart::async::Stream<dynamic>"
+"flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper" o-- "flutter_application_1::components::stream_builder_wrapper.dart::Widget Function(BuildContext, dynamic)"
+"flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper" o-- "flutter::src::painting::basic_types.dart::Axis"
+"flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper" o-- "flutter::src::widgets::scroll_physics.dart::ScrollPhysics"
+"flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper" o-- "flutter::src::painting::edge_insets.dart::EdgeInsets"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::stream_builder_wrapper.dart::StreamBuilderWrapper"
+
+class "flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper" {
+  +Stream<dynamic>? stream
+  +Widget Function(BuildContext, dynamic) itemBuilder
+  +Axis scrollDirection
+  +bool shrinkWrap
+  +ScrollPhysics physics
+  +EdgeInsets padding
+  +Widget build()
+}
+
+"flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper" o-- "dart::async::Stream<dynamic>"
+"flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper" o-- "flutter_application_1::components::stream_comments_wrapper.dart::Widget Function(BuildContext, dynamic)"
+"flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper" o-- "flutter::src::painting::basic_types.dart::Axis"
+"flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper" o-- "flutter::src::widgets::scroll_physics.dart::ScrollPhysics"
+"flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper" o-- "flutter::src::painting::edge_insets.dart::EdgeInsets"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::stream_comments_wrapper.dart::CommentsStreamWrapper"
+
+class "flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper" {
+  +Stream<dynamic>? stream
+  +Widget Function(BuildContext, dynamic) itemBuilder
+  +Axis scrollDirection
+  +bool shrinkWrap
+  +ScrollPhysics physics
+  +EdgeInsets padding
+  +Widget build()
+}
+
+"flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper" o-- "dart::async::Stream<dynamic>"
+"flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper" o-- "flutter_application_1::components::stream_grid_wrapper.dart::Widget Function(BuildContext, dynamic)"
+"flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper" o-- "flutter::src::painting::basic_types.dart::Axis"
+"flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper" o-- "flutter::src::widgets::scroll_physics.dart::ScrollPhysics"
+"flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper" o-- "flutter::src::painting::edge_insets.dart::EdgeInsets"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::stream_grid_wrapper.dart::StreamGridWrapper"
+
+class "flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper" {
+  +Stream<dynamic>? stream
+  +Widget Function(BuildContext, dynamic) itemBuilder
+  +Axis scrollDirection
+  +bool shrinkWrap
+  +bool? reverse
+  +ScrollPhysics physics
+  +EdgeInsets padding
+  +Widget build()
+  +dynamic buildUploadButton()
+}
+
+"flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper" o-- "dart::async::Stream<dynamic>"
+"flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper" o-- "flutter_application_1::components::stream_story_builder.dart::Widget Function(BuildContext, dynamic)"
+"flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper" o-- "flutter::src::painting::basic_types.dart::Axis"
+"flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper" o-- "flutter::src::widgets::scroll_physics.dart::ScrollPhysics"
+"flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper" o-- "flutter::src::painting::edge_insets.dart::EdgeInsets"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::components::stream_story_builder.dart::StreamStoriesWrapper"
+
+class "flutter_application_1::components::text_form_builder.dart::TextFormBuilder" {
+  +String? initialValue
+  +bool? enabled
+  +String? hintText
+  +TextInputType? textInputType
+  +TextEditingController? controller
+  +TextInputAction? textInputAction
+  +bool obscureText
+  +FocusNode? focusNode
+  +FocusNode? nextFocusNode
+  +void Function()? submitAction
+  +String? Function(String?)? validateFunction
+  +void Function(String)? onSaved
+  +void Function(String)? onChange
+  +Key? key
+  +IconData? prefix
+  +IconData? suffix
+  +_TextFormBuilderState createState()
+}
+
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::services::text_input.dart::TextInputType"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::services::text_input.dart::TextInputAction"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "dart::ui::void Function()"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::widgets::form.dart::String Function(String)"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "null::void Function(String)"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::foundation::key.dart::Key"
+"flutter_application_1::components::text_form_builder.dart::TextFormBuilder" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::components::text_form_builder.dart::TextFormBuilder"
+
+class "flutter_application_1::components::text_form_builder.dart::_TextFormBuilderState" {
+  +String? error
+  +Widget build()
+  +dynamic border()
+  +dynamic focusBorder()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::components::text_form_builder.dart::_TextFormBuilderState"
+
+class "flutter_application_1::components::text_time.dart::TextTime" {
+  +Widget? child
+  +_TextTimeState createState()
+}
+
+"flutter_application_1::components::text_time.dart::TextTime" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::components::text_time.dart::TextTime"
+
+class "flutter_application_1::components::text_time.dart::_TextTimeState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::components::text_time.dart::_TextTimeState"
+
+class "flutter_application_1::landing::landing_page.dart::Landing" {
+  +_LandingState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::landing::landing_page.dart::Landing"
+
+class "flutter_application_1::landing::landing_page.dart::_LandingState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::landing::landing_page.dart::_LandingState"
+
+class "flutter_application_1::main.dart::MyApp" {
+  +_MyAppState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::main.dart::MyApp"
+
+class "flutter_application_1::main.dart::_MyAppState" {
+  +void initState()
+  +Widget build()
+  +ThemeData themeData()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::main.dart::_MyAppState"
+
+class "flutter_application_1::models::comments.dart::CommentModel" {
+  +String? username
+  +String? comment
+  +dynamic timestamp
+  +String? userDp
+  +String? userId
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::models::enum::message_type.dart::MessageType" {
+  +int index
+  {static} +List<MessageType> values
+  {static} +MessageType TEXT
+  {static} +MessageType IMAGE
+}
+
+"flutter_application_1::models::enum::message_type.dart::MessageType" o-- "flutter_application_1::models::enum::message_type.dart::MessageType"
+"dart::core::Enum" <|-- "flutter_application_1::models::enum::message_type.dart::MessageType"
+
+class "flutter_application_1::models::message.dart::Message" {
+  +String? content
+  +String? senderUid
+  +String? messageId
+  +dynamic type
+  +dynamic time
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::models::notification.dart::ActivityModel" {
+  +String? type
+  +String? username
+  +String? userId
+  +String? userDp
+  +String? postId
+  +String? mediaUrl
+  +String? commentData
+  +dynamic timestamp
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::models::post.dart::PostModel" {
+  +String? id
+  +String? postId
+  +String? ownerId
+  +String? username
+  +String? location
+  +String? description
+  +String? mediaUrl
+  +dynamic timestamp
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::models::register.dart::Register" {
+  +String? username
+  +String? email
+  +String? gender
+  +String? country
+  +String? password
+  +String? passwordConfirmation
+  +bool publicEmail
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::models::status.dart::StatusModel" {
+  +String? caption
+  +String? url
+  +String? status
+  +String? statusId
+  +dynamic type
+  +List<dynamic>? viewers
+  +dynamic time
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::models::story_model.dart::Status" {
+  +String uid
+  +String username
+  +List<String>? description
+  +List<String> photoUrl
+  +dynamic createdAt
+  +String profilePic
+  +String statusId
+  +List<String> whoCanSee
+  +Map<String, dynamic> toMap()
+}
+
+class "flutter_application_1::models::user.dart::UserModel" {
+  +String? username
+  +String? email
+  +String? photoUrl
+  +String? country
+  +String? bio
+  +String? id
+  +dynamic signedUpAt
+  +dynamic lastSeen
+  +bool? isOnline
+  +Map<String, dynamic> toJson()
+}
+
+class "flutter_application_1::pages::feeds.dart::Feeds" {
+  +_FeedsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::pages::feeds.dart::Feeds"
+
+class "flutter_application_1::pages::feeds.dart::_FeedsState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +int page
+  +bool loadingMore
+  +ScrollController scrollController
+  +bool wantKeepAlive
+  +void initState()
+  +Widget build()
+}
+
+"flutter_application_1::pages::feeds.dart::_FeedsState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::pages::feeds.dart::_FeedsState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::pages::feeds.dart::_FeedsState"
+"flutter::src::widgets::automatic_keep_alive.dart::AutomaticKeepAliveClientMixin" <|-- "flutter_application_1::pages::feeds.dart::_FeedsState"
+
+class "flutter_application_1::pages::notification.dart::Activities" {
+  +_ActivitiesState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::pages::notification.dart::Activities"
+
+class "flutter_application_1::pages::notification.dart::_ActivitiesState" {
+  +dynamic currentUserId()
+  +Widget build()
+  +dynamic getActivities()
+  +dynamic deleteAllItems()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::pages::notification.dart::_ActivitiesState"
+
+class "flutter_application_1::pages::profile.dart::Profile" {
+  +dynamic profileId
+  +_ProfileState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::pages::profile.dart::Profile"
+
+class "flutter_application_1::pages::profile.dart::_ProfileState" {
+  +dynamic user
+  +bool isLoading
+  +int postCount
+  +int followersCount
+  +int followingCount
+  +bool isFollowing
+  +dynamic users
+  +DateTime timestamp
+  +ScrollController controller
+  +dynamic currentUserId()
+  +void initState()
+  +dynamic checkIfFollowing()
+  +Widget build()
+  +dynamic buildCount()
+  +dynamic buildProfileButton()
+  +dynamic buildButton()
+  +dynamic handleUnfollow()
+  +dynamic handleFollow()
+  +dynamic buildPostView()
+  +dynamic buildGridPost()
+  +dynamic buildLikeButton()
+}
+
+"flutter_application_1::pages::profile.dart::_ProfileState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::pages::profile.dart::_ProfileState"
+
+class "flutter_application_1::pages::search.dart::Search" {
+  +_SearchState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::pages::search.dart::Search"
+
+class "flutter_application_1::pages::search.dart::_SearchState" {
+  +dynamic user
+  +TextEditingController searchController
+  +dynamic auth
+  +dynamic firestore
+  +List<dynamic> users
+  +List<dynamic> filteredUsers
+  +bool loading
+  +bool wantKeepAlive
+  +dynamic currentUserId()
+  +dynamic getUsers()
+  +dynamic search()
+  +dynamic removeFromList()
+  +void initState()
+  +Widget build()
+  +dynamic buildSearch()
+  +dynamic buildUsers()
+  +dynamic showProfile()
+  +String getUser()
+}
+
+"flutter_application_1::pages::search.dart::_SearchState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::pages::search.dart::_SearchState"
+"flutter::src::widgets::automatic_keep_alive.dart::AutomaticKeepAliveClientMixin" <|-- "flutter_application_1::pages::search.dart::_SearchState"
+
+class "flutter_application_1::posts::create_post.dart::CreatePost" {
+  +_CreatePostState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::posts::create_post.dart::CreatePost"
+
+class "flutter_application_1::posts::create_post.dart::_CreatePostState" {
+  +Widget build()
+  +dynamic showImageChoices()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::posts::create_post.dart::_CreatePostState"
+
+class "flutter_application_1::posts::story::confrim_status.dart::ConfirmStatus" {
+  +State<ConfirmStatus> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::posts::story::confrim_status.dart::ConfirmStatus"
+
+class "flutter_application_1::posts::story::confrim_status.dart::_ConfirmStatusState" {
+  +bool loading
+  +Widget build()
+  +dynamic uploadMedia()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::posts::story::confrim_status.dart::_ConfirmStatusState"
+
+class "flutter_application_1::posts::story::status_view.dart::StatusScreen" {
+  +dynamic initPage
+  +dynamic statusId
+  +dynamic storyId
+  +dynamic userId
+  +State<StatusScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::posts::story::status_view.dart::StatusScreen"
+
+class "flutter_application_1::posts::story::status_view.dart::_StatusScreenState" {
+  +Widget build()
+  +dynamic getImage()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::posts::story::status_view.dart::_StatusScreenState"
+
+class "flutter_application_1::screens::comment.dart::Comments" {
+  +dynamic post
+  +_CommentsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::screens::comment.dart::Comments"
+
+class "flutter_application_1::screens::comment.dart::_CommentsState" {
+  +dynamic user
+  +dynamic services
+  +DateTime timestamp
+  +TextEditingController commentsTEC
+  +dynamic currentUserId()
+  +Widget build()
+  +dynamic buildFullPost()
+  +dynamic buildComments()
+  +dynamic buildLikeButton()
+  +dynamic buildLikesCount()
+  +dynamic addLikesToNotification()
+  +dynamic removeLikeFromNotification()
+}
+
+"flutter_application_1::screens::comment.dart::_CommentsState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::screens::comment.dart::_CommentsState"
+
+class "flutter_application_1::screens::edit_profile.dart::EditProfile" {
+  +dynamic user
+  +_EditProfileState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::screens::edit_profile.dart::EditProfile"
+
+class "flutter_application_1::screens::edit_profile.dart::_EditProfileState" {
+  +dynamic user
+  +String currentUid()
+  +Widget build()
+  +dynamic buildForm()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::screens::edit_profile.dart::_EditProfileState"
+
+class "flutter_application_1::screens::list_posts.dart::ListPosts" {
+  +dynamic userId
+  +dynamic username
+  +State<ListPosts> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::screens::list_posts.dart::ListPosts"
+
+class "flutter_application_1::screens::list_posts.dart::_ListPostsState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::screens::list_posts.dart::_ListPostsState"
+
+class "flutter_application_1::screens::mainscreen.dart::TabScreen" {
+  +_TabScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::screens::mainscreen.dart::TabScreen"
+
+class "flutter_application_1::screens::mainscreen.dart::_TabScreenState" {
+  -int _page
+  +List<dynamic> pages
+  +Widget build()
+  +dynamic buildFab()
+  +void navigationTapped()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::screens::mainscreen.dart::_TabScreenState"
+
+class "flutter_application_1::screens::settings.dart::Setting" {
+  +_SettingState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::screens::settings.dart::Setting"
+
+class "flutter_application_1::screens::settings.dart::_SettingState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::screens::settings.dart::_SettingState"
+
+class "flutter_application_1::screens::view_image.dart::ViewImage" {
+  +dynamic post
+  +_ViewImageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::screens::view_image.dart::ViewImage"
+
+class "flutter_application_1::screens::view_image.dart::_ViewImageState" {
+  +Widget build()
+  +dynamic buildImage()
+  +dynamic addLikesToNotification()
+  +dynamic removeLikeFromNotification()
+  +dynamic buildLikeButton()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::screens::view_image.dart::_ViewImageState"
+
+class "flutter_application_1::services::auth_service.dart::AuthService" {
+  +dynamic getCurrentUser()
+  +dynamic createUser()
+  +dynamic saveUserToFirestore()
+  +dynamic loginUser()
+  +dynamic forgotPassword()
+  +dynamic logOut()
+  +String handleFirebaseAuthError()
+}
+
+class "flutter_application_1::services::chat_service.dart::ChatService" {
+  +dynamic storage
+  +dynamic sendMessage()
+  +dynamic sendFirstMessage()
+  +dynamic uploadImage()
+  +dynamic setUserRead()
+  +dynamic setUserTyping()
+}
+
+class "flutter_application_1::services::post_service.dart::PostService" {
+  +String postId
+  +dynamic uploadProfilePicture()
+  +dynamic uploadPost()
+  +dynamic uploadComment()
+  +dynamic addCommentToNotification()
+  +dynamic addLikesToNotification()
+  +dynamic removeLikeFromNotification()
+}
+
+abstract class "flutter_application_1::services::services.dart::Service" {
+  +dynamic uploadImage()
+}
+
+class "flutter_application_1::services::status_services.dart::StatusService" {
+  +String statusId
+  +dynamic userService
+  +void showSnackBar()
+  +dynamic sendStatus()
+  +dynamic sendFirstStatus()
+  +dynamic uploadImage()
+}
+
+class "flutter_application_1::services::user_service.dart::UserService" {
+  +String currentUid()
+  +dynamic setUserStatus()
+  +dynamic updateProfile()
+}
+
+class "flutter_application_1::utils::config.dart::Config" {
+  {static} +dynamic initFirebase()
+}
+
+class "flutter_application_1::utils::constants.dart::Constants" {
+  {static} +String appName
+  {static} +Color lightPrimary
+  {static} +Color darkPrimary
+  {static} +Color lightAccent
+  {static} +Color darkAccent
+  {static} +Color lightBG
+  {static} +Color darkBG
+  {static} +ThemeData lightTheme
+  {static} +ThemeData darkTheme
+  {static} +List<T> map()
+}
+
+"flutter_application_1::utils::constants.dart::Constants" o-- "dart::ui::Color"
+"flutter_application_1::utils::constants.dart::Constants" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+class "flutter_application_1::utils::file_utils.dart::FileUtils" {
+  {static} +String getFileExtension()
+  {static} +String getFileSize()
+  {static} +String formatBytes()
+}
+
+class "flutter_application_1::utils::permissions.dart::Permissions" {
+  {static} +dynamic cameraMicrophoneAndStoragePermissionGranted()
+  {static} +dynamic getCameraPermission()
+  {static} +dynamic getMicrophonePermission()
+  {static} +dynamic getStoragePermission()
+  {static} -void _handleInvalidPermission()
+}
+
+class "flutter_application_1::utils::validation.dart::Validations" {
+  {static} +String? validateName()
+  {static} +String? validateEmail()
+  {static} +String? validatePassword()
+}
+
+class "flutter_application_1::view_models::auth::login_view_model.dart::LoginViewModel" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +GlobalKey<FormState> formKey
+  +bool validate
+  +bool loading
+  +String? email
+  +String? password
+  +FocusNode emailFN
+  +FocusNode passFN
+  +dynamic auth
+  +dynamic login()
+  +dynamic forgotPassword()
+  +dynamic setEmail()
+  +dynamic setPassword()
+  +void showInSnackBar()
+}
+
+"flutter_application_1::view_models::auth::login_view_model.dart::LoginViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::view_models::auth::login_view_model.dart::LoginViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter_application_1::view_models::auth::login_view_model.dart::LoginViewModel" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::auth::login_view_model.dart::LoginViewModel"
+
+class "flutter_application_1::view_models::auth::posts_view_model.dart::PostsViewModel" {
+  +dynamic userService
+  +dynamic postService
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +GlobalKey<FormState> formKey
+  +bool loading
+  +String? username
+  +File? mediaUrl
+  +dynamic picker
+  +String? location
+  +dynamic position
+  +dynamic placemark
+  +String? bio
+  +String? description
+  +String? email
+  +String? commentData
+  +String? ownerId
+  +String? userId
+  +String? type
+  +File? userDp
+  +String? imgLink
+  +bool edit
+  +String? id
+  +TextEditingController locationTEC
+  +dynamic setEdit()
+  +dynamic setPost()
+  +dynamic setUsername()
+  +dynamic setDescription()
+  +dynamic setLocation()
+  +dynamic setBio()
+  +dynamic pickImage()
+  +dynamic getLocation()
+  +dynamic uploadPosts()
+  +dynamic uploadProfilePicture()
+  +dynamic resetPost()
+  +void showInSnackBar()
+}
+
+"flutter_application_1::view_models::auth::posts_view_model.dart::PostsViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::view_models::auth::posts_view_model.dart::PostsViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter_application_1::view_models::auth::posts_view_model.dart::PostsViewModel" o-- "dart::io::File"
+"flutter_application_1::view_models::auth::posts_view_model.dart::PostsViewModel" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::auth::posts_view_model.dart::PostsViewModel"
+
+class "flutter_application_1::view_models::auth::register_view_model.dart::RegisterViewModel" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +GlobalKey<FormState> formKey
+  +bool validate
+  +bool loading
+  +String? username
+  +String? email
+  +String? country
+  +String? password
+  +String? cPassword
+  +FocusNode usernameFN
+  +FocusNode emailFN
+  +FocusNode countryFN
+  +FocusNode passFN
+  +FocusNode cPassFN
+  +dynamic auth
+  +dynamic register()
+  +dynamic setEmail()
+  +dynamic setPassword()
+  +dynamic setName()
+  +dynamic setConfirmPass()
+  +dynamic setCountry()
+  +void showInSnackBar()
+}
+
+"flutter_application_1::view_models::auth::register_view_model.dart::RegisterViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::view_models::auth::register_view_model.dart::RegisterViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter_application_1::view_models::auth::register_view_model.dart::RegisterViewModel" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::auth::register_view_model.dart::RegisterViewModel"
+
+class "flutter_application_1::view_models::conversation::conversation_view_model.dart::ConversationViewModel" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic chatService
+  +bool uploadingImage
+  +dynamic picker
+  +File? image
+  +dynamic sendMessage()
+  +dynamic sendFirstMessage()
+  +dynamic setReadCount()
+  +dynamic setUserTyping()
+  +dynamic pickImage()
+  +void showInSnackBar()
+}
+
+"flutter_application_1::view_models::conversation::conversation_view_model.dart::ConversationViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::view_models::conversation::conversation_view_model.dart::ConversationViewModel" o-- "dart::io::File"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::conversation::conversation_view_model.dart::ConversationViewModel"
+
+class "flutter_application_1::view_models::profile::edit_profile_view_model.dart::EditProfileViewModel" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +GlobalKey<FormState> formKey
+  +bool validate
+  +bool loading
+  +dynamic userService
+  +dynamic picker
+  +dynamic user
+  +String? country
+  +String? username
+  +String? bio
+  +File? image
+  +String? imgLink
+  +dynamic setUser()
+  +dynamic setImage()
+  +dynamic setCountry()
+  +dynamic setBio()
+  +dynamic setUsername()
+  +dynamic editProfile()
+  +dynamic pickImage()
+  +dynamic clear()
+  +void showInSnackBar()
+}
+
+"flutter_application_1::view_models::profile::edit_profile_view_model.dart::EditProfileViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::view_models::profile::edit_profile_view_model.dart::EditProfileViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter_application_1::view_models::profile::edit_profile_view_model.dart::EditProfileViewModel" o-- "dart::io::File"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::profile::edit_profile_view_model.dart::EditProfileViewModel"
+
+class "flutter_application_1::view_models::status::status_view_model.dart::StatusViewModel" {
+  +dynamic userService
+  +dynamic postService
+  +dynamic statusService
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +GlobalKey<FormState> formKey
+  +bool loading
+  +String? username
+  +File? mediaUrl
+  +dynamic picker
+  +String? description
+  +String? email
+  +String? userDp
+  +String? userId
+  +String? imgLink
+  +bool edit
+  +String? id
+  +int pageIndex
+  +dynamic setDescription()
+  +dynamic pickImage()
+  +dynamic sendStatus()
+  +dynamic sendFirstStatus()
+  +dynamic resetPost()
+  +void showInSnackBar()
+}
+
+"flutter_application_1::view_models::status::status_view_model.dart::StatusViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter_application_1::view_models::status::status_view_model.dart::StatusViewModel" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter_application_1::view_models::status::status_view_model.dart::StatusViewModel" o-- "dart::io::File"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::status::status_view_model.dart::StatusViewModel"
+
+class "flutter_application_1::view_models::theme::theme_view_model.dart::ThemeProvider" {
+  +String key
+  -dynamic _prefs
+  -bool _darkTheme
+  +bool dark
+  +dynamic AppProvider()
+  +dynamic toggleTheme()
+  -dynamic _initPrefs()
+  -dynamic _loadfromPrefs()
+  -dynamic _saveToPrefs()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::theme::theme_view_model.dart::ThemeProvider"
+
+class "flutter_application_1::view_models::user::user_view_model.dart::UserViewModel" {
+  +dynamic user
+  +dynamic auth
+  +dynamic setUser()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_application_1::view_models::user::user_view_model.dart::UserViewModel"
+
+class "flutter_application_1::widgets::icon_badge.dart::IconBadge" {
+  +IconData icon
+  +double? size
+  +Color? color
+  +_IconBadgeState createState()
+}
+
+"flutter_application_1::widgets::icon_badge.dart::IconBadge" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter_application_1::widgets::icon_badge.dart::IconBadge" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::widgets::icon_badge.dart::IconBadge"
+
+class "flutter_application_1::widgets::icon_badge.dart::_IconBadgeState" {
+  +void initState()
+  +Widget build()
+  +dynamic buildCount()
+  +dynamic buildTextWidget()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::widgets::icon_badge.dart::_IconBadgeState"
+
+class "flutter_application_1::widgets::notification_items.dart::ActivityItems" {
+  +dynamic activity
+  +_ActivityItemsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::widgets::notification_items.dart::ActivityItems"
+
+class "flutter_application_1::widgets::notification_items.dart::_ActivityItemsState" {
+  +Widget build()
+  +Widget stackBehindDismiss()
+  +dynamic delete()
+  +dynamic previewConfiguration()
+  +dynamic buildTextConfiguration()
+  +dynamic buildPreviewImage()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::widgets::notification_items.dart::_ActivityItemsState"
+
+class "flutter_application_1::widgets::post_tiles.dart::PostTile" {
+  +dynamic post
+  +_PostTileState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::widgets::post_tiles.dart::PostTile"
+
+class "flutter_application_1::widgets::post_tiles.dart::_PostTileState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::widgets::post_tiles.dart::_PostTileState"
+
+class "flutter_application_1::widgets::story_widget.dart::StoryWidget" {
+  +Widget build()
+  -dynamic _buildStatusAvatar()
+  +Stream<dynamic> userChatsStream()
+  +Stream<dynamic> messageListStream()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::widgets::story_widget.dart::StoryWidget"
+
+class "flutter_application_1::widgets::userpost.dart::UserPost" {
+  +dynamic post
+  +DateTime timestamp
+  +dynamic services
+  +dynamic currentUserId()
+  +Widget build()
+  +dynamic buildLikeButton()
+  +dynamic addLikesToNotification()
+  +dynamic buildLikesCount()
+  +dynamic buildCommentsCount()
+  +dynamic buildUser()
+  +dynamic showProfile()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "flutter_application_1::widgets::userpost.dart::UserPost"
+
+class "flutter_application_1::widgets::view_notification_details.dart::ViewActivityDetails" {
+  +dynamic activity
+  +_ViewActivityDetailsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "flutter_application_1::widgets::view_notification_details.dart::ViewActivityDetails"
+
+class "flutter_application_1::widgets::view_notification_details.dart::_ViewActivityDetailsState" {
+  +Widget build()
+  +dynamic buildImage()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "flutter_application_1::widgets::view_notification_details.dart::_ViewActivityDetailsState"
+
+
+@enduml
