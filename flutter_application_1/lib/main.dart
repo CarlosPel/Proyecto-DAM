@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
 
 void main() {
@@ -11,8 +12,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Quitar el banner (cintita roja esquina superior derecha) de depuración
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+
+      // Título de la aplicación
+      title: 'SPQR',
+
+      // Ruta de la pantalla inicial
+      initialRoute: '/',
+
+      // Rutas de las pantallas
+      routes: {
+        '/': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(),
+        // '/profile': (context) => ProfileScreen(),
+      },
     );
   }
 }

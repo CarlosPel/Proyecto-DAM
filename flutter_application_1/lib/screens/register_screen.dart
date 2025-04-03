@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  // Controlador de texto para el correo electrónico
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
-  
-  // Controlador de texto para la contraseña
   final TextEditingController _passwordController = TextEditingController();
-
-  // Clave global para el formulario
-  // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Método para manejar el inicio de sesión
   void _login() {
     if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/home');
+      // Simulación de autenticación
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Iniciando sesión...')),
+      );
     }
   }
 
@@ -36,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Campo de texto para el correo electrónico
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(labelText: 'Correo electrónico'),
@@ -48,11 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-
-                // Espacio entre los campos de texto
                 SizedBox(height: 10),
-
-                // Campo de texto para la contraseña
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(labelText: 'Contraseña'),
