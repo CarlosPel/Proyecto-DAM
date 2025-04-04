@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert'; // Para codificar los datos en JSON
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // Controlador de texto para el correo electrónico
   final TextEditingController _emailController = TextEditingController();
-  
+
   // Controlador de texto para la contraseña
   final TextEditingController _passwordController = TextEditingController();
 
@@ -19,10 +21,39 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Método para manejar el inicio de sesión
-  void _login() {
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/home');
+      final String email = _emailController.text;
+      final String password = _passwordController.text;
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://your-backend-url.com/api/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': email, 'password': password}),
+        );
+
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          // Manejar la respuesta exitosa, por ejemplo, guardar el token
+          Navigator.pushNamed(context, '/home');
+        } else {
+          // Manejar errores, por ejemplo, credenciales incorrectas
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${response.body}')),
+          );
+        }
+      } catch (e) {
+        // Manejar errores de red u otros
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error de conexión: $e')),
+        );
+      }
     }
+  }
+
+  void _register() {
+    Navigator.pushNamed(context, '/register');
   }
 
   @override
@@ -36,6 +67,38 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Imagen
+
+                Image.asset(
+                  'assets/images/login.png',
+                  color: Colors.blue,
+                  fit: BoxFit.contain,
+                  height: 150,
+                ),
+
+                SizedBox(height: 20),
+
+                // Mensaje de bienvenida
+                Text(
+                  'Bienvenido a SPQR',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                // Mensaje de bienvenida
+                Text(
+                  'Iniciar sesión',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                SizedBox(height: 10),
+
                 // Campo de texto para el correo electrónico
                 TextFormField(
                   controller: _emailController,
@@ -49,7 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
 
-                // Espacio entre los campos de texto
                 SizedBox(height: 10),
 
                 // Campo de texto para la contraseña
@@ -64,10 +126,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
+
                 SizedBox(height: 20),
+
+                // Botón de inicio de sesión
                 ElevatedButton(
                   onPressed: _login,
                   child: Text('Iniciar sesión'),
+                ),
+
+                SizedBox(height: 20),
+
+                TextButton(
+                  onPressed: _register,
+                  child: Text(
+                    '¿No tienes una cuenta? Regístrate aquí',
+                    style: TextStyle(
+                      color: Colors.blue, // Color del texto
+                      decoration: TextDecoration
+                          .underline, // Subrayado para indicar que es pulsable
+                    ),
+                  ),
                 ),
               ],
             ),
