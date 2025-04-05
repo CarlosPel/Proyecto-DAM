@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'dart:convert'; // Para codificar los datos en JSON
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   // Controlador de texto para el correo electrónico
   final TextEditingController _emailController = TextEditingController();
 
@@ -22,32 +22,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Método para manejar el inicio de sesión
   Future<void> _login() async {
+
+    // Valida el formulario ejecutando los métodos de validación de cada campo
     if (_formKey.currentState!.validate()) {
+      // Email y contraseña ingresados por el usuario
       final String email = _emailController.text;
       final String password = _passwordController.text;
 
+      // URL del backend
+      final String backendUrl = 'http://your-backend-url.com/api/login';
+
       try {
+        // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
         final response = await http.post(
-          Uri.parse('http://your-backend-url.com/api/login'),
+          Uri.parse(backendUrl),
+
+          // Se especifica el tipo de contenido como JSON 
           headers: {'Content-Type': 'application/json'},
+
+          // Se envía el cuerpo de la solicitud codificado como JSON
           body: jsonEncode({'email': email, 'password': password}),
         );
 
+        // Verifica si la respuesta es exitosa (código 200)
         if (response.statusCode == 200) {
-          final responseData = jsonDecode(response.body);
-          // Manejar la respuesta exitosa, por ejemplo, guardar el token
-          Navigator.pushNamed(context, '/home');
+          // Decodifica la respuesta JSON
+          // final responseData = jsonDecode(response.body);
+          
+          // Verifica que el estado esta asociado a un contexto montado
+          if (mounted) {
+            // Pasa a la pantalla principal
+            Navigator.pushNamed(context, '/home');
+          }
         } else {
-          // Manejar errores, por ejemplo, credenciales incorrectas
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${response.body}')),
-          );
+          if (mounted) {
+            // Muestra un mensaje de error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: ${response.body}')),
+            );
+          }
         }
       } catch (e) {
         // Manejar errores de red u otros
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de conexión: $e')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error de conexión: $e')),
+          );
+        }
       }
     }
   }
