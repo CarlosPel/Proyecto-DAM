@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/routes.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-// Pantalla de inicio de sesión
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+// Pantalla de registro de cuenta
+class SingUpScreen extends StatefulWidget {
+  const SingUpScreen({super.key});
 
   @override
-  LoginScreenState createState() => LoginScreenState();
+  SingUpScreenState createState() => SingUpScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class SingUpScreenState extends State<SingUpScreen> {
   // Controlador de texto para el correo electrónico
   final TextEditingController _emailController = TextEditingController();
   // Controlador de texto para la contraseña
@@ -19,66 +17,19 @@ class LoginScreenState extends State<LoginScreen> {
   // Clave global para el formulario
   // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // Ruta de la pantalla de registro
-  final String singUpScreen = AppRoutes.singUpScreen;
-  // Ruta de la pantalla principal
-  final String homeScreen = AppRoutes.homeScreen;
+  // Ruta de la pantalla de inicio de sesión
+  final String loginScreen = AppRoutes.loginScreen;
 
-  // Método para manejar el inicio de sesión
-  Future<void> _login() async {
+  // Método para manejar el registro de cuenta
+  void _singUp() {
     // Valida el formulario ejecutando los métodos de validación de cada campo
     if (_formKey.currentState!.validate()) {
-      // Email y contraseña ingresados por el usuario
-      final String email = _emailController.text;
-      final String password = _passwordController.text;
-
-      // URL del backend
-      final String backendUrl = 'http://your-backend-url.com/api/login';
-
-      try {
-        // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
-        final response = await http.post(
-          Uri.parse(backendUrl),
-
-          // Se especifica el tipo de contenido como JSON
-          headers: {'Content-Type': 'application/json'},
-
-          // Se envía el cuerpo de la solicitud codificado como JSON
-          body: jsonEncode({'email': email, 'password': password}),
-        );
-
-        // Verifica si la respuesta es exitosa (código 200)
-        if (response.statusCode == 200) {
-          // Decodifica la respuesta JSON
-          // final responseData = jsonDecode(response.body);
-
-          // Verifica que el estado esta asociado a un contexto montado
-          if (mounted) {
-            // Pasa a la pantalla principal
-            Navigator.pushNamed(context, homeScreen);
-          }
-        } else {
-          if (mounted) {
-            // Mensaje de error
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: ${response.body}')),
-            );
-          }
-        }
-      } catch (e) {
-        // Manejar errores de conexión con el backend
-        if (mounted) {
-          // Mensaje de error
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error de conexión: $e')),
-          );
-        }
-      }
+      
     }
   }
 
-  void _goSingUp() {
-    Navigator.pushNamed(context, singUpScreen);
+  void _goLogin() {
+    Navigator.pushNamed(context, loginScreen);
   }
 
   // Interfaz de el formulario de inicio de sesión
@@ -95,7 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
               children: [
                 // Imagen
                 /*Image.asset(
-                  'assets/images/login.png',
+                  'assets/images/singup.png',
                   color: Colors.blue,
                   fit: BoxFit.contain,
                   height: 150,
@@ -115,7 +66,7 @@ class LoginScreenState extends State<LoginScreen> {
 
                 // Título de la pantalla
                 Text(
-                  'Iniciar sesión',
+                  'Crear una cuenta',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -131,7 +82,7 @@ class LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Ingrese su correo electrónico';
+                      return 'Ingrese un correo electrónico';
                     }
                     return null;
                   },
@@ -146,7 +97,23 @@ class LoginScreenState extends State<LoginScreen> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Ingrese su contraseña';
+                      return 'Ingrese una contraseña';
+                    }
+                    return null;
+                  },
+                ),
+                
+                SizedBox(height: 10),
+
+                // Campo de texto para repetir la contraseña
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Repetir contraseña'),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Repita la contraseña';
+                    } else if (value != _passwordController.text) {
+                      return 'Las contraseñas no coinciden';
                     }
                     return null;
                   },
@@ -154,35 +121,24 @@ class LoginScreenState extends State<LoginScreen> {
 
                 SizedBox(height: 20),
 
-                // Botón de inicio de sesión
+                // Botón de registro de cuenta
                 ElevatedButton(
-                  onPressed: _login,
-                  child: Text('Iniciar sesión'),
+                  onPressed: _singUp,
+                  child: Text('Registrarse'),
                 ),
 
                 SizedBox(height: 20),
 
-                // Texto para redirigir a la pantalla de registro
                 TextButton(
-                  onPressed: _goSingUp,
+                  onPressed: _goLogin,
                   child: Text(
-                    '¿No tienes una cuenta? Regístrate aquí',
+                    '¿Ya tienes una cuenta? Inicia sesión aquí',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Colors.blue, // Color del texto
                       decoration: TextDecoration
-                          .underline,
+                          .underline, // Subrayado para indicar que es pulsable
                     ),
                   ),
-                ),
-
-                SizedBox(height: 20),
-
-                // Botón para saltarse el inicio de sesión
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.homeScreen);
-                  },
-                  child: Text('Home'),
                 ),
               ],
             ),

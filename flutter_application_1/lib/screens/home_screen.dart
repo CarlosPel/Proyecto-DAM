@@ -4,19 +4,38 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio'),
+        automaticallyImplyLeading: false,
+        title: Text('What\'s New'),
       ),
-      body: Center(
-        child: Text('Bienvenido a la pantalla de inicio!'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: List.generate(
+            30,
+            (index) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Elemento $index', style: TextStyle(fontSize: 18)),
+            ),
+          ),
+        ),
+      ),
+
+      // Botón flotante de menú
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showOptions(),
+        child: Icon(Icons.add),
       ),
     );
+  }
+  
+  _showOptions() {
+    // Mostrar opciones de menú
   }
 }

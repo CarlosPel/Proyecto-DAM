@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home_screen.dart';
-import 'package:flutter_application_1/screens/login_screen.dart';
-import 'package:flutter_application_1/screens/register_screen.dart';
+import 'package:flutter_application_1/routes/routes.dart';
 
+// Método de ejecución de la aplicación
 void main() {
   runApp(MyApp());
 }
 
+// Clase principal de la aplicación
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -20,15 +20,10 @@ class MyApp extends StatelessWidget {
       title: 'SPQR',
 
       // Ruta de la pantalla inicial
-      initialRoute: '/',
+      initialRoute: AppRoutes.loginScreen,
 
       // Rutas de las pantallas
-      routes: {
-        '/': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
-        '/home': (context) => HomeScreen(),
-        // '/profile': (context) => ProfileScreen(),
-      },
+      routes: AppRoutes.getRoutes(),
     );
   }
 }
