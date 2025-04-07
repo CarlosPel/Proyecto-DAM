@@ -19,10 +19,6 @@ class LoginScreenState extends State<LoginScreen> {
   // Clave global para el formulario
   // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // Ruta de la pantalla de registro
-  final String singUpScreen = AppRoutes.singUpScreen;
-  // Ruta de la pantalla principal
-  final String homeScreen = AppRoutes.homeScreen;
 
   // Método para manejar el inicio de sesión
   Future<void> _login() async {
@@ -55,7 +51,7 @@ class LoginScreenState extends State<LoginScreen> {
           // Verifica que el estado esta asociado a un contexto montado
           if (mounted) {
             // Pasa a la pantalla principal
-            Navigator.pushNamed(context, homeScreen);
+            Navigator.pushNamed(context, AppRoutes.homeScreen);
           }
         } else {
           if (mounted) {
@@ -78,7 +74,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _goSingUp() {
-    Navigator.pushNamed(context, singUpScreen);
+    Navigator.pushNamed(context, AppRoutes.singUpScreen);
   }
 
   // Interfaz de el formulario de inicio de sesión
