@@ -1,0 +1,28 @@
+# Dependencias de Node.js
+node_modules/
+
+# Archivos de registro
+*.log
+
+# Directorios de construcción
+dist/
+build/
+
+# Archivos de configuración del entorno
+.env
+config.json
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de caché y temporales
+.npm/
+.eslintcache
+.node_repl_history
+
+# Archivos de configuración de editores
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
