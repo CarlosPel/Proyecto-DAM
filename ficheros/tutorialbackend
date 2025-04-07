@@ -1,0 +1,32 @@
+Tutorial para configurar y preparar el backend de nuestro proyecto.
+
+1. Instalar software necesario.
+	+ Node.js (version que utilizo (Miguel: 4/4/2025): 22.14.0)
+		+ Esto instalará npm (versión que utilizo (Miguel: 4/4/2025): 10.9.2)
+	+ PostgreDB (versión que utilizo (Miguel: 4/4/2025): 17.4)
+		Además, hay que establecer que el puerto es el 5432.
+		
+	+ Links:
+		@ https://nodejs.org/es
+		@ https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+2. Comprobar que se ha instalado correctamente el software.
+	+ Para Node.js
+		- En un cmd (no funciona en gitbash) ejecutamos "node -v", 
+		este comando debería mostrar la versión instalada de node.js
+			
+		- En un cmd (no funciona en gitbash) ejecutamos "npm -v", 
+		este comando debería mostrar la versión instalada de npm
+
+	+ PostgreDB
+		- Añadir la ruta "../PostgreSQL\17\bin" a variables de entorno.
+		- Abrir un terminal y ejecutar "psql -U postres"
+		- Estarías listo para trabajar con postgres.
+
+3. Conectar Postgres con Node.js.
+	!! Importante, yo (Miguel 5/4/2025) ya he ejecutado los siguientes comandos, por lo que al clonarte
+		 el repo, solo necesitarías ejecutar el comando "npm install".
+	+ Hay que irse, en cmd, a la carpeta donde se guardarán los archivos backend del proyecto.
+	+ Una vez en estamos en la carpeta backend, ejecutamos los siguientes comandos.
+		> "npm init -y"
+		> "npm install pg"
