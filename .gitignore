@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dependencias de Node.js
 node_modules/
 
@@ -26,3 +27,6 @@ Thumbs.db
 .vscode/
 *.sublime-workspace
 *.sublime-project
+=======
+.idea
+>>>>>>> 3f25ea9717e0680697fdad9ebda142af268b3125
