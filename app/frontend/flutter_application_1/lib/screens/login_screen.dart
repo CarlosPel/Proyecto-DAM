@@ -165,8 +165,7 @@ class LoginScreenState extends State<LoginScreen> {
                     '¿No tienes una cuenta? Regístrate aquí',
                     style: TextStyle(
                       color: Colors.blue,
-                      decoration: TextDecoration
-                          .underline,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),

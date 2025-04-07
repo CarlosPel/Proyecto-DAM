@@ -36,29 +36,34 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
           // Botón Perfil
-          /*Positioned(
+          /*AnimatedPositioned(
+            duration: Duration(milliseconds: 300),
             bottom: isOpen ? 100 : 40,
-            right: isOpen ? 100 : 30,
-            child: AnimatedOpacity(
-              opacity: isOpen ? 1 : 0,
-              duration: Duration(milliseconds: 300),
+            right: isOpen ? 40 : 30,
+            child: Visibility(
+              visible: isOpen,
               child: FloatingActionButton(
                 mini: true,
                 onPressed: () {
-                  print('Botón 1');
-                  // Navigator.pushNamed(context, AppRoutes.profileScreen);
+                  if (Navigator.canPop(context) || AppRoutes.profileScreen != null) {
+                    Navigator.pushNamed(context, AppRoutes.profileScreen);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Ruta no encontrada: profileScreen')),
+                    );
+                  }
                 },
                 child: Icon(Icons.person),
               ),
             ),
           ),
           // Botón 2
-          Positioned(
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 300),
             bottom: isOpen ? 160 : 40,
-            right: isOpen ? 40 : 30,
-            child: AnimatedOpacity(
-              opacity: isOpen ? 1 : 0,
-              duration: Duration(milliseconds: 300),
+            right: isOpen ? 100 : 30,
+            child: Visibility(
+              visible: isOpen,
               child: FloatingActionButton(
                 mini: true,
                 onPressed: () {
