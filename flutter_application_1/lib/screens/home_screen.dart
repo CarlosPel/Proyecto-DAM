@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/routes/routes.dart';
+import 'package:flutter_application_1/widgets/post_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  bool isOpen = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,27 +19,72 @@ class HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: Text('What\'s New'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: List.generate(
-            30,
-            (index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Elemento $index', style: TextStyle(fontSize: 18)),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: List.generate(
+                30,
+                (index) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PostContainer(
+                    title: 'Título de la publicación $index',
+                    text: 'Texto de la publicación $index',
+                  ),
+                ),
+              ),
             ),
+          ),
+          // Botón Perfil
+          /*Positioned(
+            bottom: isOpen ? 100 : 40,
+            right: isOpen ? 100 : 30,
+            child: AnimatedOpacity(
+              opacity: isOpen ? 1 : 0,
+              duration: Duration(milliseconds: 300),
+              child: FloatingActionButton(
+                mini: true,
+                onPressed: () {
+                  print('Botón 1');
+                  // Navigator.pushNamed(context, AppRoutes.profileScreen);
+                },
+                child: Icon(Icons.person),
+              ),
+            ),
+          ),
+          // Botón 2
+          Positioned(
+            bottom: isOpen ? 160 : 40,
+            right: isOpen ? 40 : 30,
+            child: AnimatedOpacity(
+              opacity: isOpen ? 1 : 0,
+              duration: Duration(milliseconds: 300),
+              child: FloatingActionButton(
+                mini: true,
+                onPressed: () {
+                  print('Botón 2');
+                },
+                child: Icon(Icons.photo),
+              ),
+            ),
+          ),*/
+        ],
+      ),
+      // Botón flotante de menú
+      floatingActionButton: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                isOpen = !isOpen;
+              });
+            },
+            child: Icon(isOpen ? Icons.close : Icons.add),
           ),
         ),
       ),
-
-      // Botón flotante de menú
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showOptions(),
-        child: Icon(Icons.add),
-      ),
     );
-  }
-  
-  _showOptions() {
-    // Mostrar opciones de menú
   }
 }
