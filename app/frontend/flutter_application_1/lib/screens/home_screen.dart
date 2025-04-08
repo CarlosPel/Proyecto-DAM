@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/routes.dart';
-import 'package:flutter_application_1/widgets/post_container.dart';
+import 'package:flutter_application_1/widgets/post_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

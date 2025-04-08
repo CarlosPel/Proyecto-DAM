@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/news_container.dart';
-import 'package:flutter_application_1/widgets/post_container.dart';
+import 'package:flutter_application_1/widgets/news_widget.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
