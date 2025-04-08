@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/routes.dart';
+import 'package:country_picker/country_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:country_list/country_list.dart';
+
+
 
 // Pantalla de registro de cuenta
 class SingUpScreen extends StatefulWidget {
@@ -14,15 +21,74 @@ class SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   // Controlador de texto para la contraseña
   final TextEditingController _passwordController = TextEditingController();
+  // Controlador de texto para el nombre de usuario
+  final TextEditingController _usernameController = TextEditingController();
+  // Controlador de texto para el país
+  //final TextEditingController _countryController = TextEditingController();
   // Clave global para el formulario
   // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // Variable para almacenar el país seleccionado
+  String? selectedCountry;
 
   // Método para manejar el registro de cuenta
-  void _singUp() {
+  Future<void> _singUp() async {
     // Valida el formulario ejecutando los métodos de validación de cada campo
     if (_formKey.currentState!.validate()) {
-      
+      // Email y contraseña ingresados por el usuario
+      final String email = _emailController.text;
+      final String password = _passwordController.text;
+      final String username = _usernameController.text;
+      final String country = 'Spain';
+
+      // URL del backend
+      final String backendUrl = 'http://localhost:5000/users/register';
+
+      try {
+        // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
+        final response = await http.post(
+          Uri.parse(backendUrl),
+
+          // Se especifica el tipo de contenido como JSON
+          headers: {'Content-Type': 'application/json'},
+
+          // Se envía el cuerpo de la solicitud codificado como JSON
+          body: jsonEncode({
+            'username': username,
+            'email': email,
+            'password': password,
+            'nation': country,
+            'admin': false
+          }),
+        );
+
+        // Verifica si la respuesta es exitosa (código 200)
+        if (response.statusCode == 201) {
+          // Decodifica la respuesta JSON
+          // final responseData = jsonDecode(response.body);
+
+          // Verifica que el estado esta asociado a un contexto montado
+          if (mounted) {
+            // Pasa a la pantalla principal
+            Navigator.pushNamed(context, AppRoutes.loginScreen);
+          }
+        } else {
+          if (mounted) {
+            // Mensaje de error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: ${response.body}')),
+            );
+          }
+        }
+      } catch (e) {
+        // Manejar errores de conexión con el backend
+        if (mounted) {
+          // Mensaje de error
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error de conexión: $e')),
+          );
+        }
+      }
     }
   }
 
@@ -73,6 +139,21 @@ class SingUpScreenState extends State<SingUpScreen> {
 
                 SizedBox(height: 10),
 
+                // Campo de texto para el correo nombre de usuario
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(labelText: 'Nombre de usuario'),
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese un nombre de usuario';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: 10),
+
                 // Campo de texto para el correo electrónico
                 TextFormField(
                   controller: _emailController,
@@ -100,7 +181,7 @@ class SingUpScreenState extends State<SingUpScreen> {
                     return null;
                   },
                 ),
-                
+
                 SizedBox(height: 10),
 
                 // Campo de texto para repetir la contraseña
@@ -116,6 +197,36 @@ class SingUpScreenState extends State<SingUpScreen> {
                     return null;
                   },
                 ),
+
+                SizedBox(height: 20),
+
+                Row(children: [
+
+                  /*ElevatedButton(
+                    onPressed: () {
+                      showCountryPicker(
+                        context: context,
+                        onSelect: (Country country) {
+                          setState(() {
+                            selectedCountry = country.name;
+                          });
+                        },
+                      );
+                    },
+                    child: Text('Selecciona un país'),
+                  ),
+                  TextFormField(
+                    controller: _countryController,
+                    decoration:
+                        InputDecoration(labelText: 'Seleccione un país'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Selección un país';
+                      }
+                      return null;
+                    },
+                  ),*/
+                ]),
 
                 SizedBox(height: 20),
 
