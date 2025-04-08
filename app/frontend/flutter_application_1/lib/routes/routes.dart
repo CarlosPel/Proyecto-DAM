@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
+import 'package:flutter_application_1/screens/news_screen.dart';
 import 'package:flutter_application_1/screens/profile_screen.dart';
 import 'package:flutter_application_1/screens/singup_screen.dart';
 
@@ -14,6 +15,8 @@ class AppRoutes {
   static const String singUpScreen = '/singup';
   // Ruta de la pantalla de perfil
   static const String profileScreen = '/profile';
+  // Ruta de la pantalla de noticias
+  static const String newsScreen = '/news';
 
   // Devuelve un mapa con las rutas de la aplicación
   static Map<String, WidgetBuilder> getRoutes() {
@@ -22,6 +25,7 @@ class AppRoutes {
       loginScreen: (context) => LoginScreen(),
       singUpScreen: (context) => SingUpScreen(),
       profileScreen: (context) => ProfileScreen(),
+      newsScreen: (context) => NewsScreen(),
     };
   }
 }
