@@ -1,19 +1,15 @@
-// server.js
-require('dotenv').config();
 const express = require('express');
-const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+require('dotenv').config();
 
 const app = express();
+const PORT = process.env.SERVER_PORT || 5000;
 
-// Middleware para parsear JSON
-app.use(express.json());
+app.use(express.json()); // Middleware para parsear JSON
 
-// Rutas de autenticación
-app.use('/api/auth', authRoutes);
+// Rutas
+app.use('/users', userRoutes);
 
-// Puerto de escucha
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
