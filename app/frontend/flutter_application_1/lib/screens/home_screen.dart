@@ -19,8 +19,21 @@ class HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: Text('What\'s New'),
       ),
-      body: Stack(
+      body: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.newsScreen);
+                  },
+                  child: Icon(Icons.newspaper),
+                ),
+              ),
+            ],  
+          ),
           SingleChildScrollView(
             child: Column(
               children: List.generate(
