@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
-  const { username, password, email, nation, admin } = req.body;
+  const { username, password, email, nation } = req.body;
 
   try {
     // Validar que no falten datos obligatorios
@@ -28,10 +28,10 @@ const registerUser = async (req, res) => {
 
     // Insertar el usuario en la base de datos
     const query = `
-      INSERT INTO users (username, password_hash, email, nation, admin)
-      VALUES ($1, $2, $3, $4, $5) RETURNING *;
+      INSERT INTO users (username, password_hash, email, nation)
+      VALUES ($1, $2, $3, $4) RETURNING *;
     `;
-    const values = [username, hashedPassword, email, nation, admin !== undefined ? admin : false];
+    const values = [username, hashedPassword, email, nation];
 
     const result = await pool.query(query, values);
     res.status(201).json({ message: 'Usuario registrado con éxito', user: result.rows[0] });
