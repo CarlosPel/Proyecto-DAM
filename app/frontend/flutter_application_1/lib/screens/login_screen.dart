@@ -32,7 +32,6 @@ class LoginScreenState extends State<LoginScreen> {
       final String backendUrl = 'http://localhost:5000/users/login';
 
       try {
-        print(Uri.parse(backendUrl));
         // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
         final response = await http.post(
           Uri.parse(backendUrl),
@@ -43,8 +42,6 @@ class LoginScreenState extends State<LoginScreen> {
           // Se envía el cuerpo de la solicitud codificado como JSON
           body: jsonEncode({'email': email, 'password': password}),
         );
-        
-        print(Uri.parse(backendUrl));
 
         // Verifica si la respuesta es exitosa (código 200)
         if (response.statusCode == 200) {
