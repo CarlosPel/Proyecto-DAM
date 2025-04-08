@@ -68,4 +68,4 @@ CREATE TABLE noticia (
 );
 
 -- Insert de una nacion para el registro
-INSERT INTO nation (nationName) VALUES ('España');
+INSERT INTO nation (nationName) VALUES ('Grecia');
