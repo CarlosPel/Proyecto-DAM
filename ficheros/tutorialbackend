@@ -25,8 +25,20 @@ Tutorial para configurar y preparar el backend de nuestro proyecto.
 
 3. Conectar Postgres con Node.js.
 	!! Importante, yo (Miguel 5/4/2025) ya he ejecutado los siguientes comandos, por lo que al clonarte
-		 el repo, solo necesitarías ejecutar el comando "npm install".
+		 el repo, solo necesitarías ejecutar el comando "npm install", desde la carpeta "/backend".
 	+ Hay que irse, en cmd, a la carpeta donde se guardarán los archivos backend del proyecto.
 	+ Una vez en estamos en la carpeta backend, ejecutamos los siguientes comandos.
 		> "npm init -y"
 		> "npm install pg"
+
+4. Acceder a PostgreSQL y crear la base de datos.
+	+ Se abre un terminal y se introduce el comando "psql -U postgres" para acceder a PostgreSQL.
+	+ Una vez dentro, se ejecuta "\i ruta/absoluta/archivo.sql de la bbdd" Para generar la base y sus respectivas tablas.
+	+ Si se desea, se pueden crear más usuarios para ser utilizados en el pool del backend, se hace con el siguiente comando:
+		> create role nombre with login password passwd;
+		> alter role nombre with superuser;
+
+5. Levantar el servidor del backend y comenzar a trabajar con él.
+	+ Se abre un terminal y se ejecuta el comando "node server.js" desde la carpeta backend, esto arrancará el servidor. Debemos dejar esa terminal minimizada y 
+		no tocarla. En ella, se mostrarán los mensajes de las operaciones realizadas en el servidor.
+	+ Si se desea comprobar la funcionalidad del backend, utilizando el comando "curl" se puede simular.
