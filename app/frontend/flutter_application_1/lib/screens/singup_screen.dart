@@ -2,11 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/routes.dart';
-import 'package:country_picker/country_picker.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:country_list/country_list.dart';
-
-
 
 // Pantalla de registro de cuenta
 class SingUpScreen extends StatefulWidget {
@@ -200,7 +197,25 @@ class SingUpScreenState extends State<SingUpScreen> {
 
                 SizedBox(height: 20),
 
-                Row(children: [
+                CountryCodePicker(
+                  onChanged: (code) {
+                    setState(() {
+                      selectedCountry = code.name;
+                    });
+                  },
+                  initialSelection: 'ES',
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  comparator: (a, b) => b.name!.compareTo(a.name!),
+                  onInit: (code) {
+                    /*debugPrint(
+                        "on init ${code?.name} ${code?.dialCode} ${code?.name}");*/
+                    print('insert into nation (code, nation_name) values\n');
+                    for (var country in codes) {
+                      print('(\'${country['code']}\', \'${country['name']}\'),');
+                    }
+                  },
+                ),
+                /*Row(children: [
 
                   /*ElevatedButton(
                     onPressed: () {
@@ -226,7 +241,7 @@ class SingUpScreenState extends State<SingUpScreen> {
                       return null;
                     },
                   ),*/
-                ]),
+                ]),*/
 
                 SizedBox(height: 20),
 

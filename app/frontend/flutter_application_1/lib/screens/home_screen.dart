@@ -16,7 +16,7 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         title: Text('What\'s New'),
       ),
       body: Column(
@@ -30,6 +30,14 @@ class HomeScreenState extends State<HomeScreen> {
                       Navigator.pushNamed(context, AppRoutes.newsScreen);
                   },
                   child: Icon(Icons.newspaper),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.profileScreen);
+                  },
+                  child: Icon(Icons.person),
                 ),
               ),
             ],  

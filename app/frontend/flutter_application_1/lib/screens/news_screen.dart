@@ -15,7 +15,7 @@ class NewsScreenState extends State<NewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         title: Text('Newspaper'),
       ),
       body: SingleChildScrollView(

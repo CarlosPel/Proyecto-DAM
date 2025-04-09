@@ -29,7 +29,7 @@ class LoginScreenState extends State<LoginScreen> {
       final String password = _passwordController.text;
 
       // URL del backend
-      final String backendUrl = 'http://localhost:5000/users/login';
+      final String backendUrl = 'http://10.0.2.2:5000/users/login';
 
       try {
         // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST

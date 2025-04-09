@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/clases/user_profile.dart';
+import 'package:flutter_application_1/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,8 +13,11 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final UserProfile userProfile = Provider.of<UserProvider>(context).user!;
+
     return Scaffold(
       appBar: AppBar(
+        // automaticallyImplyLeading: false,
         title: const Text('Mi Perfil'),
       ),
       body: Padding(
@@ -19,18 +25,18 @@ class ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
+            /*CircleAvatar(
               radius: 50,
               //backgroundImage: AssetImage(Icons.person),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),*/
             Text(
-              'Nombre de Usuario',
+              userProfile.username,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8.0),
             Text(
-              'email@ejemplo.com',
+              userProfile.email,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 24.0),
@@ -46,4 +52,3 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
