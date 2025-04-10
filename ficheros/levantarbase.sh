@@ -38,7 +38,13 @@ curl -X POST http://localhost:5000/users/register -H "Content-Type: application/
   "email": "lenin@prueba.com",
   "nation": "RU"
 }'
-
+echo "Ejecutando comando curl para registrar un usuario..."
+curl -X POST http://localhost:5000/users/register -H "Content-Type: application/json" -d '{
+  "username": "paco",
+  "password": "123456",
+  "email": "paco@prueba.com",
+  "nation": "ES"
+}'
 echo "Ejecutando comando curl para registrar un usuario..."
 curl -X POST http://localhost:5000/users/register -H "Content-Type: application/json" -d '{
   "username": "hamilton",

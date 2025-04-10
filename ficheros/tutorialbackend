@@ -32,8 +32,8 @@ Tutorial para configurar y preparar el backend de nuestro proyecto.
 		> "npm install pg"
 
 4. Acceder a PostgreSQL y crear la base de datos.
-	+ Se abre un terminal y se introduce el comando "psql -U postgres" para acceder a PostgreSQL.
-	+ Una vez dentro, se ejecuta "\i ruta/absoluta/archivo.sql de la bbdd" Para generar la base y sus respectivas tablas.
+	+ Para este paso, existe un fichero automatizado. En la raíz del repo, ejecutamos (sustituyendo $1 por la ruta del fichero './bbdd.sql') el siguiente comando: 
+		"./ficheros/levantarbase.sh $1"
 	+ Si se desea, se pueden crear más usuarios para ser utilizados en el pool del backend, se hace con el siguiente comando:
 		> create role nombre with login password passwd;
 		> alter role nombre with superuser;
