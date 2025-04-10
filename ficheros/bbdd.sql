@@ -54,13 +54,15 @@ CREATE TABLE post (
     title VARCHAR(100),
     nation VARCHAR(2) NOT NULL,
     topic VARCHAR(100),
+    noticia INT,
     content TEXT NOT NULL,
     post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     parent_post INT NULL,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE SET NULL,
     FOREIGN KEY (topic) REFERENCES topic(topic_name) ON DELETE SET NULL,
-    FOREIGN KEY (parent_post) REFERENCES post(id_post) ON DELETE CASCADE
+    FOREIGN KEY (parent_post) REFERENCES post(id_post) ON DELETE SET NULL,
+    FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
 -- Creación de la tabla noticia
@@ -68,7 +70,11 @@ CREATE TABLE noticia (
     id_noticia SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL,
     author_name VARCHAR(200) NOT NULL,
-    content TEXT NOT NULL
+    title VARCHAR(200) NOT NULL,
+    subtitle VARCHAR(700) NOT NULL,
+    content TEXT NOT NULL,
+    nation VARCHAR(2) NOT NULL,
+    FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE CASCADE
 );
 
 -- Insert de las naciones

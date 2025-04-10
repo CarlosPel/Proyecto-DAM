@@ -87,4 +87,41 @@ const loginUser = async (req, res) => {
 };
 
 
-module.exports = { registerUser, loginUser };
+const editProfileUser = async (req, res) => {
+  const { username, email, nation } = req.body;
+  const { id_user } = req.params
+try {
+    // Validar que se envíen todos los campos obligatorios desde el frontend
+    if (!username || !email || !nation) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    // Validar formato de correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
+    }
+
+    // Actualizar los datos en la base de datos
+    const query = `
+      UPDATE users 
+      SET username = $1, email = $2, nation = $3 
+      WHERE id_user = $4 RETURNING *;
+    `;
+    const values = [username, email, nation, id_user];
+
+    const result = await pool.query(query, values);
+
+    // Verificar si el usuario existe
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({ message: 'Perfil actualizado con éxito', user: result.rows[0] });
+  } catch (error) {
+    console.error('Detalle del error:', error);
+    res.status(500).json({ error: 'Error al actualizar el perfil del usuario' });
+  }
+};
+
+module.exports = { registerUser, loginUser, editProfileUser };
