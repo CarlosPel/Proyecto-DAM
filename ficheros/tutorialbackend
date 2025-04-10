@@ -27,9 +27,9 @@ Tutorial para configurar y preparar el backend de nuestro proyecto.
 	!! Importante, yo (Miguel 5/4/2025) ya he ejecutado los siguientes comandos, por lo que al clonarte
 		 el repo, solo necesitarías ejecutar el comando "npm install", desde la carpeta "/backend".
 	+ Hay que irse, en cmd, a la carpeta donde se guardarán los archivos backend del proyecto.
-	+ Una vez en estamos en la carpeta backend, ejecutamos los siguientes comandos.
+	+ Una vez estamos en la carpeta backend, ejecutamos los siguientes comandos.
 		> "npm init -y"
-		> "npm install pg"
+		> "npm install pg express jsonwebtoken cors"
 
 4. Acceder a PostgreSQL y crear la base de datos.
 	+ Para este paso, existe un fichero automatizado. En la raíz del repo, ejecutamos (sustituyendo $1 por la ruta del fichero './bbdd.sql') el siguiente comando: 
