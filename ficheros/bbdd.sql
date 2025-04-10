@@ -47,6 +47,20 @@ CREATE TABLE user_topic (
     FOREIGN KEY (topic_name) REFERENCES topic(topic_name) ON DELETE CASCADE
 );
 
+
+-- Creación de la tabla noticia
+CREATE TABLE noticia (
+    id_noticia SERIAL PRIMARY KEY,
+    company_name VARCHAR(100) NOT NULL,
+    author_name VARCHAR(200) NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    subtitle VARCHAR(700) NOT NULL,
+    content TEXT NOT NULL,
+    nation VARCHAR(2) NOT NULL,
+    FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE CASCADE
+);
+
+
 -- Creación de la tabla post
 CREATE TABLE post (
     id_post SERIAL PRIMARY KEY,
@@ -65,17 +79,6 @@ CREATE TABLE post (
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
--- Creación de la tabla noticia
-CREATE TABLE noticia (
-    id_noticia SERIAL PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    author_name VARCHAR(200) NOT NULL,
-    title VARCHAR(200) NOT NULL,
-    subtitle VARCHAR(700) NOT NULL,
-    content TEXT NOT NULL,
-    nation VARCHAR(2) NOT NULL,
-    FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE CASCADE
-);
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 

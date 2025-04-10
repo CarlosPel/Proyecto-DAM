@@ -32,9 +32,14 @@ const registerUser = async (req, res) => {
       VALUES ($1, $2, $3, $4) RETURNING *;
     `;
     const values = [username, hashedPassword, email, nation];
-
     const result = await pool.query(query, values);
-    res.status(201).json({ message: 'Usuario registrado con éxito', user: result.rows[0] });
+
+    if (result.rows.length === 0) {
+      return res.status(500).json({ error: 'Error al registrar el usuario en la base de datos' });
+    }
+
+    await loginUser(req, res);
+
   } catch (error) {
     // Manejo de errores específicos
     if (error.code === '23505') { // Código para violación de clave única
