@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/routes/routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:http/http.dart' as http;
 
 // Pantalla de registro de cuenta
@@ -26,7 +28,7 @@ class SingUpScreenState extends State<SingUpScreen> {
   // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // Variable para almacenar el país seleccionado
-  String? selectedCountry;
+  String? country;
 
   // Método para manejar el registro de cuenta
   Future<void> _singUp() async {
@@ -36,10 +38,9 @@ class SingUpScreenState extends State<SingUpScreen> {
       final String email = _emailController.text;
       final String password = _passwordController.text;
       final String username = _usernameController.text;
-      final String country = 'Spain';
 
       // URL del backend
-      final String backendUrl = 'http://localhost:5000/users/register';
+      final String backendUrl = 'http://10.0.2.2:5000/users/register';
 
       try {
         // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
@@ -55,19 +56,20 @@ class SingUpScreenState extends State<SingUpScreen> {
             'email': email,
             'password': password,
             'nation': country,
-            'admin': false
           }),
         );
 
         // Verifica si la respuesta es exitosa (código 200)
-        if (response.statusCode == 201) {
+        if (response.statusCode == 200) {
           // Decodifica la respuesta JSON
           // final responseData = jsonDecode(response.body);
-
+          print('1');
           // Verifica que el estado esta asociado a un contexto montado
           if (mounted) {
             // Pasa a la pantalla principal
-            Navigator.pushNamed(context, AppRoutes.loginScreen);
+            print('2');
+            LoginScreenState().goHomeScreen(response);
+            print('3');
           }
         } else {
           if (mounted) {
@@ -117,7 +119,7 @@ class SingUpScreenState extends State<SingUpScreen> {
 
                 // Mensaje de bienvenida
                 Text(
-                  'Bienvenido a SPQR',
+                  'Bienvenido a ${AppData.name}',
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -199,21 +201,23 @@ class SingUpScreenState extends State<SingUpScreen> {
 
                 CountryCodePicker(
                   onChanged: (code) {
-                    setState(() {
-                      selectedCountry = code.name;
-                    });
+                    country = code.code;
                   },
                   initialSelection: 'ES',
                   margin: const EdgeInsets.symmetric(horizontal: 6),
                   comparator: (a, b) => b.name!.compareTo(a.name!),
                   onInit: (code) {
+                    code!.name = 'España';
+                    country = code.code;
                     /*debugPrint(
                         "on init ${code?.name} ${code?.dialCode} ${code?.name}");*/
-                    print('insert into nation (code, nation_name) values\n');
+                    /*print('insert into nation (code, nation_name) values\n');
                     for (var country in codes) {
                       print('(\'${country['code']}\', \'${country['name']}\'),');
-                    }
+                    }*/
                   },
+                  showCountryOnly: true,
+                  showOnlyCountryWhenClosed: true,
                 ),
                 /*Row(children: [
 

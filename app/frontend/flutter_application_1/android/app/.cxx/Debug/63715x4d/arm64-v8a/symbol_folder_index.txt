@@ -1,0 +1,1 @@
+C:\Users\cspellon\Proyecto-DAM\app\frontend\flutter_application_1\build\app\intermediates\cxx\Debug\63715x4d\obj\arm64-v8a

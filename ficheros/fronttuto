@@ -1,0 +1,42 @@
+Tutorial para configurar y preparar el backend de nuestro proyecto.
+
+Verificar instalación de flutter
+  + flutter doctor
+      y seguir las instrucciones que nos da el terminal para instalar lo que falte.
+  + flutter doctor --android-licenses
+      y suele pedir aceptar las licencias de android
+  + flutter config --android-sdk "C:\Users\Usuario\AppData\Local\Android\Sdk"
+      (cambiar por tu ruta)
+
+Ejecutar app en emulador.
+  + flutter emulators
+      para listar los emuladores disponibles
+  + flutter emulators --launch <id_emulador>
+      para lanzar el emulador
+	+ flutter devices
+      para listar los dispositivos disponibles y ver si el emulador está conectado
+  + flutter run
+      para ejecutar la app en el emulador
+      + fluuter run -d <id_emulador>
+        para ejecutar la app en el emulador en caso de que haya más de uno disponible
+  + r (en terminal)
+      tras realizar cambios para aplicarlos en la app del emulador
+  + ctrl + c (en terminal)
+      para parar la app en el emulador
+
+Depurar app en movil.
+  + Activar opciones de desarrollador en el movil
+  + Activar depuración por usb en el movil
+  + Conectar movil por usb al ordenador
+  + flutter devices
+      para listar los dispositivos disponibles y ver si el movil está conectado
+  + flutter emulators --launch <id_movil>
+  + No desconectar el movil del usb para seguir actualizando los cambios en la app
+
+Instalar app en movil.
+  + flutter build apk --release
+      para crear el apk de la app
+  + flutter install
+      para instalar el apk en el movil conectado por usb
+  + flutter run --release
+      para ejecutar la app en el movil conectado por usb+ 
