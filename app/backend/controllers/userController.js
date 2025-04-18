@@ -65,11 +65,11 @@ const loginUser = async (req, res) => {
     const result = await pool.query(query, [email]);
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Credenciales incorrectas' });
+      return res.status(401).json({ error: 'Email no registrado' });
     }
 
     const user = result.rows[0];
-    const userData = {username: user.username, email: user.email, nation: user.nation};
+    const userData = { username: user.username, email: user.email, nation: user.nation };
 
     // Verificar la contraseña
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({ message: 'Inicio de sesión exitoso', token, user: userData});
+    res.status(200).json({ message: 'Inicio de sesión exitoso', token, user: userData });
   } catch (error) {
     console.error('Detalle del error:', error);
     res.status(500).json({ error: 'Error al iniciar sesión' });
@@ -95,7 +95,7 @@ const loginUser = async (req, res) => {
 const editProfileUser = async (req, res) => {
   const { username, email, nation } = req.body;
   const { id_user } = req.params
-try {
+  try {
     // Validar que se envíen todos los campos obligatorios desde el frontend
     if (!username || !email || !nation) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });

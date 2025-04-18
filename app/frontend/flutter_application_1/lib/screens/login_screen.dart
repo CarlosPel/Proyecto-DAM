@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/routes/routes.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application_1/utilities/auth_service.dart';
 
 // Pantalla de inicio de sesión
 class LoginScreen extends StatefulWidget {
@@ -21,57 +19,6 @@ class LoginScreenState extends State<LoginScreen> {
   // Clave global para el formulario
   // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  // Método para manejar el inicio de sesión
-  Future<void> _login() async {
-    // Valida el formulario ejecutando los métodos de validación de cada campo
-    if (_formKey.currentState!.validate()) {
-      // Email y contraseña ingresados por el usuario
-      login(_emailController.text, _passwordController.text);
-    }
-  }
-
-  Future<void> login(String email, String password) async {
-    // URL del backend
-    final String backendUrl = 'http://10.0.2.2:5000/users/login';
-
-    try {
-      // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
-      final response = await http.post(
-        Uri.parse(backendUrl),
-
-        // Se especifica el tipo de contenido como JSON
-        headers: {'Content-Type': 'application/json'},
-
-        // Se envía el cuerpo de la solicitud codificado como JSON
-        body: jsonEncode({'email': email, 'password': password}),
-      );
-
-      // Verifica si la respuesta es exitosa (código 200)
-      if (response.statusCode == 200) {
-        goHomeScreen(response);
-      } else {
-        if (mounted) {
-          // Mensaje de error
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${response.body}')),
-          );
-        }
-      }
-    } catch (e) {
-      // Manejar errores de conexión con el backend
-      if (mounted) {
-        // Mensaje de error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de conexión: $e')),
-        );
-      }
-    }
-  }
-
-  void _goSingUp() {
-    Navigator.pushNamed(context, AppRoutes.singUpScreen);
-  }
 
   // Interfaz de el formulario de inicio de sesión
   @override
@@ -148,7 +95,16 @@ class LoginScreenState extends State<LoginScreen> {
 
                 // Botón de inicio de sesión
                 ElevatedButton(
-                  onPressed: _login,
+                  onPressed: () {
+                    // Valida el formulario
+                    if (_formKey.currentState!.validate()) {
+                      // Si el formulario es válido, llama al método de inicio de sesión
+                      loginUser(
+                          context: context,
+                          email: _emailController.text,
+                          password: _passwordController.text);
+                    }
+                  },
                   child: Text('Iniciar sesión'),
                 ),
 
@@ -156,7 +112,10 @@ class LoginScreenState extends State<LoginScreen> {
 
                 // Texto para redirigir a la pantalla de registro
                 TextButton(
-                  onPressed: _goSingUp,
+                  onPressed: () {
+                    // Navega a la pantalla de registro
+                    Navigator.pushNamed(context, AppRoutes.singUpScreen);
+                  },
                   child: Text(
                     '¿No tienes una cuenta? Regístrate aquí',
                     style: TextStyle(
@@ -173,7 +132,10 @@ class LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     // Navigator.pushNamed(context, AppRoutes.homeScreen);
                     // lenin@prueba.com
-                    login('lenin@prueba.com', '123456');
+                    loginUser(
+                        context: context,
+                        email: 'lenin@prueba.com',
+                        password: '123456');
                   },
                   child: Text('Inicio rápido'),
                 ),
@@ -183,29 +145,5 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  void goHomeScreen(http.Response response) {
-    // Decodifica la respuesta JSON
-    final responseData = jsonDecode(response.body);
-    
-    // Verifica que el estado esta asociado a un contexto montado
-    if (mounted) {
-      // Mensaje de éxito
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                '${responseData['message']}. Bienvenido ${responseData['user']['username']}')),
-      );
-
-      // Guarda datos del usuario en shared preferences
-      guardarDatosUsuario(responseData['user']['username'],
-          responseData['user']['email'], responseData['user']['nation']);
-
-      // Pasa a la pantalla principal
-      print('5');
-      Navigator.pushNamed(context, AppRoutes.homeScreen);
-      print('6');
-    }
   }
 }

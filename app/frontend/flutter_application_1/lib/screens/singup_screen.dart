@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/routes/routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter_application_1/screens/login_screen.dart';
+import 'package:flutter_application_1/utilities/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 // Pantalla de registro de cuenta
@@ -61,15 +61,18 @@ class SingUpScreenState extends State<SingUpScreen> {
 
         // Verifica si la respuesta es exitosa (código 200)
         if (response.statusCode == 200) {
-          // Decodifica la respuesta JSON
-          // final responseData = jsonDecode(response.body);
-          print('1');
-          // Verifica que el estado esta asociado a un contexto montado
           if (mounted) {
-            // Pasa a la pantalla principal
-            print('2');
-            LoginScreenState().goHomeScreen(response);
-            print('3');
+            // Decodifica la respuesta JSON
+            final responseData = jsonDecode(response.body);
+
+            // Mensaje de éxito
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(
+                      '${responseData['message']}. Bienvenido ${responseData['user']['username']}')),
+            );
+            
+            await loginUser(context: context, email: email, password: password);
           }
         } else {
           if (mounted) {
