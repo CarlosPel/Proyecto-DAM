@@ -134,7 +134,7 @@ class LoginScreenState extends State<LoginScreen> {
                     // lenin@prueba.com
                     loginUser(
                         context: context,
-                        email: 'lenin@prueba.com',
+                        email: 'paco@prueba.com',
                         password: '123456');
                   },
                   child: Text('Inicio rápido'),

@@ -13,66 +13,63 @@ class ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
         title: const Text('Mi Perfil'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            /*CircleAvatar(
-              radius: 50,
-              //backgroundImage: AssetImage(Icons.person),
-            ),
+        child: FutureBuilder<Map<String, String>>(
+          future: obtenerDatosUsuario(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Error al cargar los datos'));
+            } else if (snapshot.hasData) {
+              final userData = snapshot.data!;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Avatar del usuario
+                  const CircleAvatar(
+                    radius: 50,
+                    child: Icon(Icons.person, size: 50),
+                  ),
+                  const SizedBox(height: 16.0),
 
-            const SizedBox(height: 16.0),*/
-            
-            // Nombre de usuario
-            FutureBuilder<Map<String, String>>(
-              future: obtenerDatosUsuario(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return const Text('Error loading data');
-                } else if (snapshot.hasData) {
-                  return Text(
-                    snapshot.data!['nombre'] ?? 'username',
+                  // Nombre de usuario
+                  Text(
+                    userData['nombre'] ?? 'Nombre no disponible',
                     style: Theme.of(context).textTheme.titleLarge,
-                  );
-                } else {
-                  return const Text('No data available');
-                }
-              },
-            ),
+                  ),
+                  const SizedBox(height: 8.0),
 
-            const SizedBox(height: 8.0),
+                  // Correo electrónico
+                  Text(
+                    userData['email'] ?? 'Correo no disponible',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 8.0),
 
-            // Correo electrónico
-            Text(
-              'userProfile.email', 
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+                  // País
+                  Text(
+                    userData['countryCode'] ?? 'País no disponible',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 24.0),
 
-            const SizedBox(height: 24.0),
-
-            // Correo electrónico
-            Text(
-              'userProfile.country',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-
-            const SizedBox(height: 24.0),
-
-            // Botón para editar perfil
-            ElevatedButton(
-              onPressed: () {
-                // Acción para editar perfil
-              },
-              child: const Text('Editar Perfil'),
-            ),
-          ],
+                  // Botón para editar perfil
+                  ElevatedButton(
+                    onPressed: () {
+                      // Acción para editar perfil
+                    },
+                    child: const Text('Editar Perfil'),
+                  ),
+                ],
+              );
+            } else {
+              return const Center(child: Text('No hay datos disponibles'));
+            }
+          },
         ),
       ),
     );
