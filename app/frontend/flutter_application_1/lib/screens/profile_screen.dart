@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 
@@ -17,6 +18,8 @@ class ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+
+        // FutureBuilder para cargar los datos del usuario
         child: FutureBuilder<Map<String, String>>(
           future: obtenerDatosUsuario(),
           builder: (context, snapshot) {
@@ -51,11 +54,29 @@ class ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 8.0),
 
                   // País
-                  Text(
+                  CountryCodePicker(
+                    enabled: false,
+                    onChanged: (code) {},
+                    initialSelection: userData['countryCode'] ?? 'ES',
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    comparator: (a, b) => b.name!.compareTo(a.name!),
+                    onInit: (code) {
+                      code!.name = code.code == 'ES' ? 'España' : code.name;
+                      /*debugPrint(
+                        "on init ${code?.name} ${code?.dialCode} ${code?.name}");*/
+                      /*print('insert into nation (code, nation_name) values\n');
+                    for (var country in codes) {
+                      print('(\'${country['code']}\', \'${country['name']}\'),');
+                    }*/
+                    },
+                    showCountryOnly: true,
+                    showOnlyCountryWhenClosed: true,
+                  ),
+                  /*Text(
                     userData['countryCode'] ?? 'País no disponible',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),*/
 
                   // Botón para editar perfil
                   ElevatedButton(

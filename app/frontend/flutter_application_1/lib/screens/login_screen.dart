@@ -130,8 +130,6 @@ class LoginScreenState extends State<LoginScreen> {
                 // Botón para saltarse el inicio de sesión
                 ElevatedButton(
                   onPressed: () {
-                    // Navigator.pushNamed(context, AppRoutes.homeScreen);
-                    // lenin@prueba.com
                     loginUser(
                         context: context,
                         email: 'paco@prueba.com',
