@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/user_data.dart';
@@ -30,7 +32,7 @@ Future<void> loginUser({
       );
 
       // Guardar datos del usuario
-      await guardarDatosUsuario(responseData);
+      await saveUserData(responseData);
 
       // Navegar a la pantalla principal
       Navigator.pushNamed(context, AppRoutes.homeScreen);

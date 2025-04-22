@@ -21,7 +21,7 @@ class ProfileScreenState extends State<ProfileScreen> {
 
         // FutureBuilder para cargar los datos del usuario
         child: FutureBuilder<Map<String, String>>(
-          future: obtenerDatosUsuario(),
+          future: getUserData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
