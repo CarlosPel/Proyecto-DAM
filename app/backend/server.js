@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(cors());
 
 // Rutas
 app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
