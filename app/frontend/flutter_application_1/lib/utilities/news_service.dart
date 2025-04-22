@@ -1,16 +1,15 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_application_1/data/app_data.dart';
 import 'package:http/http.dart' as http;
 
 // Función para obtener las noticias principales
-Future<List<dynamic>> fetchTopHeadlines({String country = 'us'}) async {
+Future<List<dynamic>> fetchTopHeadlines(userData, {String country = 'us'}) async {
   final String url = '/top-headlines?country=$country&apiKey=';
   return await _fetchNews(url);
 }
 
 Future<List<dynamic>> _fetchNews(String url) async {
-  final String? apiKey =
-      dotenv.env['NEWS_API_KEY']; // Reemplaza con tu clave de API de NewsAPI
+  final String apiKey = AppData.apiKey;//dotenv.env['NEWS_API_KEY'];
   final String baseUrl = 'https://newsapi.org/v2';
   final String fullUrl = '$baseUrl$url$apiKey';
 

@@ -20,7 +20,7 @@ Tutorial para configurar y preparar el backend de nuestro proyecto.
 
 	+ PostgreDB
 		- Añadir la ruta "../PostgreSQL\17\bin" a variables de entorno.
-		- Abrir un terminal y ejecutar "psql -U postres"
+		- Abrir un terminal y ejecutar "psql -U postgres"
 		- Estarías listo para trabajar con postgres.
 
 3. Conectar Postgres con Node.js.
