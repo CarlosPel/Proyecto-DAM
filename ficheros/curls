@@ -1,0 +1,51 @@
+#CURLS para comprobar la funcionalidad del backend.
+
+
+#CURL de Registro:
+
+curl -X POST http://localhost:5000/users/register \
+-H "Content-Type: application/json" \
+-d '{
+  "username": "prueba",
+  "password": "123456",
+  "email": "prueba@prueba.com",
+  "nation": "ES"
+}'
+
+
+#CURL de LogIn:
+
+curl -X POST http://localhost:5000/users/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "lenin@prueba.com",
+  "password": "123456"
+}'
+
+
+#CURL de actualizar perfil:
+
+curl -X PUT http://localhost:5000/users/editProfile \
+-H "Authorization: Bearer <token>" \
+-H "Content-Type: application/json" \
+-d '{
+  "username": "prueba",
+  "password": "123456",
+  "email": "prueba@prueba.com",
+  "nation": "DZ"
+}'
+
+
+#CURL de crear post:
+
+curl -X POST http://localhost:5000/posts/create \
+-H "Authorization: Bearer <token>" \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "",
+  "nation": "ES",
+  "topic": "",
+  "noticia": "",
+  "content": "post de prueba 0.",
+  "parent_post": ""
+}'

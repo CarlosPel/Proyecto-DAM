@@ -3,7 +3,7 @@ const authenticateUser = require('../middlewares/auth'); // Middleware de autent
 
 // Función para crear un post
 const createPost = async (req, res) => {
-    let { title, content, nation, topic, parent_post } = req.body; // Datos del post desde el cliente
+    let { title, content, nation, topic, parent_post, noticia } = req.body; // Datos del post desde el cliente
     const id_user = req.user.id_user; // Extraído del token JWT
     console.log(req.user);
     try {
@@ -24,9 +24,9 @@ const createPost = async (req, res) => {
         const post_date = new Date(); // Fecha actual
 
         const newPost = await pool.query(
-            `INSERT INTO post (id_user, title, content, nation, topic, post_date, parent_post)
-             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-            [id_user, title, content, nation, topic, post_date, parent_post]
+            `INSERT INTO post (id_user, title, nation, topic, noticia, content, post_date, parent_post)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+            [id_user, title, nation, topic, noticia, content, post_date, parent_post]
         );
 
         res.status(201).json({ message: 'Post creado exitosamente', post: newPost.rows[0] });

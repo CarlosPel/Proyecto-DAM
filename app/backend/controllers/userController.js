@@ -1,6 +1,7 @@
 const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const authenticateUser = require('../middlewares/auth');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
@@ -94,7 +95,7 @@ const loginUser = async (req, res) => {
 
 const editProfileUser = async (req, res) => {
   const { username, email, nation } = req.body;
-  const { id_user } = req.params
+  const id_user = req.user.id_user; // Extraído del token JWT
   try {
     // Validar que se envíen todos los campos obligatorios desde el frontend
     if (!username || !email || !nation) {
@@ -109,8 +110,8 @@ const editProfileUser = async (req, res) => {
 
     // Actualizar los datos en la base de datos
     const query = `
-      UPDATE users 
-      SET username = $1, email = $2, nation = $3 
+      UPDATE users
+      SET username = $1, email = $2, nation = $3
       WHERE id_user = $4 RETURNING *;
     `;
     const values = [username, email, nation, id_user];
@@ -122,7 +123,8 @@ const editProfileUser = async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    res.status(200).json({ message: 'Perfil actualizado con éxito', user: result.rows[0] });
+    await loginUser(req, res);
+    // res.status(200).json({ message: 'Perfil actualizado con éxito', user: result.rows[0] });
   } catch (error) {
     console.error('Detalle del error:', error);
     res.status(500).json({ error: 'Error al actualizar el perfil del usuario' });
