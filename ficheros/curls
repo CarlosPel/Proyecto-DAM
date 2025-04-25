@@ -49,3 +49,12 @@ curl -X POST http://localhost:5000/posts/create \
   "content": "post de prueba 0.",
   "parent_post": ""
 }'
+
+#CURL de traer noticias MEDIASTAK:
+
+curl -X POST http://localhost:3000/api/noticias \
+-H "Content-Type: application/json" \
+-d '{"url": "https://newsapi.org/v2/top-headlines?country=us"}'
+
+#CURL de traer noticias RAPIDAPI:
+curl -X POST http://localhost:5000/news/get -H "Content-Type: application/json" -d '{"urlSuffix": "?limit=5&country=ES&lang=es"}'
