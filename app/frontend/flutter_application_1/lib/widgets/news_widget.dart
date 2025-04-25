@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class NewsWidget extends StatefulWidget {
   final String titulo;
   final String contenido;
+  final bool isExpanded;
+  final VoidCallback onTap;
 
-  const NewsWidget({super.key, required this.titulo, required this.contenido});
+  const NewsWidget(
+      {super.key,
+      required this.titulo,
+      required this.contenido,
+      required this.onTap,
+      required this.isExpanded});
 
   @override
   NewsWidgetState createState() => NewsWidgetState();
@@ -34,7 +41,7 @@ class NewsWidgetState extends State<NewsWidget> {
                   Expanded(
                     child: Text(
                       widget.titulo,
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      style: const TextStyle(color: Colors.black, fontSize: 18),
                     ),
                   ),
                   Icon(
@@ -49,7 +56,7 @@ class NewsWidgetState extends State<NewsWidget> {
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
                     widget.contenido,
-                    style: const TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
                 crossFadeState: _isExpanded

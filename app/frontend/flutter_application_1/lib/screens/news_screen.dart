@@ -13,12 +13,21 @@ class NewsScreen extends StatefulWidget {
 class NewsScreenState extends State<NewsScreen> {
   // Future para cargar las noticias
   late Future<List<dynamic>> _newsFuture;
+  // Índice de la noticia pulsada
+  int _expandedIndex = -1;
 
   // Carga las noticias al crearse el estado de la pantalla de noticias
   @override
   void initState() {
     super.initState();
     _newsFuture = _loadNews();
+  }
+
+  // Cambia el estado de la noticia pulsada
+  void _toggleExpanded(int index) {
+    setState(() {
+      _expandedIndex = (_expandedIndex == index) ? -1 : index;
+    });
   }
 
   // Carga las noticias
@@ -55,8 +64,11 @@ class NewsScreenState extends State<NewsScreen> {
                 // Artículo correspondiente al número de elemento de la lista
                 final article = articles[index];
                 return NewsWidget(
-                    titulo: article['title'],
-                    contenido: article['description']);
+                  titulo: article['title'],
+                  contenido: article['snippet'],
+                  isExpanded: _expandedIndex == index,
+                  onTap: () => _toggleExpanded(index),
+                );
               },
             );
           } else {

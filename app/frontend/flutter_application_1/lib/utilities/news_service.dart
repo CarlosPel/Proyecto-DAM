@@ -1,28 +1,27 @@
 import 'dart:convert';
-import 'package:flutter_application_1/data/app_data.dart';
 import 'package:http/http.dart' as http;
 
-// Función para obtener las noticias principales
+// Noticias más relevantes de política del país del usuario ordenadas por ultima hora
 Future<List<dynamic>> fetchTopHeadlines(String? country) async {
-  final String filter = '/top-headlines?country=$country&categoty=politics';
-  return await _fetchNews(filter);
+  final String url =
+      '/topic-headlines?topic=CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ&country=ES&lang=es';
+  return await _fetchNews(url);
 }
 
-Future<List<dynamic>> _fetchNews(String filter) async {
-  final String apiKey = AppData.apiKey;//dotenv.env['NEWS_API_KEY'];
-  final String baseUrl = 'https://newsapi.org/v2';
-  final String url = '$baseUrl$filter&apiKey=$apiKey';
-
+// Obtiene las noticias de la url proporcionada
+Future<List<dynamic>> _fetchNews(String url) async {
+  final String loginUrl = 'http://10.0.2.2:5000/news/get';
   try {
-    print(url);
-    final response = await http.get(Uri.parse(url));
+    final response = await http.post(
+      Uri.parse(loginUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'urlFi': url}),
+    );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print(data);
-      return data;
+      return jsonDecode(response.body)['data'];
     } else {
-      throw Exception('Error al obtener las noticias: ${response.body}');
+      throw Exception('Error al cargar las noticias: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error de conexión: $e');
