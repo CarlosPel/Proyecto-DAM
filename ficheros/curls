@@ -57,4 +57,4 @@ curl -X POST http://localhost:3000/api/noticias \
 -d '{"url": "https://newsapi.org/v2/top-headlines?country=us"}'
 
 #CURL de traer noticias RAPIDAPI:
-curl -X POST http://localhost:5000/news/get -H "Content-Type: application/json" -d '{"urlSuffix": "?limit=5&country=ES&lang=es"}'
+curl -X POST http://localhost:5000/news/get -H "Content-Type: application/json" -d '{"urlFi": "/topic-headlines?topic=CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ&limit=500&country=ES&lang=es"}'

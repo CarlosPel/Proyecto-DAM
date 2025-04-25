@@ -35,14 +35,14 @@ const getNews = async (req, res) => {
 
 const getNews = async (req, res) => {
     try {
-        const { urlSuffix } = req.body; // Recibe la terminación de la URL desde el frontend.
+        const { urlFi } = req.body; // Recibe la terminación de la URL desde el frontend.
 
         // Configura los detalles de la solicitud.
         const options = {
             method: 'GET',
             hostname: 'real-time-news-data.p.rapidapi.com',
             port: null,
-            path: `${urlSuffix}`, // Añade la terminación proporcionada.
+            path: `${urlFi}`, // Añade la terminación proporcionada.
             headers: {
                 'x-rapidapi-key': process.env.NEWS_API_RAPIDAPI_KEY, // Clave API desde el archivo .env.
                 'x-rapidapi-host': 'real-time-news-data.p.rapidapi.com',
