@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/routes/routes.dart';
+import 'package:flutter_application_1/data/routes.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,6 +30,14 @@ class HomeScreenState extends State<HomeScreen> {
                       Navigator.pushNamed(context, AppRoutes.newsScreen);
                   },
                   child: Icon(Icons.newspaper),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.createPostScreen);
+                  },
+                  child: Icon(Icons.add_a_photo),
                 ),
               ),
               Expanded(

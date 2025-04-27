@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/news_service.dart';
-import 'package:flutter_application_1/widgets/news_widget.dart';
+import 'package:flutter_application_1/widgets/article_widget.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -26,7 +27,7 @@ class NewsScreenState extends State<NewsScreen> {
   // Cambia el estado de la noticia pulsada
   void _toggleExpanded(int index) {
     setState(() {
-      _expandedIndex = (_expandedIndex == index) ? -1 : index;
+      _expandedIndex = (_expandedIndex == index) ? -1 : index; // Cierra la actual si es la misma
     });
   }
 
@@ -63,9 +64,15 @@ class NewsScreenState extends State<NewsScreen> {
               itemBuilder: (context, index) {
                 // Artículo correspondiente al número de elemento de la lista
                 final article = articles[index];
-                return NewsWidget(
-                  titulo: article['title'],
-                  contenido: article['snippet'],
+                return ArticleWidget(
+                  article: Article(
+                    title: article['title'],
+                    snippet: article['snippet'],
+                    url: article['link'],
+                    imgUrl: article['photo_url'],
+                    datetime: article['published_datetime_utc'],
+                    source: article['source_name'],
+                  ),
                   isExpanded: _expandedIndex == index,
                   onTap: () => _toggleExpanded(index),
                 );

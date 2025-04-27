@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+const String politicsCode = 'CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ';
+
 // Noticias más relevantes de política del país del usuario ordenadas por ultima hora
 Future<List<dynamic>> fetchTopHeadlines(String? country) async {
   final String url =
-      '/topic-headlines?topic=CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ&country=ES&lang=es';
+      '/topic-headlines?topic=$politicsCode&country=ES&lang=es';
   return await _fetchNews(url);
 }
 

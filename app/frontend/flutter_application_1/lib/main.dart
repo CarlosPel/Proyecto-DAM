@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/routes/routes.dart';
+import 'package:flutter_application_1/data/routes.dart';
 
 // Método de ejecución de la aplicación
 void main() {
