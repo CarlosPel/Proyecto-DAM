@@ -2,7 +2,11 @@
 \c postgres
 DROP DATABASE agora;
 
-CREATE DATABASE agora;
+CREATE DATABASE agora
+WITH ENCODING 'UTF8'
+LC_COLLATE='es_ES.UTF-8'
+LC_CTYPE='es_ES.UTF-8'
+TEMPLATE template0;
 \c agora; 
 
 
@@ -51,13 +55,10 @@ CREATE TABLE user_topic (
 -- Creación de la tabla noticia
 CREATE TABLE noticia (
     id_noticia SERIAL PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    author_name VARCHAR(200) NOT NULL,
+    source_name VARCHAR(100) NOT NULL,
     title VARCHAR(200) NOT NULL,
-    subtitle VARCHAR(700) NOT NULL,
     content TEXT NOT NULL,
-    nation VARCHAR(2) NOT NULL,
-    FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE CASCADE
+    link TEXT NOT NULL
 );
 
 

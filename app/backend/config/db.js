@@ -8,6 +8,13 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  client_encoding: 'UTF8',
+});
+
+pool.on('connect', (client) => {
+  client.query('SET client_encoding = \'UTF8\';')
+    .then(() => console.log('Codificación del cliente establecida en UTF-8'))
+    .catch((err) => console.error('Error al configurar client_encoding:', err));
 });
 
 pool.on('connect', () => {
