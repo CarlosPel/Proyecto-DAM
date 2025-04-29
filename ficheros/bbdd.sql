@@ -80,6 +80,9 @@ CREATE TABLE post (
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
+-- Insert de los temas
+INSERT INTO topic (topic_name) VALUES 
+('socialismo');
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 
