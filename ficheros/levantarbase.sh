@@ -3,7 +3,7 @@
 # Verificar si se ha proporcionado el parámetro de la ruta del archivo SQL
 if [ -z "$1" ]; then
   echo "Error: Debes proporcionar la ruta del archivo SQL como parámetro."
-  echo "Uso: ./setup.sh /ruta/a/bbdd.sql"
+  echo "Uso: ./levantarbase.sh /ruta/a/bbdd.sql"
   exit 1
 fi
 

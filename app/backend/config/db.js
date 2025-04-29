@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 pool.on('connect', (client) => {
-  client.query('SET client_encoding = \'UTF8\';')
+  client.query('SET client_encoding = "UTF8";')
     .then(() => console.log('Codificación del cliente establecida en UTF-8'))
     .catch((err) => console.error('Error al configurar client_encoding:', err));
 });

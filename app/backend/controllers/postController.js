@@ -21,13 +21,22 @@ const createPost = async (req, res) => {
 	if (!noticia_title || noticia_title.trim() === "") {
 	    noticia = null;
 	}else{
-        const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link)
-            VALUES ($1, $2, $3, $4) RETURNING *`,
-            [noticia_source, noticia_title, noticia_content, noticia_url]
+        const comprobacionNoticia = await pool.query(`SELECT * FROM noticia WHERE source_name = $1 AND title = $2`,
+            [noticia_source, noticia_title]
         );
+        
+        if (comprobacionNoticia.rows.length === 0){
+            const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link)
+                VALUES ($1, $2, $3, $4) RETURNING *`,
+                [noticia_source, noticia_title, noticia_content, noticia_url]
+            );
+            console.log("Noticia creada.")
+            noticia = newNoticia.rows[0].id_noticia;
+        } else{
+            noticia = comprobacionNoticia.rows[0].id_noticia;
+        }
 
-        console.log("Noticia creada.")
-        noticia = newNoticia.rows[0].id_noticia;
+        
     }
 
         const post_date = new Date(); // Fecha actual
