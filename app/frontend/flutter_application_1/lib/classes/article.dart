@@ -2,7 +2,7 @@ class Article {
   String title;
   String snippet;
   String url;
-  String? imgUrl;
+  String imgUrl;
   String datetime;
   String source;
 
@@ -10,7 +10,7 @@ class Article {
     required this.title,
     required this.snippet,
     required this.url,
-    this.imgUrl,
+    required this.imgUrl,
     required this.datetime,
     required this.source,
   });

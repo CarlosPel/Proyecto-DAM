@@ -55,10 +55,10 @@ CREATE TABLE user_topic (
 -- Creación de la tabla noticia
 CREATE TABLE noticia (
     id_noticia SERIAL PRIMARY KEY,
-    source_name VARCHAR(100) NOT NULL,
-    title VARCHAR(200) NOT NULL,
-    content TEXT NOT NULL,
-    link TEXT NOT NULL
+    source_name VARCHAR(100),
+    title VARCHAR(200),
+    content TEXT,
+    link TEXT 
 );
 
 
@@ -80,6 +80,9 @@ CREATE TABLE post (
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
+-- Insert de los temas
+INSERT INTO topic (topic_name) VALUES 
+('socialismo');
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 

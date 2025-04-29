@@ -18,26 +18,26 @@ const createPost = async (req, res) => {
         if (!parent_post || parent_post.trim() === "") {
             parent_post = null;
         }
-	if (!noticia_title || noticia_title.trim() === "") {
-	    noticia = null;
-	}else{
-        const comprobacionNoticia = await pool.query(`SELECT * FROM noticia WHERE source_name = $1 AND title = $2`,
-            [noticia_source, noticia_title]
-        );
-        
-        if (comprobacionNoticia.rows.length === 0){
-            const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link)
-                VALUES ($1, $2, $3, $4) RETURNING *`,
-                [noticia_source, noticia_title, noticia_content, noticia_url]
+        if (!noticia_title || noticia_title.trim() === "") {
+            noticia = null;
+        } else {
+            const comprobacionNoticia = await pool.query(`SELECT * FROM noticia WHERE source_name = $1 AND title = $2`,
+                [noticia_source, noticia_title]
             );
-            console.log("Noticia creada.")
-            noticia = newNoticia.rows[0].id_noticia;
-        } else{
-            noticia = comprobacionNoticia.rows[0].id_noticia;
-        }
 
-        
-    }
+            if (comprobacionNoticia.rows.length === 0) {
+                const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link)
+                VALUES ($1, $2, $3, $4) RETURNING *`,
+                    [noticia_source, noticia_title, noticia_content, noticia_url]
+                );
+                console.log("Noticia creada.")
+                noticia = newNoticia.rows[0].id_noticia;
+            } else {
+                noticia = comprobacionNoticia.rows[0].id_noticia;
+            }
+
+
+        }
 
         const post_date = new Date(); // Fecha actual
 
@@ -56,46 +56,46 @@ const createPost = async (req, res) => {
 
 
 const getPost = async (req, res) => {
-        const id_user = req.user.id_user; 
-        const { nation, topic, post_dateIN, post_dateFI } = req.body;
-    
-        let query = 'SELECT * FROM POST';
-        let conditions = [];
-        let values = [];
-        let index = 1; 
-    
-        if (nation && nation.trim() !== "") {
-            conditions.push(`nation = $${index++}`);
-            values.push(nation);
+    const id_user = req.user.id_user;
+    const { nation, topic, post_dateIN, post_dateFI } = req.body;
+
+    let query = 'SELECT * FROM POST';
+    let conditions = [];
+    let values = [];
+    let index = 1;
+
+    if (nation && nation.trim() !== "") {
+        conditions.push(`nation = $${index++}`);
+        values.push(nation);
+    }
+    if (topic && topic.trim() !== "") {
+        conditions.push(`topic = $${index++}`);
+        values.push(topic);
+    }
+    if (post_dateIN && post_dateIN.trim() !== "") {
+        if (post_dateFI && post_dateFI.trim() !== "") {
+            conditions.push(`post_date BETWEEN $${index++} AND $${index++}`);
+            values.push(post_dateIN, post_dateFI);
+        } else {
+            conditions.push(`post_date = $${index++}`);
+            values.push(post_dateIN);
         }
-        if (topic && topic.trim() !== "") {
-            conditions.push(`topic = $${index++}`);
-            values.push(topic);
-        }
-        if (post_dateIN && post_dateIN.trim() !== "") {
-            if (post_dateFI && post_dateFI.trim() !== "") {
-                conditions.push(`post_date BETWEEN $${index++} AND $${index++}`);
-                values.push(post_dateIN, post_dateFI);
-            } else {
-                conditions.push(`post_date = $${index++}`);
-                values.push(post_dateIN);
-            }
-        }
-    
-        if (conditions.length > 0) {
-            query += ` WHERE ${conditions.join(' AND ')}`;
-        }
-        query += ' ORDER BY post_date DESC;';
-    
-        try {
-            const result = await pool.query(query, values);
-            res.status(201).json({ message: 'Post extraídos correctamente', post: result.rows });
-        } catch (error) {
-            console.error(error.message);
-            res.status(500).json({ message: 'Error al obtener posts' });
-        }
-    };
-    
+    }
+
+    if (conditions.length > 0) {
+        query += ` WHERE ${conditions.join(' AND ')}`;
+    }
+    query += ' ORDER BY post_date DESC;';
+
+    try {
+        const result = await pool.query(query, values);
+        res.status(201).json({ message: 'Post extraídos correctamente', post: result.rows });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al obtener posts' });
+    }
+};
+
 
 
 module.exports = { createPost, getPost };
