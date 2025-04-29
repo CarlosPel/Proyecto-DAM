@@ -39,20 +39,34 @@ curl -X PUT http://localhost:5000/users/editProfile \
 #CURL de crear post:
 
 curl -X POST http://localhost:5000/posts/create \
--H "Authorization: Bearer <token>" \
--H "Content-Type: application/json" \
+-H "Authorization: Bearer " \ 
+-H "Content-Type: application/json; charset=utf-8" \
 -d '{
   "title": "",
-  "nation": "ES",
   "topic": "",
-  "noticia": "",
-  "content": "post de prueba 0.",
-  "parent_post": ""
+  "content": "",
+  "parent_post": "",
+  "noticia_title": "",
+  "noticia_content": "",
+  "noticia_url": "",
+  "noticia_source": ""
+}'
+
+
+#Curl de obtener post:
+curl -X POST http://localhost:5000/posts/get \
+-H "Authorization: Bearer <token>" \
+-H "Content-Type: application/json; chatset=utf-8" \
+-d '{
+  "nation": "",
+  "topic": "",
+  "post_dateIN": "",
+  "post_dateFI": ""
 }'
 
 #CURL de traer noticias MEDIASTAK:
 
-curl -X POST http://localhost:3000/api/noticias \
+curl -X POST http://localhost:5000/news/get \
 -H "Content-Type: application/json" \
 -d '{"url": "https://newsapi.org/v2/top-headlines?country=us"}'
 

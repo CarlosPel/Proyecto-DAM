@@ -56,40 +56,53 @@ const createPost = async (req, res) => {
 
 
 const getPost = async (req, res) => {
-    const id_user = req.user.id_user;
+    const id_user = req.user.id_user; // Si necesitas este ID para algo específico
     const { nation, topic, post_dateIN, post_dateFI } = req.body;
 
-    let query = 'SELECT * FROM POST';
+    let query = `
+        SELECT 
+            POST.*,
+            USERS.username AS user_name
+        FROM POST
+        INNER JOIN USERS ON POST.id_user = USERS.id_user
+    `; // JOIN entre POST y USERS
+
     let conditions = [];
     let values = [];
     let index = 1;
 
+    // Construcción dinámica de las condiciones
     if (nation && nation.trim() !== "") {
-        conditions.push(`nation = $${index++}`);
+        conditions.push(`POST.nation = $${index++}`);
         values.push(nation);
     }
     if (topic && topic.trim() !== "") {
-        conditions.push(`topic = $${index++}`);
+        conditions.push(`POST.topic = $${index++}`);
         values.push(topic);
     }
     if (post_dateIN && post_dateIN.trim() !== "") {
         if (post_dateFI && post_dateFI.trim() !== "") {
-            conditions.push(`post_date BETWEEN $${index++} AND $${index++}`);
+            conditions.push(`POST.post_date BETWEEN $${index++} AND $${index++}`);
             values.push(post_dateIN, post_dateFI);
         } else {
-            conditions.push(`post_date = $${index++}`);
+            conditions.push(`POST.post_date = $${index++}`);
             values.push(post_dateIN);
         }
     }
 
+    // Si hay condiciones, las añadimos a la consulta
     if (conditions.length > 0) {
         query += ` WHERE ${conditions.join(' AND ')}`;
     }
-    query += ' ORDER BY post_date DESC;';
+
+    query += ' ORDER BY POST.post_date DESC;';
 
     try {
         const result = await pool.query(query, values);
-        res.status(201).json({ message: 'Post extraídos correctamente', post: result.rows });
+        res.status(201).json({
+            message: 'Post extraídos correctamente',
+            posts: result.rows, // Incluye tanto los datos del post como el nombre del usuario
+        });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Error al obtener posts' });
