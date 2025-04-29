@@ -1,6 +1,6 @@
 class Article {
   String title;
-  String snippet;
+  String? snippet;
   String url;
   String imgUrl;
   String datetime;
@@ -8,7 +8,7 @@ class Article {
 
   Article({
     required this.title,
-    required this.snippet,
+    this.snippet,
     required this.url,
     required this.imgUrl,
     required this.datetime,

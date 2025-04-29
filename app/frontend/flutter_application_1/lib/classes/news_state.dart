@@ -1,3 +1,4 @@
+// Estado para almacenar las noticias ya cargadas
 class NewsState {
   // Patrón Singleton para la clase NewsState
   // Se asegura de que solo haya una instancia de NewsState en toda la aplicación

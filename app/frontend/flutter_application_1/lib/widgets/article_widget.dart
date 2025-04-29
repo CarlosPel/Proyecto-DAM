@@ -52,10 +52,10 @@ class ArticleWidgetState extends State<ArticleWidget> {
                   padding: const EdgeInsets.only(top: 10),
                   child: Column(
                     children: [
-                      Text(
-                        article.snippet,
+                      if (article.snippet != null) ...[Text(
+                        article.snippet!,
                         style: const TextStyle(color: Colors.black),
-                      ),
+                      )],
                       Row(
                         children: [
                           ElevatedButton(

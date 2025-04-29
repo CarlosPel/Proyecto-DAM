@@ -113,11 +113,13 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  article.snippet,
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 16),
+                if (article.snippet != null) ...[
+                  Text(
+                    article.snippet!,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
+                ]
               ],
               TextFormField(
                 decoration: InputDecoration(labelText: 'Título'),

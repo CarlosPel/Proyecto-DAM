@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/classes/posts_state.dart';
 import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/utilities/news_service.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,7 +14,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  late Future<List<dynamic>> _postsFuture;
+  int _expandedIndex = -1;
   bool isOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (postsState.news.isEmpty) {
+      _postsFuture = _loadPosts();
+    }
+  }
+
+  void _toggleExpanded(int index) {
+    setState(() {
+      _expandedIndex = (_expandedIndex == index) ? -1 : index;
+    });
+  }
+
+  Future<List<dynamic>> _loadPosts() async {
+    final userData = await getUserData();
+    final countryCode = userData['countryCode'];
+    final posts = await fetchPosts(countryCode);
+    postsState.news = posts;
+    return posts;
+  }
+
+  Future<void> _refreshPosts() async {
+    final newPosts = await _loadPosts();
+    setState(() {
+      postsState.news = newPosts;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +62,7 @@ class HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.newsScreen);
+                    Navigator.pushNamed(context, AppRoutes.newsScreen);
                   },
                   child: Icon(Icons.newspaper),
                 ),
@@ -35,7 +70,7 @@ class HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.createPostScreen);
+                    Navigator.pushNamed(context, AppRoutes.createPostScreen);
                   },
                   child: Icon(Icons.add_a_photo),
                 ),
@@ -43,28 +78,77 @@ class HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.profileScreen);
+                    Navigator.pushNamed(context, AppRoutes.profileScreen);
                   },
                   child: Icon(Icons.person),
                 ),
               ),
-            ],  
+            ],
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: List.generate(
-                30,
-                (index) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PostContainer(
-                    title: 'Título de la publicación $index',
-                    text: 'Texto de la publicación $index',
+          postsState.news.isNotEmpty
+              ? Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: _refreshPosts,
+                    child: ListView.builder(
+                      itemCount: postsState.news.length,
+                      itemBuilder: (context, index) {
+                        final post = postsState.news[index];
+                        return PostWidget(
+                          post: Post(
+                            title: post['title'],
+                            content: post['content'],
+                            datetime: post['post_date'],
+                            user: post['user_name'],
+                          ),
+                          isExpanded: _expandedIndex == index,
+                          onTap: () => _toggleExpanded(index),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          // Botón Perfil
+                )
+              : Expanded(
+                  child: FutureBuilder<List<dynamic>>(
+                    future: _postsFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData) {
+                        postsState.news = snapshot.data!;
+                        return RefreshIndicator(
+                          onRefresh: _refreshPosts,
+                          child: ListView.builder(
+                            itemCount: postsState.news.length,
+                            itemBuilder: (context, index) {
+                              final post = postsState.news[index];
+                              return PostWidget(
+                                post: Post(
+                                  title: post['title'],
+                                  content: post['snippet'],
+                                  datetime: post['published_datetime_utc'],
+                                  user: post['user'],
+                                ),
+                                isExpanded: _expandedIndex == index,
+                                onTap: () => _toggleExpanded(index),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                            child: Text('No hay posts disponibles'));
+                      }
+                    },
+                  ),
+                )
+        ],
+      ),
+    );
+  }
+}
+// Botón Perfil
           /*AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             bottom: isOpen ? 100 : 40,
@@ -102,10 +186,8 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),*/
-        ],
-      ),
       // Botón flotante de menú
-      floatingActionButton: Align(
+      /*floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
           padding: const EdgeInsets.only(left: 30.0),
@@ -118,7 +200,4 @@ class HomeScreenState extends State<HomeScreen> {
             child: Icon(isOpen ? Icons.close : Icons.add),
           ),
         ),
-      ),
-    );
-  }
-}
+      ),*/
