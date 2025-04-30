@@ -16,7 +16,8 @@ Future<void> createPost(
     Article? article,
     String? title,
     required String content,
-    Topic? topic}) async {
+    Topic? topic,
+    int? parentPost}) async {
   // URL del backend
   final String backendUrl = 'http://10.0.2.2:5000/posts/create';
   final Map<String, String> userData = await getUserData();
@@ -39,7 +40,7 @@ Future<void> createPost(
         'content': content,
         'nation': userData['countryCode'],
         'topic': topic?.name,
-        'parent_post': '', //parentPost ?? '',
+        'parent_post': parentPost,
         'noticia_title': article?.title,
         'noticia_content': article?.snippet,
         'noticia_url': article?.url,

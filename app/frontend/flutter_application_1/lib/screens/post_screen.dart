@@ -32,11 +32,19 @@ class PostScreenState extends State<PostScreen> {
             ),
             Row(
               children: [
-                TextField(),
+                Expanded(
+                  child: TextField(
+                    controller: _commentController,
+                    decoration: InputDecoration(
+                      hintText: 'Write a comment...',
+                    ),
+                  ),
+                ),
                 ElevatedButton(
                     onPressed: () => createPost(
                           context: context,
                           content: _commentController.text,
+                          parentPost: post.id,
                         ),
                     child: Icon(Icons.send))
               ],

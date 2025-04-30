@@ -15,7 +15,7 @@ const createPost = async (req, res) => {
         if (!topic || topic.trim() === "") {
             topic = null;
         }
-        if (!parent_post || parent_post.trim() === "") {
+        if (!parent_post || parent_post.toString().trim() === "") {
             parent_post = null;
         }
         if (!noticia_title || noticia_title.trim() === "") {
