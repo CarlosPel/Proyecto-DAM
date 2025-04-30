@@ -19,7 +19,7 @@ CREATE TABLE nation (
 -- Creación de la tabla user
 CREATE TABLE users (
     id_user SERIAL PRIMARY KEY,
-    username VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     nation VARCHAR(2) NOT NULL,
@@ -80,17 +80,6 @@ CREATE TABLE post (
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
--- Insert de los temas
-INSERT INTO topic (topic_name) VALUES 
-('socialismo'),
-('democracia'),
-('liberalismo'),
-('comunismo'),
-('fascismo'),
-('falangismo'),
-('marxismo'),
-('capitalismo'),
-('anarquismo');
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 
@@ -341,3 +330,26 @@ INSERT INTO nation (code, nation_name) VALUES
 ('ZM', 'Zambia'),
 ('ZW', 'Zimbabwe')
 ;
+
+
+/*
+-- Insert de los temas
+INSERT INTO topic (topic_name) VALUES 
+('socialismo'),
+('democracia'),
+('liberalismo'),
+('comunismo'),
+('fascismo'),
+('falangismo'),
+('marxismo'),
+('capitalismo'),
+('anarquismo');
+
+INSERT INTO post (id_user, title, nation, topic, noticia, content, parent_post) VALUES
+(1, '¡Lenin ha llegado!', 'RU', null, null, 'Hola, soy Lenin. Este es mi primer post', null),
+(2, '¡Paco ha llegado!', 'ES', null,  null, 'Hola, soy Paco. Este es mi primer post', null),
+(1, null, 'RU', null, null, '¡Hola, Paco!', 2),
+(2, null, 'ES', null, null, '¡Hola Lenin!', 1)
+;
+
+*/

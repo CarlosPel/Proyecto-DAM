@@ -53,7 +53,6 @@ curl -X POST http://localhost:5000/users/register -H "Content-Type: application/
   "nation": "US"
 }'
 
-
 if [ $? -ne 0 ]; then
   echo "Error al ejecutar el comando curl."
 fi
@@ -66,5 +65,28 @@ if [ $? -eq 0 ]; then
 else
   echo "Error al apagar el servidor."
 fi
+
+# Cambiar al directorio /Proyecto
+echo "Cambiando al directorio /Proyecto..."
+cd ../../ || { echo "Error: No se pudo cambiar al directorio /Proyecto."; exit 1; }
+
+# Ejecutar el segundo script SQL (inserts.sql)
+
+if [ -z "$2" ]; then
+  echo "Error: Debes proporcionar la ruta del archivo SQL para insertar más datos"
+  echo "Uso: ./ficheros/levantarbase.sh ./ficheros/bbdd.sql ./ficheros/inserts.sql"
+  exit 1
+fi
+
+INSERTS=$2
+echo "Ejecutando script inserts.sql en PostgreSQL..."
+psql -U postgres -f "$INSERTS"
+if [ $? -ne 0 ]; then
+  echo "Error al ejecutar inserts.sql. Verifica la conexión y el archivo."
+  exit 1
+fi
+
+
+
 
 echo "Script completado con éxito."
