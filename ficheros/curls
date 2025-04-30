@@ -64,6 +64,11 @@ curl -X POST http://localhost:5000/posts/get \
   "post_dateFI": ""
 }'
 
+#Curl de obtener comentarios:
+curl -X POST http://localhost:5000/posts/comments \
+-H "Content-Type: application/json" \
+-d '{"id_post": 11}'
+
 #CURL de traer noticias MEDIASTAK:
 
 curl -X POST http://localhost:5000/news/get \

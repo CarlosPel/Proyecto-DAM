@@ -114,7 +114,24 @@ const getPost = async (req, res) => {
     }
 };
 
+const getComments = async (req, res) => {
+    const id_post = req.body.id_post;
+
+    const query = `SELECT * FROM post WHERE parent_post = $1`;
+
+    try {
+        const resultado = await pool.query(query, [id_post]);
+        res.status(200).json({
+            message: 'Comentarios extraídos correctamente',
+            data: resultado.rows,
+        });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({message: 'Error al obtener los comentarios de este post'})
+    }
+};
 
 
-module.exports = { createPost, getPost };
+
+module.exports = { createPost, getPost, getComments };
 
