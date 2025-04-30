@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/news_state.dart';
 import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/news_service.dart';
+import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/article_widget.dart';
 
 class NewsScreen extends StatefulWidget {

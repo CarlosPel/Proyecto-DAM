@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/classes/posts_notifier.dart';
 import 'package:flutter_application_1/classes/posts_state.dart';
 import 'package:flutter_application_1/data/routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/news_service.dart';
+import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +23,16 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Escucha los cambios en PostsNotifier
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final postsNotifier = Provider.of<PostsNotifier>(context, listen: false);
+      if (postsNotifier.shouldRefresh) {
+        _refreshPosts();
+        postsNotifier.reset();
+      }
+    });
+
     if (postsState.news.isEmpty) {
       _postsFuture = _loadPosts();
     }
@@ -95,6 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
                         final post = postsState.news[index];
                         return PostWidget(
                           post: Post(
+                            id: post['id_post'],
                             title: post['title'],
                             content: post['content'],
                             datetime: post['post_date'],
@@ -125,10 +138,11 @@ class HomeScreenState extends State<HomeScreen> {
                               final post = postsState.news[index];
                               return PostWidget(
                                 post: Post(
+                                  id: post['id_post'],
                                   title: post['title'],
-                                  content: post['snippet'],
-                                  datetime: post['published_datetime_utc'],
-                                  user: post['user'],
+                                  content: post['content'],
+                                  datetime: post['post_date'],
+                                  user: post['user_name'],
                                 ),
                                 isExpanded: _expandedIndex == index,
                                 onTap: () => _toggleExpanded(index),

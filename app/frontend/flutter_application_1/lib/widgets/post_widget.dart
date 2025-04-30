@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/screens/post_screen.dart';
 
 // Contenedor para mostrar las publicaciones
 class PostWidget extends StatefulWidget {
@@ -26,7 +27,13 @@ class PostWidgetState extends State<PostWidget> {
 
     return Card(
       child: InkWell(
-        onTap: widget.onTap,
+        // onTap: widget.onTap,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PostScreen(post: post),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -36,7 +43,7 @@ class PostWidgetState extends State<PostWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      post.title,
+                      post.title!,
                       style: const TextStyle(color: Colors.black, fontSize: 18),
                     ),
                   ),
@@ -46,7 +53,7 @@ class PostWidgetState extends State<PostWidget> {
                   ),*/
                 ],
               ),
-              AnimatedCrossFade(
+              /*AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
                 secondChild: Padding(
                   padding: const EdgeInsets.only(top: 10),
@@ -66,7 +73,7 @@ class PostWidgetState extends State<PostWidget> {
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
                 duration: const Duration(milliseconds: 200),
-              ),
+              ),*/
             ],
           ),
         ),

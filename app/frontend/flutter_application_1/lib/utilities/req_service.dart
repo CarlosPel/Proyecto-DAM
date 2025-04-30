@@ -17,7 +17,7 @@ Future<List<dynamic>> fetchPosts(String? country) async {
   final String routeUrl = 'http://10.0.2.2:5000/posts/get';
   final String userToken = await getUserToken();
 
-  return await _fetchFromUrl(http.post(
+  return await _fetchFromReq(http.post(
     Uri.parse(routeUrl),
     headers: {
       'Authorization': 'Bearer $userToken',
@@ -28,17 +28,30 @@ Future<List<dynamic>> fetchPosts(String? country) async {
 }
 
 Future<List<dynamic>> _fetchNews(String url) async {
-  final String routeUrl = 'http://10.0.2.2:5000/news/get';
+  // final String routeUrl = 'http://10.0.2.2:5000/news/get';
 
-  return await _fetchFromUrl(http.post(
+  final List<dynamic> fakenews = [];
+  for (int i = 0; i < 100; i++) {
+    fakenews.add({
+      'title': 'Noticia de ejemplo $i',
+      'snippet': 'Esta es una noticia de ejemplo $i.',
+      'link': 'https://example.com/noticia-$i',
+      'photo_url': 'https://example.com/foto-$i.jpg',
+      'published_datetime_utc': DateTime.now().toUtc().toString(),
+      'source_name': 'Fuente de ejemplo $i',
+    });
+  }
+  return fakenews;
+
+  /*return await _fetchFromReq(http.post(
     Uri.parse(routeUrl),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({'urlFi': url}),
-  ));
+  ));*/
 }
 
 // Obtiene las noticias de la url proporcionada
-Future<List<dynamic>> _fetchFromUrl(Future<http.Response> req) async {
+Future<List<dynamic>> _fetchFromReq(Future<http.Response> req) async {
   try {
     final response = await req;
     if (response.statusCode == 200) {

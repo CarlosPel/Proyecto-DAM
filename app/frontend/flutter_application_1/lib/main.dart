@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/classes/posts_notifier.dart';
+import 'package:provider/provider.dart';
 
 // Método de ejecución de la aplicación
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => PostsNotifier(),
+      child: MyApp(),
+    ),
+  );
 }
 
 // Clase principal de la aplicación

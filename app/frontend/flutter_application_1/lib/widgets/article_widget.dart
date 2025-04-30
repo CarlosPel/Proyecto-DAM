@@ -4,8 +4,6 @@ import 'package:flutter_application_1/screens/create_post_screen.dart';
 
 class ArticleWidget extends StatefulWidget {
   final Article article;
-  /*final String titulo;
-  final String contenido;*/
   final bool isExpanded;
   final VoidCallback onTap;
 
