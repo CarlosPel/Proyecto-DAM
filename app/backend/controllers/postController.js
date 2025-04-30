@@ -57,6 +57,7 @@ const createPost = async (req, res) => {
 
 const getPost = async (req, res) => {
     const id_user = req.user.id_user; // Si necesitas este ID para algo específico
+    const nation_user = req.user.nation;
     const { nation, topic, post_dateIN, post_dateFI } = req.body;
 
     let query = `
@@ -75,7 +76,11 @@ const getPost = async (req, res) => {
     if (nation && nation.trim() !== "") {
         conditions.push(`POST.nation = $${index++}`);
         values.push(nation);
-    }
+   }
+/*  else{
+        conditions.push(`POST.nation = $${index++}`);
+        values.push(nation_user);
+    }*/
     if (topic && topic.trim() !== "") {
         conditions.push(`POST.topic = $${index++}`);
         values.push(topic);

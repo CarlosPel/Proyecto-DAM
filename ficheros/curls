@@ -60,7 +60,7 @@ curl -X POST http://localhost:5000/posts/get \
 -d '{
   "nation": "",
   "topic": "",
-  "post_dateIN": "",
+  "post_dateIN": "",    # Para introducir fecha para filtrar posts, debe seguir este formatín: 2025-04-28T07:00:00.000Z
   "post_dateFI": ""
 }'
 
@@ -71,4 +71,8 @@ curl -X POST http://localhost:5000/news/get \
 -d '{"url": "https://newsapi.org/v2/top-headlines?country=us"}'
 
 #CURL de traer noticias RAPIDAPI:
-curl -X POST http://localhost:5000/news/get -H "Content-Type: application/json" -d '{"urlFi": "/topic-headlines?topic=CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ&limit=500&country=ES&lang=es"}'
+curl -X POST http://localhost:5000/news/get \
+-H "Content-Type: application/json" \
+-d '{
+    "urlFi": "/topic-headlines?topic=CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ&limit=1&country=ES&lang=es"
+}'

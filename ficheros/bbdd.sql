@@ -81,8 +81,17 @@ CREATE TABLE post (
 );
 
 -- Insert de los temas
-INSERT INTO topic (topic_name) VALUES 
-('socialismo');
+INSERT INTO topic (topic_name) VALUES (
+('socialismo'),
+('democracia'),
+('liberalismo'),
+('comunismo'),
+('fascismo'),
+('falangismo'),
+('marxismo'),
+('capitalismo'),
+('anarquismo')
+);
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 
