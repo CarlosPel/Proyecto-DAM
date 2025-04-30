@@ -27,6 +27,18 @@ Future<List<dynamic>> fetchPosts(String? country) async {
   ));
 }
 
+// Obtiene los comentarios de un post
+Future<List<dynamic>> fetchComments(int postId) async {
+  final String routeUrl = 'http://10.0.2.2:5000/posts/comments';
+
+  return await _fetchFromReq(http.post(
+    Uri.parse(routeUrl),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'id_post': postId}),
+  ));
+}
+
+//
 Future<List<dynamic>> _fetchNews(String url) async {
   // final String routeUrl = 'http://10.0.2.2:5000/news/get';
 

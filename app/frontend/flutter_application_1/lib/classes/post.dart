@@ -1,15 +1,24 @@
+import 'package:flutter_application_1/classes/article.dart';
+import 'package:flutter_application_1/enums/topic.dart';
+
 class Post {
-  int id;
+  int? id;
   String? title;
   String content;
-  String datetime;
-  String user;
+  String? datetime;
+  String? user;
+  Article? article;
+  Topic? topic;
+  Post? parentPost;
 
   Post({
-    required this.id,
+    this.id,
     this.title,
     required this.content,
-    required this.datetime,
-    required this.user,
+    this.datetime,
+    this.user,
+    this.article,
+    this.topic,
+    this.parentPost,
   });
 }
