@@ -131,4 +131,21 @@ const editProfileUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, editProfileUser };
+const userPosts = async(req, res) => {
+  const id_user = req.user.id_user;
+  console.log(id_user);
+  const query = `SELECT * FROM post WHERE id_user = $1`;
+
+  try{
+    const resultado = await pool.query(query, [id_user]);
+    res.status(200).json({
+      message: 'Posts extraídos correctamente',
+      data: resultado.rows,
+  });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({message: 'Error al obtener los post de este usuario'})
+  }  
+}
+
+module.exports = { registerUser, loginUser, editProfileUser, userPosts };

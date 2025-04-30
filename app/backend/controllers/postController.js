@@ -122,7 +122,8 @@ const getPost = async (req, res) => {
 const getComments = async (req, res) => {
     const id_post = req.body.id_post;
 
-    const query = `SELECT * FROM post WHERE parent_post = $1`;
+    const query = `SELECT POST.*, USERS.username AS user_name FROM POST INNER JOIN 
+                        USERS ON POST.id_user = USERS.id_user WHERE POST.parent_post = $1`;
 
     try {
         const resultado = await pool.query(query, [id_post]);
