@@ -99,7 +99,7 @@ const getPost = async (req, res) => {
 
     try {
         const result = await pool.query(query, values);
-        res.status(201).json({
+        res.status(200).json({
             message: 'Post extraídos correctamente',
             posts: result.rows, // Incluye tanto los datos del post como el nombre del usuario
         });
