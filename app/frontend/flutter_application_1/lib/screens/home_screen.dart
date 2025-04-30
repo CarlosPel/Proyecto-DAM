@@ -152,7 +152,7 @@ class HomeScreenState extends State<HomeScreen> {
                         );
                       } else {
                         return const Center(
-                            child: Text('No hay posts disponibles'));
+                            child: Text('No hay publicaciones disponibles'));
                       }
                     },
                   ),
