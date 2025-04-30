@@ -1,29 +1,50 @@
 import 'dart:convert';
+import 'package:flutter_application_1/data/user_data.dart';
 import 'package:http/http.dart' as http;
 
-const String politicsCode = 'CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ';
+const String politicsCode =
+    'CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ';
 
 // Noticias más relevantes de política del país del usuario ordenadas por ultima hora
 Future<List<dynamic>> fetchTopHeadlines(String? country) async {
   final String url =
-      '/topic-headlines?topic=$politicsCode&country=ES&lang=es';
+      '/topic-headlines?topic=$politicsCode&country=$country&lang=es';
   return await _fetchNews(url);
 }
 
-// Obtiene las noticias de la url proporcionada
-Future<List<dynamic>> _fetchNews(String url) async {
-  final String loginUrl = 'http://10.0.2.2:5000/news/get';
-  try {
-    final response = await http.post(
-      Uri.parse(loginUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'urlFi': url}),
-    );
+// Obtiene posts
+Future<List<dynamic>> fetchPosts(String? country) async {
+  final String routeUrl = 'http://10.0.2.2:5000/posts/get';
+  final String userToken = await getUserToken();
 
+  return await _fetchFromUrl(http.post(
+    Uri.parse(routeUrl),
+    headers: {
+      'Authorization': 'Bearer $userToken',
+      'Content-Type': 'application/json'
+    },
+    body: jsonEncode({'nation': country}),
+  ));
+}
+
+Future<List<dynamic>> _fetchNews(String url) async {
+  final String routeUrl = 'http://10.0.2.2:5000/news/get';
+
+  return await _fetchFromUrl(http.post(
+    Uri.parse(routeUrl),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'urlFi': url}),
+  ));
+}
+
+// Obtiene las noticias de la url proporcionada
+Future<List<dynamic>> _fetchFromUrl(Future<http.Response> req) async {
+  try {
+    final response = await req;
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['data'];
     } else {
-      throw Exception('Error al cargar las noticias: ${response.body}');
+      throw Exception('Error al cargar el contenido: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error de conexión: $e');
