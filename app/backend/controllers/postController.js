@@ -63,9 +63,13 @@ const getPost = async (req, res) => {
     let query = `
         SELECT 
             POST.*,
-            USERS.username AS user_name
+            USERS.username AS user_name,
+            NOTICIA.title AS noticia_title, 
+            NOTICIA.content AS noticia_content, 
+            NOTICIA.source_name AS noticia_source
         FROM POST
         INNER JOIN USERS ON POST.id_user = USERS.id_user
+        LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
     `; // JOIN entre POST y USERS
 
     let conditions = [];
