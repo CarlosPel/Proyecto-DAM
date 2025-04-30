@@ -60,9 +60,10 @@ curl -X POST http://localhost:5000/posts/get \
 -d '{
   "nation": "",
   "topic": "",
-  "post_dateIN": "",    # Para introducir fecha para filtrar posts, debe seguir este formatín: 2025-04-28T07:00:00.000Z
+  "post_dateIN": "",    
   "post_dateFI": ""
 }'
+# Para introducir fecha para filtrar posts, debe seguir este formatín: 2025-04-28T07:00:00.000Z
 
 #Curl de obtener comentarios:
 curl -X POST http://localhost:5000/posts/comments \

@@ -70,9 +70,10 @@ const getPost = async (req, res) => {
         FROM POST
         INNER JOIN USERS ON POST.id_user = USERS.id_user
         LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
-    `; // JOIN entre POST y USERS
+        WHERE POST.parent_post is null
+    `;
 
-    let conditions = [];
+    const conditions = []
     let values = [];
     let index = 1;
 
@@ -101,7 +102,7 @@ const getPost = async (req, res) => {
 
     // Si hay condiciones, las añadimos a la consulta
     if (conditions.length > 0) {
-        query += ` WHERE ${conditions.join(' AND ')}`;
+        query += ` AND ${conditions.join(' AND ')}`;
     }
 
     query += ' ORDER BY POST.post_date DESC;';
