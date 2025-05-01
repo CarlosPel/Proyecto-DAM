@@ -34,6 +34,14 @@ Future<void> loginUser({
       // Guardar datos del usuario
       await saveUserData(responseData);
 
+      // El token es extraible de SharedPreferences
+      late bool tokenNotSaved;
+
+      // Pausa la navegación hasta que el token esté disponible
+      do {
+        tokenNotSaved = (await getUserData())['token'] == null;
+      } while (tokenNotSaved);
+
       // Navegar a la pantalla principal
       Navigator.pushNamed(context, AppRoutes.homeScreen);
     } else {

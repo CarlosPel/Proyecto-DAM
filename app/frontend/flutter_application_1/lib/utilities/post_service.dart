@@ -54,20 +54,6 @@ Future<void> createPost(
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(responseData['message'])),
       );
-
-      // Notifica que los posts deben refrescarse
-      if (post.title != null) {
-        Provider.of<PostsNotifier>(context, listen: false).markForRefresh();
-
-        Navigator.pushNamed(context, AppRoutes.homeScreen);
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PostScreen(post: post.parentPost),
-          ),
-        );
-      }
     } else {
       // Mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(

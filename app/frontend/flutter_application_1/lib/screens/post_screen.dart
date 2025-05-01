@@ -17,6 +17,25 @@ class PostScreen extends StatefulWidget {
 class PostScreenState extends State<PostScreen> {
   final TextEditingController _commentController = TextEditingController();
 
+  // Crea un comentario para una publicación
+  Future<void> _commentPost(Post post) async {
+    createPost(
+        context: context,
+        post: Post(
+          content: _commentController.text,
+          parentPost: post,
+        ));
+        _refreshComments(post.id!);
+  }
+  
+  // Recarga los comentarios de la publicación
+  void _refreshComments(int postId) {
+    setState(() {
+      fetchComments(postId);
+      _commentController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Post? post = widget.post;
@@ -59,26 +78,24 @@ class PostScreenState extends State<PostScreen> {
                 },
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _commentController,
-                    decoration: const InputDecoration(
-                      hintText: 'Escribe un comentario...',
+            Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 64.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _commentController,
+                      decoration: const InputDecoration(
+                        hintText: 'Escribe un comentario...',
+                      ),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () => createPost(
-                      context: context,
-                      post: Post(
-                        content: _commentController.text,
-                        parentPost: post,
-                      )),
-                  child: const Icon(Icons.send),
-                ),
-              ],
+                  ElevatedButton(
+                    onPressed: () => _commentPost(post),
+                    child: const Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
