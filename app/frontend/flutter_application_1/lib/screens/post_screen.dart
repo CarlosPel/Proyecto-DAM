@@ -3,6 +3,7 @@ import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/utilities/post_service.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/widgets/comment_widget.dart';
 
 class PostScreen extends StatefulWidget {
   final Post? post;
@@ -16,6 +17,26 @@ class PostScreen extends StatefulWidget {
 
 class PostScreenState extends State<PostScreen> {
   final TextEditingController _commentController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  final Map<int, GlobalKey> _commentKeys = {};
+
+  // Ir a commentario contestado
+  void _scrollToIndex(int index) {
+    final key = _commentKeys[index];
+    if (key != null) {
+      final context = key.currentContext;
+      if (context != null) {
+        final box = context.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero,
+            ancestor: context.findRenderObject());
+        _scrollController.animateTo(
+          _scrollController.offset + position.dy,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
 
   // Crea un comentario para una publicación
   Future<void> _commentPost(Post post) async {
@@ -39,6 +60,8 @@ class PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     final Post? post = widget.post;
+    //final List<int> commentsIds = [];
+    Map<String, dynamic>? referencedComment;
 
     if (post != null) {
       return Scaffold(
@@ -62,12 +85,25 @@ class PostScreenState extends State<PostScreen> {
                   } else if (snapshot.hasData) {
                     final comments = snapshot.data!;
                     return ListView.builder(
+                      controller: _scrollController,
                       itemCount: comments.length,
                       itemBuilder: (context, index) {
                         final comment = comments[index];
-                        return ListTile(
-                          title: Text(comment['user_name']),
-                          subtitle: Text(comment['content']),
+                        _commentKeys[comment['id_post']] = GlobalKey();
+
+                        return Container(
+                          key: _commentKeys[comment['id']],
+                          child: CommentWidget(
+                            userName: comment['user_name'],
+                            text: comment['content'],
+                            onPressedIcon: () {
+                              setState(() {
+                                referencedComment = comment;
+                                print(referencedComment);
+                              });
+                              //_scrollToIndex(comment['parent_post']);
+                            },
+                          ),
                         );
                       },
                     );
