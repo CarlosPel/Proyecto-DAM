@@ -19,15 +19,15 @@ class PostScreenState extends State<PostScreen> {
 
   // Crea un comentario para una publicación
   Future<void> _commentPost(Post post) async {
-    createPost(
+    await createPost(
         context: context,
         post: Post(
           content: _commentController.text,
           parentPost: post,
         ));
-        _refreshComments(post.id!);
+    _refreshComments(post.id!);
   }
-  
+
   // Recarga los comentarios de la publicación
   void _refreshComments(int postId) {
     setState(() {
@@ -79,7 +79,8 @@ class PostScreenState extends State<PostScreen> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 64.0),
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 64.0),
               child: Row(
                 children: [
                   Expanded(
