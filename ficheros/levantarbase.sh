@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# Verificar si se ha proporcionado el parámetro de la ruta del archivo SQL
-if [ -z "$1" ]; then
-  echo "Error: Debes proporcionar la ruta del archivo SQL como parámetro."
-  echo "Uso: ./levantarbase.sh /ruta/a/bbdd.sql"
-  exit 1
-fi
-
-SQL_FILE=$1
 
 # Conexión a PostgreSQL y ejecución del archivo SQL
+
+cd ./ficheros
 echo "Ejecutando script SQL en PostgreSQL..."
-psql -U postgres -f "$SQL_FILE"
+psql -U postgres -f ./bbdd.sql
 if [ $? -ne 0 ]; then
   echo "Error al ejecutar el script SQL. Verifica la conexión y el archivo."
   exit 1
@@ -19,7 +13,7 @@ fi
 
 # Cambiar al directorio /backend
 echo "Cambiando al directorio /backend..."
-cd ./app/backend/ || { echo "Error: No se pudo cambiar al directorio /backend. Asegurate de estar en la raíz del repositorio."; exit 1; }
+cd ../app/backend/ || { echo "Error: No se pudo cambiar al directorio /backend. Asegurate de estar en la raíz del repositorio."; exit 1; }
 
 # Levantar el servidor
 echo "Levantando el servidor con node..."
@@ -72,15 +66,10 @@ cd ../../ || { echo "Error: No se pudo cambiar al directorio /Proyecto."; exit 1
 
 # Ejecutar el segundo script SQL (inserts.sql)
 
-if [ -z "$2" ]; then
-  echo "Error: Debes proporcionar la ruta del archivo SQL para insertar más datos"
-  echo "Uso: ./ficheros/levantarbase.sh ./ficheros/bbdd.sql ./ficheros/inserts.sql"
-  exit 1
-fi
 
-INSERTS=$2
+cd ./ficheros
 echo "Ejecutando script inserts.sql en PostgreSQL..."
-psql -U postgres -f "$INSERTS"
+psql -U postgres -f ./inserts.sql
 if [ $? -ne 0 ]; then
   echo "Error al ejecutar inserts.sql. Verifica la conexión y el archivo."
   exit 1
