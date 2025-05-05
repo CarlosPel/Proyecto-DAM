@@ -1,5 +1,7 @@
 \c agora
 
+SET client_encoding = "UTF8";
+
 INSERT INTO topic (topic_name) VALUES 
 ('socialismo'),
 ('democracia'),
