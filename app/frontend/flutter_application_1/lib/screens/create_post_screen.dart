@@ -1,17 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/classes/posts_notifier.dart';
 import 'package:flutter_application_1/data/routes.dart';
-import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/enums/topic.dart';
 import 'package:flutter_application_1/utilities/post_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class CreatePostScreen extends StatefulWidget {
   final Article? article;

@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/classes/posts_notifier.dart';
-import 'package:flutter_application_1/data/routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/screens/post_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -54,6 +52,9 @@ Future<void> createPost(
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(responseData['message'])),
       );
+
+      // Notifica a los listeners que se ha creado un nuevo post
+      Provider.of<PostsNotifier>(context, listen: false).markForRefresh();
     } else {
       // Mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
