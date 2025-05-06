@@ -34,7 +34,7 @@ Future<void> createPost(
         'content': post.content,
         'nation': userData['countryCode'],
         'topic': post.topic?.name,
-        'parent_post': post.parentPost?.id,
+        'parent_post': post.parentPostId,
         'noticia_title': article?.title,
         'noticia_content': article?.snippet,
         'noticia_url': article?.url,

@@ -19,6 +19,7 @@ class PostScreenState extends State<PostScreen> {
   final TextEditingController _commentController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final Map<int, GlobalKey> _commentKeys = {};
+  Map<String, dynamic>? _referencedComment;
 
   // Ir a commentario contestado
   void _scrollToIndex(int index) {
@@ -44,7 +45,9 @@ class PostScreenState extends State<PostScreen> {
         context: context,
         post: Post(
           content: _commentController.text,
-          parentPost: post,
+          parentPostId: _referencedComment != null
+              ? _referencedComment!['id_post']
+              : post.id,
         ));
     _refreshComments(post.id!);
   }
@@ -61,7 +64,6 @@ class PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     final Post? post = widget.post;
     //final List<int> commentsIds = [];
-    Map<String, dynamic>? referencedComment;
 
     if (post != null) {
       return Scaffold(
@@ -90,7 +92,6 @@ class PostScreenState extends State<PostScreen> {
                       itemBuilder: (context, index) {
                         final comment = comments[index];
                         _commentKeys[comment['id_post']] = GlobalKey();
-
                         return Container(
                           key: _commentKeys[comment['id']],
                           child: CommentWidget(
@@ -98,8 +99,7 @@ class PostScreenState extends State<PostScreen> {
                             text: comment['content'],
                             onPressedIcon: () {
                               setState(() {
-                                referencedComment = comment;
-                                print(referencedComment);
+                                _referencedComment = comment;
                               });
                               //_scrollToIndex(comment['parent_post']);
                             },
@@ -114,25 +114,58 @@ class PostScreenState extends State<PostScreen> {
                 },
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 64.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _commentController,
-                      decoration: const InputDecoration(
-                        hintText: 'Escribe un comentario...',
-                      ),
+            Column(
+              children: [
+                if (_referencedComment != null)
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${_referencedComment!['user_name']}: ${_referencedComment!['content']}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            setState(() {
+                              _referencedComment = null;
+                            });
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () => _commentPost(post),
-                    child: const Icon(Icons.send),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, right: 16.0, bottom: 64.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _commentController,
+                          decoration: const InputDecoration(
+                            hintText: 'Escribe un comentario...',
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => _commentPost(post),
+                        child: const Icon(Icons.send),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

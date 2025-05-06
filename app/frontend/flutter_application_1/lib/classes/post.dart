@@ -9,7 +9,7 @@ class Post {
   String? user;
   Article? article;
   Topic? topic;
-  Post? parentPost;
+  int? parentPostId;
 
   Post({
     this.id,
@@ -19,6 +19,6 @@ class Post {
     this.user,
     this.article,
     this.topic,
-    this.parentPost,
+    this.parentPostId,
   });
 }
