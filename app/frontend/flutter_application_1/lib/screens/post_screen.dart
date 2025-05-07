@@ -22,7 +22,7 @@ class PostScreenState extends State<PostScreen> {
   Map<String, dynamic>? _referencedComment;
 
   // Ir a commentario contestado
-  void _scrollToIndex(int index) {
+  /*void _scrollToIndex(int index) {
     final key = _commentKeys[index];
     if (key != null) {
       final context = key.currentContext;
@@ -37,7 +37,7 @@ class PostScreenState extends State<PostScreen> {
         );
       }
     }
-  }
+  }*/
 
   // Crea un comentario para una publicación
   Future<void> _commentPost(Post post) async {
@@ -56,6 +56,7 @@ class PostScreenState extends State<PostScreen> {
   void _refreshComments(int postId) {
     setState(() {
       fetchComments(postId);
+      _referencedComment = null;
       _commentController.clear();
     });
   }
@@ -95,8 +96,12 @@ class PostScreenState extends State<PostScreen> {
                         return Container(
                           key: _commentKeys[comment['id']],
                           child: CommentWidget(
-                            userName: comment['user_name'],
-                            text: comment['content'],
+                            comment: Post(
+                              id: comment['id_post'],
+                              content: comment['content'],
+                              user: comment['user_name'],
+                              parentPostId: comment['parent_post'],
+                            ),
                             onPressedIcon: () {
                               setState(() {
                                 _referencedComment = comment;
