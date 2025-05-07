@@ -1,5 +1,7 @@
+// Importamos el módulo pg de PostgreSQL
 const { Pool } = require('pg');
-require('dotenv').config(); // Carga las variables de entorno del archivo .env
+// Cargamos las variables del fichero .env
+require('dotenv').config(); 
 
 // Configuración de la conexión
 const pool = new Pool({
@@ -11,12 +13,14 @@ const pool = new Pool({
   client_encoding: 'UTF8',
 });
 
+// Ejecutamos la conexión
 pool.on('connect', (client) => {
   client.query('SET client_encoding = "UTF8";')
     .then(() => console.log('Codificación del cliente establecida en UTF-8'))
     .catch((err) => console.error('Error al configurar client_encoding:', err));
 });
 
+// Mostramos que la conexión ha sido exitosa
 pool.on('connect', () => {
   console.log('Conectado a la base de datos PostgreSQL');
 });
