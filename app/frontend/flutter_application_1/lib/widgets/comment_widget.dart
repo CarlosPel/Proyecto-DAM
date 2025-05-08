@@ -7,6 +7,7 @@ class CommentWidget extends StatefulWidget {
   final int? referencedCommentId;
   final VoidCallback onPressedIcon;
   final VoidCallback? onTap;
+  final bool isExpanded;
 
   const CommentWidget({
     super.key,
@@ -14,6 +15,7 @@ class CommentWidget extends StatefulWidget {
     this.referencedCommentId,
     required this.onPressedIcon,
     this.onTap,
+    this.isExpanded = false,
   });
 
   @override
@@ -55,7 +57,36 @@ class CommentWidgetState extends State<CommentWidget> {
                 secondChild: Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: FutureBuilder<List<dynamic>>(
-                        future: fetchComments(comment.id!), builder: builder)),
+                        future: fetchComments(comment.id!),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (snapshot.hasData) {
+                            final comments = snapshot.data!;
+                            return ListView.builder(
+                              itemCount: comments.length,
+                              itemBuilder: (context, index) {
+                                final comment = comments[index];
+                                return CommentWidget(
+                                  comment: Post(
+                                    id: comment['id_post'],
+                                    content: comment['content'],
+                                    user: comment['user_name'],
+                                    parentPostId: comment['parent_post'],
+                                  ),
+                                  onPressedIcon: () => widget.onPressedIcon(),
+                                );
+                              },
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        })),
                 crossFadeState: widget.isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
