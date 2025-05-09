@@ -93,9 +93,10 @@ class PostScreenState extends State<PostScreen> {
                       itemBuilder: (context, index) {
                         final comment = comments[index];
                         _commentKeys[comment['id_post']] = GlobalKey();
-                        return Container(
-                          key: _commentKeys[comment['id']],
-                          child: CommentWidget(
+                        //return Container(
+                          //key: _commentKeys[comment['id']],
+                          //child: CommentWidget(
+                          return CommentWidget(
                             comment: Post(
                               id: comment['id_post'],
                               content: comment['content'],
@@ -108,8 +109,8 @@ class PostScreenState extends State<PostScreen> {
                               });
                               //_scrollToIndex(comment['parent_post']);
                             },
-                          ),
-                        );
+                          );
+                        //);
                       },
                     );
                   } else {

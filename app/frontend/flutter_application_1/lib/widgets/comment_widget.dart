@@ -54,9 +54,7 @@ class CommentWidgetState extends State<CommentWidget> {
               ),
               AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
-                secondChild: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: FutureBuilder<List<dynamic>>(
+                secondChild: FutureBuilder<List<dynamic>>(
                         future: fetchComments(comment.id!),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -69,6 +67,8 @@ class CommentWidgetState extends State<CommentWidget> {
                           } else if (snapshot.hasData) {
                             final comments = snapshot.data!;
                             return ListView.builder(
+                              shrinkWrap: true, // Allow dynamic sizing
+                              physics: const NeverScrollableScrollPhysics(), // Prevent scrolling inside
                               itemCount: comments.length,
                               itemBuilder: (context, index) {
                                 final comment = comments[index];
@@ -86,7 +86,7 @@ class CommentWidgetState extends State<CommentWidget> {
                           } else {
                             return const SizedBox.shrink();
                           }
-                        })),
+                        }),
                 crossFadeState: widget.isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,

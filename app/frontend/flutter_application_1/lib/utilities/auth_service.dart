@@ -39,7 +39,7 @@ Future<void> loginUser({
 
       // Pausa la navegación hasta que el token esté disponible
       do {
-        tokenNotSaved = (await getUserData())['token'] == null;
+        tokenNotSaved = (await getUserData())['token']!.length <= 0;
       } while (tokenNotSaved);
 
       // Navegar a la pantalla principal
