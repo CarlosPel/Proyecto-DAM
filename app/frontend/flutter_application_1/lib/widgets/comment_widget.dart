@@ -67,8 +67,8 @@ class CommentWidgetState extends State<CommentWidget> {
                           } else if (snapshot.hasData) {
                             final comments = snapshot.data!;
                             return ListView.builder(
-                              shrinkWrap: true, // Allow dynamic sizing
-                              physics: const NeverScrollableScrollPhysics(), // Prevent scrolling inside
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: comments.length,
                               itemBuilder: (context, index) {
                                 final comment = comments[index];
