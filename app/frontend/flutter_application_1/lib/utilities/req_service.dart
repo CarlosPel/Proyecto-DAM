@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:http/http.dart' as http;
 
 const String politicsCode =
     'CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ';
+const String backendUrl = AppData.backendUrl;
 
 // Noticias más relevantes de política del país del usuario ordenadas por ultima hora
 Future<List<dynamic>> fetchTopHeadlines(String? country) async {
@@ -14,7 +16,7 @@ Future<List<dynamic>> fetchTopHeadlines(String? country) async {
 
 // Obtiene posts
 Future<List<dynamic>> fetchPosts(String? country) async {
-  final String routeUrl = 'http://10.0.2.2:5000/posts/get';
+  final String routeUrl = '$backendUrl/posts/get';
   final String userToken = await getUserToken();
 
   return await _fetchFromReq(http.post(
@@ -29,7 +31,7 @@ Future<List<dynamic>> fetchPosts(String? country) async {
 
 // Obtiene los comentarios de un post
 Future<List<dynamic>> fetchComments(int postId) async {
-  final String routeUrl = 'http://10.0.2.2:5000/posts/comments';
+  final String routeUrl = '$backendUrl/posts/comments';
 
   return await _fetchFromReq(http.post(
     Uri.parse(routeUrl),
@@ -40,7 +42,7 @@ Future<List<dynamic>> fetchComments(int postId) async {
 
 //
 Future<List<dynamic>> _fetchNews(String url) async {
-  // final String routeUrl = 'http://10.0.2.2:5000/news/get';
+  // final String routeUrl = '$backendUrl/news/get';
 
   final List<dynamic> fakenews = [];
   for (int i = 0; i < 100; i++) {

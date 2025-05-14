@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/classes/posts_notifier.dart';
+import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ import 'package:provider/provider.dart';
 Future<void> createPost(
     {required BuildContext context, required Post post}) async {
   // URL del backend
-  final String backendUrl = 'http://10.0.2.2:5000/posts/create';
+  final String backendUrl = '${AppData.backendUrl}/posts/create';
   final Map<String, String> userData = await getUserData();
   final Article? article = post.article;
 

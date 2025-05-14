@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/data/routes.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,7 @@ Future<void> loginUser({
   required String email,
   required String password,
 }) async {
-  final String loginUrl = 'http://10.0.2.2:5000/users/login';
+  final String loginUrl = '${AppData.backendUrl}/users/login';
 
   try {
     final response = await http.post(
@@ -39,6 +40,7 @@ Future<void> loginUser({
 
       // Pausa la navegación hasta que el token esté disponible
       do {
+        // ignore: prefer_is_empty
         tokenNotSaved = (await getUserData())['token']!.length <= 0;
       } while (tokenNotSaved);
 
