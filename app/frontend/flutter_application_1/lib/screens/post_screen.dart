@@ -19,7 +19,20 @@ class PostScreenState extends State<PostScreen> {
   final TextEditingController _commentController = TextEditingController();
   //final Map<int, GlobalKey> _commentKeys = {};
   Map<String, dynamic>? _referencedComment;
-  int _expandedIndex = -1;
+  List<dynamic>? _comments;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadComments();
+  }
+
+  Future<void> _loadComments() async {
+    final data = await fetchComments(widget.post!.id!);
+    setState(() {
+      _comments = data;
+    });
+  }
 
   // Crea un comentario para una publicación
   Future<void> _commentPost(Post post) async {
@@ -35,17 +48,12 @@ class PostScreenState extends State<PostScreen> {
   }
 
   // Recarga los comentarios de la publicación
-  void _refreshComments(int postId) {
+  void _refreshComments(int postId) async {
+    final data = await fetchComments(postId);
     setState(() {
-      fetchComments(postId);
+      _comments = data;
       _referencedComment = null;
       _commentController.clear();
-    });
-  }
-
-  void _toggleExpanded(int index) {
-    setState(() {
-      _expandedIndex = (_expandedIndex == index) ? -1 : index;
     });
   }
 
@@ -65,47 +73,35 @@ class PostScreenState extends State<PostScreen> {
               child: Text(post.content),
             ),
             Expanded(
-              child: FutureBuilder<List<dynamic>>(
-                future: fetchComments(post.id!),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    final comments = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: comments.length,
-                      itemBuilder: (context, index) {
-                        final comment = comments[index];
-                        return CommentWidget(
-                          comment: Post(
-                            id: comment['id_post'],
-                            content: comment['content'],
-                            user: comment['user_name'],
-                            parentPostId: comment['parent_post'],
-                          ),
-                          onPressedIcon: (Post selectedComment) {
-                            setState(() {
-                              _referencedComment = {
-                                'id_post': selectedComment.id,
-                                'content': selectedComment.content,
-                                'user_name': selectedComment.user,
-                              };
-                            });
+              child: _comments == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : _comments!.isEmpty
+                      ? const Center(
+                          child: Text('No hay comentarios disponibles'))
+                      : ListView.builder(
+                          itemCount: _comments!.length,
+                          itemBuilder: (context, index) {
+                            final comment = _comments![index];
+                            return CommentWidget(
+                              key: ValueKey(comment['id_post']),
+                              comment: Post(
+                                id: comment['id_post'],
+                                content: comment['content'],
+                                user: comment['user_name'],
+                                parentPostId: comment['parent_post'],
+                              ),
+                              onPressedIcon: (Post selectedComment) {
+                                setState(() {
+                                  _referencedComment = {
+                                    'id_post': selectedComment.id,
+                                    'content': selectedComment.content,
+                                    'user_name': selectedComment.user,
+                                  };
+                                });
+                              },
+                            );
                           },
-                          onTap: () => _toggleExpanded(index),
-                          isExpanded: _expandedIndex == index,
-                        );
-                        //);
-                      },
-                    );
-                  } else {
-                    return const Center(
-                        child: Text('No hay comentarios disponibles'));
-                  }
-                },
-              ),
+                        ),
             ),
             Column(
               children: [

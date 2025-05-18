@@ -4,18 +4,12 @@ import 'package:flutter_application_1/utilities/req_service.dart';
 
 class CommentWidget extends StatefulWidget {
   final Post comment;
-  final int? referencedCommentId;
   final void Function(Post) onPressedIcon;
-  final VoidCallback? onTap;
-  final bool isExpanded;
 
   const CommentWidget({
     super.key,
     required this.comment,
-    this.referencedCommentId,
     required this.onPressedIcon,
-    this.onTap,
-    this.isExpanded = false,
   });
 
   @override
@@ -24,16 +18,28 @@ class CommentWidget extends StatefulWidget {
 
 class CommentWidgetState extends State<CommentWidget> {
   bool _isExpanded = false;
+  List<dynamic>? _subComments; // ⬅️ Guarda comentarios hijos
 
-  void _toggleExpanded() {
+  void _toggleExpanded() async {
     setState(() {
       _isExpanded = !_isExpanded;
     });
+
+    // Solo cargar si se expande y aún no hay comentarios
+    if (_isExpanded && _subComments == null) {
+      final fetched = await fetchComments(widget.comment.id!);
+      if (mounted) {
+        setState(() {
+          _subComments = fetched;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final Post comment = widget.comment;
+
     return Card(
       child: InkWell(
         onTap: _toggleExpanded,
@@ -43,45 +49,35 @@ class CommentWidgetState extends State<CommentWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(comment.user!),
+                title: Text(comment.user ?? ''),
                 subtitle: Text(comment.content),
                 trailing: IconButton(
                   icon: const Icon(Icons.comment),
-                  onPressed: () => widget.onPressedIcon(widget.comment),
+                  onPressed: () => widget.onPressedIcon(comment),
                 ),
               ),
               AnimatedCrossFade(
                 firstChild: const SizedBox.shrink(),
-                secondChild: FutureBuilder<List<dynamic>>(
-                    future: fetchComments(comment.id!),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (snapshot.hasData) {
-                        final comments = snapshot.data!;
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: comments.length,
-                          itemBuilder: (context, index) {
-                            final subComment = comments[index];
-                            return CommentWidget(
-                              comment: Post(
-                                id: subComment['id_post'],
-                                content: subComment['content'],
-                                user: subComment['user_name'],
-                                parentPostId: subComment['parent_post'],
-                              ),
-                              onPressedIcon: widget.onPressedIcon,
-                            );
-                          },
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    }),
+                secondChild: _subComments == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _subComments!.length,
+                        itemBuilder: (context, index) {
+                          final sub = _subComments![index];
+                          return CommentWidget(
+                            key: ValueKey(sub['id_post']),
+                            comment: Post(
+                              id: sub['id_post'],
+                              content: sub['content'],
+                              user: sub['user_name'],
+                              parentPostId: sub['parent_post'],
+                            ),
+                            onPressedIcon: widget.onPressedIcon,
+                          );
+                        },
+                      ),
                 crossFadeState: _isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
