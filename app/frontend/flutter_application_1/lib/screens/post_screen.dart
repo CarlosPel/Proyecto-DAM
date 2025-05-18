@@ -17,27 +17,9 @@ class PostScreen extends StatefulWidget {
 
 class PostScreenState extends State<PostScreen> {
   final TextEditingController _commentController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _commentKeys = {};
+  //final Map<int, GlobalKey> _commentKeys = {};
   Map<String, dynamic>? _referencedComment;
-
-  // Ir a commentario contestado
-  /*void _scrollToIndex(int index) {
-    final key = _commentKeys[index];
-    if (key != null) {
-      final context = key.currentContext;
-      if (context != null) {
-        final box = context.findRenderObject() as RenderBox;
-        final position = box.localToGlobal(Offset.zero,
-            ancestor: context.findRenderObject());
-        _scrollController.animateTo(
-          _scrollController.offset + position.dy,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    }
-  }*/
+  int _expandedIndex = -1;
 
   // Crea un comentario para una publicación
   Future<void> _commentPost(Post post) async {
@@ -61,10 +43,15 @@ class PostScreenState extends State<PostScreen> {
     });
   }
 
+  void _toggleExpanded(int index) {
+    setState(() {
+      _expandedIndex = (_expandedIndex == index) ? -1 : index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Post? post = widget.post;
-    //final List<int> commentsIds = [];
 
     if (post != null) {
       return Scaffold(
@@ -88,28 +75,28 @@ class PostScreenState extends State<PostScreen> {
                   } else if (snapshot.hasData) {
                     final comments = snapshot.data!;
                     return ListView.builder(
-                      controller: _scrollController,
                       itemCount: comments.length,
                       itemBuilder: (context, index) {
                         final comment = comments[index];
-                        _commentKeys[comment['id_post']] = GlobalKey();
-                        //return Container(
-                          //key: _commentKeys[comment['id']],
-                          //child: CommentWidget(
-                          return CommentWidget(
-                            comment: Post(
-                              id: comment['id_post'],
-                              content: comment['content'],
-                              user: comment['user_name'],
-                              parentPostId: comment['parent_post'],
-                            ),
-                            onPressedIcon: () {
-                              setState(() {
-                                _referencedComment = comment;
-                              });
-                              //_scrollToIndex(comment['parent_post']);
-                            },
-                          );
+                        return CommentWidget(
+                          comment: Post(
+                            id: comment['id_post'],
+                            content: comment['content'],
+                            user: comment['user_name'],
+                            parentPostId: comment['parent_post'],
+                          ),
+                          onPressedIcon: (Post selectedComment) {
+                            setState(() {
+                              _referencedComment = {
+                                'id_post': selectedComment.id,
+                                'content': selectedComment.content,
+                                'user_name': selectedComment.user,
+                              };
+                            });
+                          },
+                          onTap: () => _toggleExpanded(index),
+                          isExpanded: _expandedIndex == index,
+                        );
                         //);
                       },
                     );
