@@ -33,3 +33,5 @@ Thumbs.db
 app/frontend/flutter_application_1/android/app/.cxx/
 
 .cxx/
+
+ficheros/deploybase.sh
