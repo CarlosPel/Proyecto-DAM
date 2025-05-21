@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 
 class LoadingScreen extends StatefulWidget {

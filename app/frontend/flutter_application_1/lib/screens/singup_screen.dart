@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter_application_1/utilities/auth_service.dart';
 import 'package:http/http.dart' as http;

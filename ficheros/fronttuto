@@ -42,3 +42,17 @@ Instalar app en movil.
       para ejecutar la app en el movil conectado por usb+ 
 
     (otra opción) flutter run -d <id_movil>
+
+Modalidad Inalámbrica
+  + (en móvil) 
+        Depuración inalámbrica > Emparejar dispositivo con código de emparejamiento.
+  + adb pair <ip_address>:<port>
+
+  + (en móvil) Busca Dirección IP y puerto
+    
+  + adb connect <ip_address>:<port>
+
+  + adb devices
+        comprobar conexión correcta
+  + flutter run --> selecciónar dispositivo móvil
+

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/enums/topic.dart';
 import 'package:flutter_application_1/utilities/post_service.dart';
 

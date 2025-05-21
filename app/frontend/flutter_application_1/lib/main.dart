@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/classes/posts_notifier.dart';
+import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:provider/provider.dart';
 
 // Método de ejecución de la aplicación
@@ -24,7 +25,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // Título de la aplicación
-      title: 'SPQR',
+      title: 'Ágora',
+
+      // Tema de la aplicación
+      theme: AppTheme.lightTheme,
 
       // Ruta de la pantalla inicial
       initialRoute: AppRoutes.loginScreen,

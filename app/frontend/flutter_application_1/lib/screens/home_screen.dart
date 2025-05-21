@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/classes/posts_notifier.dart';
 import 'package:flutter_application_1/classes/posts_state.dart';
-import 'package:flutter_application_1/data/routes.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
