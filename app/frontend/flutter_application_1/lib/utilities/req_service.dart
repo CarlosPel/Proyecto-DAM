@@ -40,10 +40,20 @@ Future<List<dynamic>> fetchComments(int postId) async {
   ));
 }
 
-//
+// Obtiene las noticias de la url proporcionada
 Future<List<dynamic>> _fetchNews(String url) async {
   // final String routeUrl = '$backendUrl/news/get';
+  return _fetchFakeNews();
+  /*return await _fetchFromReq(http.post(
+    Uri.parse(routeUrl),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'urlFi': url}),
+  ));*/
+}
 
+// Devuelve noticias de ejemplo para no consumir la API
+// Borrar para versión de producción
+List<dynamic> _fetchFakeNews() {
   final List<dynamic> fakenews = [];
   for (int i = 0; i < 100; i++) {
     fakenews.add({
@@ -56,12 +66,6 @@ Future<List<dynamic>> _fetchNews(String url) async {
     });
   }
   return fakenews;
-
-  /*return await _fetchFromReq(http.post(
-    Uri.parse(routeUrl),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'urlFi': url}),
-  ));*/
 }
 
 // Obtiene las noticias de la url proporcionada
