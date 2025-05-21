@@ -40,7 +40,7 @@ Future<List<dynamic>> fetchComments(int postId) async {
   ));
 }
 
-//
+// Obtiene las noticias de la url proporcionada
 Future<List<dynamic>> _fetchNews(String url) async {
   // final String routeUrl = '$backendUrl/news/get';
   return _fetchFakeNews();
