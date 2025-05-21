@@ -1,4 +1,4 @@
 class AppData {
   static const String name = 'AGORA';
-  static const String backendUrl = 'http://10.0.2.2:5000';
+  static const String backendUrl = 'https://agora-backend-um0h.onrender.com';
 }
