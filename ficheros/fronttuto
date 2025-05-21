@@ -40,3 +40,5 @@ Instalar app en movil.
       para instalar el apk en el movil conectado por usb
   + flutter run --release
       para ejecutar la app en el movil conectado por usb+ 
+
+    (otra opción) flutter run -d <id_movil>
