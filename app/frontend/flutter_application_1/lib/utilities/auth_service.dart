@@ -35,12 +35,6 @@ Future<void> loginUser({
       // Guardar datos del usuario
       await saveUserData(responseData);
 
-      // Confirmar que el token está disponible
-      final userData = await getUserData();
-      if (userData['token'] == null || userData['token']!.isEmpty) {
-        throw Exception('Token no guardado correctamente');
-      }
-
       // Navegar a la pantalla principal
       Navigator.pushNamed(context, AppRoutes.homeScreen);
     } else {
