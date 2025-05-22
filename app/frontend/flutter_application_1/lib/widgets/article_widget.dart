@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/screens/create_post_screen.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 
 class ArticleWidget extends StatefulWidget {
   final Article article;
@@ -50,21 +50,21 @@ class ArticleWidgetState extends State<ArticleWidget> {
                   padding: const EdgeInsets.only(top: 10),
                   child: Column(
                     children: [
-                      if (article.snippet != null) ...[Text(
-                        article.snippet!,
-                        style: const TextStyle(color: Colors.black),
-                      )],
+                      if (article.snippet != null) ...[
+                        Text(
+                          article.snippet!,
+                          style: const TextStyle(color: Colors.black),
+                        )
+                      ],
                       Row(
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreatePostScreen(article: article),
-                                ),
-                              );
+                              Navigator.pushNamed(
+                                  context, AppRoutes.createPostScreen,
+                                  arguments: {
+                                    article: article,
+                                  });
                             },
                             child: const Text('Post'),
                           ),

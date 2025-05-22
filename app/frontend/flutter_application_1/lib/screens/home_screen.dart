@@ -9,7 +9,9 @@ import 'package:flutter_application_1/widgets/post_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool hasAgreed;
+
+  const HomeScreen({super.key, required this.hasAgreed});
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -24,6 +26,12 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
+    if (!widget.hasAgreed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamed(context, AppRoutes.termsScreen);
+      });
+      return;
+    }
     // Escucha los cambios en PostsNotifier
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final postsNotifier = Provider.of<PostsNotifier>(context, listen: false);

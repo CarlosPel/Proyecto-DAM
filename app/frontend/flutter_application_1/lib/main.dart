@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.loginScreen,
 
       // Rutas de las pantallas
-      routes: AppRoutes.getRoutes(),
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }

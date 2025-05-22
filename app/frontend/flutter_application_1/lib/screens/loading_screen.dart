@@ -2,11 +2,17 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/app_routes.dart';
-import 'package:flutter_application_1/data/user_data.dart';
 
 class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({super.key});
+  final String route;
+  final Future<bool> Function() loadCondition;
+  final Map<String, dynamic>? args;
+
+  const LoadingScreen(
+      {super.key,
+      required this.route,
+      required this.loadCondition,
+      required this.args});
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
@@ -19,20 +25,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (await _checkCondition()) {
+      if (await widget.loadCondition()) {
         _timer.cancel();
-        Navigator.pushNamed(context, AppRoutes.homeScreen);
+        Navigator.pushNamed(context, widget.route, arguments: widget.args);
       }
     });
-  }
-
-  Future<bool> _checkCondition() async {
-    try {
-      await getUserToken();
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 
   @override

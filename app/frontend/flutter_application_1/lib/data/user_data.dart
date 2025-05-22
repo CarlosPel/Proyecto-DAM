@@ -5,7 +5,8 @@ Future<void> saveUserData(dynamic responseData) async {
       name: responseData['user']['username'],
       email: responseData['user']['email'],
       countryCode: responseData['user']['nation'],
-      token: responseData['token']);
+      token: responseData['token'],
+      hasAgreed: responseData['user']['hasAgreed']);
 }
 
 // Guarda los datos del usuario en SharedPreferences
@@ -13,7 +14,8 @@ Future<void> _saveUserData(
     {required String name,
     required String email,
     required String countryCode,
-    required String token}) async {
+    required String token,
+    required bool hasAgreed}) async {
   // Se obtiene una instancia de SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -22,6 +24,8 @@ Future<void> _saveUserData(
   await prefs.setString('email', email);
   await prefs.setString('countryCode', countryCode);
   await prefs.setString('token', token);
+  await prefs.setBool('hasAgreed', hasAgreed);
+  await prefs.setBool('isLoggedIn', true);
 }
 
 // Obtener el token del usuario desde SharedPreferences
@@ -55,4 +59,32 @@ Future<Map<String, String>> getUserData() async {
     'countryCode': countryCode ?? '',
     'token': token ?? '',
   };
+}
+
+Future<bool> isLoggedIn() async {
+  // Se obtiene una instancia de SharedPreferences
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Se obtiene el estado de inicio de sesión
+  bool? isLoggedIn = prefs.getBool('isLoggedIn');
+
+  return isLoggedIn ?? false;
+}
+
+Future<bool> hasAgreed() async {
+  // Se obtiene una instancia de SharedPreferences
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Se obtiene el estado de acuerdo
+  bool? hasAgreed = prefs.getBool('hasAgreed');
+
+  return hasAgreed ?? false;
+}
+
+Future<void> saveAgreement() async {
+  // Se obtiene una instancia de SharedPreferences
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Se guarda el estado de acuerdo
+  prefs.setBool('hasAgreed', true);
 }
