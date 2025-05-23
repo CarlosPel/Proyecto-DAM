@@ -148,4 +148,18 @@ const userPosts = async(req, res) => {
   }  
 }
 
-module.exports = { registerUser, loginUser, editProfileUser, userPosts };
+const userConditions = async(req, res) => {
+  const id_user = req.user.id_user;
+  const query = 'UPDATE users Set hasAgreed = true where id_user = $1';
+  try{
+    const result = await pool.query(query, id_user);
+    res.status(200).json({
+      message: 'Has aceptado los términos y condiciones.'
+    });
+  }catch (error) {
+    console.error(error.message);
+    res.status(500).json({message: 'Error al aceptar los términos y condiciones'})
+  }
+}
+
+module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions };
