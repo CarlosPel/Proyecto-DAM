@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/screens/post_screen.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 
 // Contenedor para mostrar las publicaciones
 class PostWidget extends StatefulWidget {
@@ -27,12 +27,13 @@ class PostWidgetState extends State<PostWidget> {
 
     return Card(
       child: InkWell(
-        // onTap: widget.onTap,
-        onTap: () => Navigator.push(
+        onTap: () => Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => PostScreen(post: post),
-          ),
+          AppRoutes.postScreen,
+          arguments: {
+            'post': post,
+            'article': post.article,
+          },
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

@@ -40,7 +40,7 @@ class SingUpScreenState extends State<SingUpScreen> {
       final String username = _usernameController.text;
 
       // URL del backend
-      final String backendUrl = 'http://10.0.2.2:5000/users/register';
+      final String backendUrl = '${AppData.backendUrl}/users/register';
 
       try {
         // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST

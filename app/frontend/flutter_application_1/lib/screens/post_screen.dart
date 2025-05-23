@@ -6,10 +6,10 @@ import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/comment_widget.dart';
 
 class PostScreen extends StatefulWidget {
-  final Post? post;
+  final Post post;
   final Article? article;
 
-  const PostScreen({super.key, this.post, this.article});
+  const PostScreen({super.key, required this.post, this.article});
 
   @override
   State<PostScreen> createState() => PostScreenState();
@@ -28,7 +28,7 @@ class PostScreenState extends State<PostScreen> {
   }
 
   Future<void> _loadComments() async {
-    final data = await fetchComments(widget.post!.id!);
+    final data = await fetchComments(widget.post.id!);
     setState(() {
       _comments = data;
     });
