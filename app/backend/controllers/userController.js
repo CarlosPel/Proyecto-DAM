@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
     }
 
     const user = result.rows[0];
-    const userData = { username: user.username, email: user.email, nation: user.nation };
+    const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.hasAgreed };
 
     // Verificar la contraseña
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
