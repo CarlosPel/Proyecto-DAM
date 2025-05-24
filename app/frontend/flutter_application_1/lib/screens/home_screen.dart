@@ -95,6 +95,15 @@ class HomeScreenState extends State<HomeScreen> {
                   child: Icon(Icons.person),
                 ),
               ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    logout();
+                    Navigator.pushNamed(context, AppRoutes.loginScreen);
+                  },
+                  child: Icon(Icons.logout),
+                ),
+              ),
             ],
           ),
           postsState.news.isNotEmpty

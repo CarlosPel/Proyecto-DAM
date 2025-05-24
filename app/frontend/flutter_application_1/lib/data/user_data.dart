@@ -29,7 +29,7 @@ Future<void> _saveUserData(
 }
 
 // Obtener el token del usuario desde SharedPreferences
-Future<String?> getUserToken() async {
+Future<String?> getToken() async {
   // Instancia de SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 

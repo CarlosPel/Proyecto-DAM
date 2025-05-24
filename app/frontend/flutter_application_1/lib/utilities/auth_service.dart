@@ -14,7 +14,12 @@ goHomeIfAgreed(BuildContext context) {
     'loadCondition': () => isDataSaved(hasAgreed()),
     'action': () async {
       if ((await hasAgreed())!) {
-        Navigator.pushNamed(context, AppRoutes.homeScreen);
+        Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
+          'loadCondition': () => isDataSaved(getToken()),
+          'action': () async {
+            Navigator.pushNamed(context, AppRoutes.homeScreen);
+          }
+        });
       } else {
         Navigator.pushNamed(context, AppRoutes.termsScreen);
       }
@@ -26,7 +31,7 @@ Future<void> agreeTerms(BuildContext context) async {
   final String agreeUrl = '${AppData.backendUrl}/users/conditions';
 
   try {
-    final String? token = await getUserToken();
+    final String? token = await getToken();
 
     final response = await http.post(
       Uri.parse(agreeUrl),
@@ -79,10 +84,10 @@ Future<void> loginUser({
           content: Text('Bienvenido ${responseData['user']['username']}'),
         ),
       );
-      
+
       // Guardar datos del usuario
       await saveUserData(responseData);
-      
+
       // Navegar a la pantalla principal
       goHomeIfAgreed(context);
     } else {

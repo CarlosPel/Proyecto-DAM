@@ -17,7 +17,7 @@ Future<List<dynamic>> fetchTopHeadlines(String? country) async {
 // Obtiene posts
 Future<List<dynamic>> fetchPosts(String? country) async {
   final String routeUrl = '$backendUrl/posts/get';
-  final String userToken = (await getUserToken())!;
+  final String userToken = (await getToken())!;
 
   return await _fetchFromReq(http.post(
     Uri.parse(routeUrl),
