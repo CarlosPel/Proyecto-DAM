@@ -48,7 +48,7 @@ class PostScreenState extends State<PostScreen> {
   }
 
   // Recarga los comentarios de la publicación
-  void _refreshComments(int postId) async {
+  Future<void> _refreshComments(int postId) async {
     final data = await fetchComments(postId);
     setState(() {
       _comments = data;
@@ -77,30 +77,33 @@ class PostScreenState extends State<PostScreen> {
                 : _comments!.isEmpty
                     ? const Center(
                         child: Text('No hay comentarios disponibles'))
-                    : ListView.builder(
-                        itemCount: _comments!.length,
-                        itemBuilder: (context, index) {
-                          final comment = _comments![index];
-                          return CommentWidget(
-                            key: ValueKey(comment['id_post']),
-                            comment: Post(
-                              id: comment['id_post'],
-                              content: comment['content'],
-                              user: comment['user_name'],
-                              parentPostId: comment['parent_post'],
-                            ),
-                            onPressedIcon: (Post selectedComment) {
-                              setState(() {
-                                _referencedComment = {
-                                  'id_post': selectedComment.id,
-                                  'content': selectedComment.content,
-                                  'user_name': selectedComment.user,
-                                };
-                              });
-                            },
-                          );
-                        },
-                      ),
+                    : RefreshIndicator(
+                      onRefresh: () => _refreshComments(post.id!),
+                      child: ListView.builder(
+                          itemCount: _comments!.length,
+                          itemBuilder: (context, index) {
+                            final comment = _comments![index];
+                            return CommentWidget(
+                              key: ValueKey(comment['id_post']),
+                              comment: Post(
+                                id: comment['id_post'],
+                                content: comment['content'],
+                                user: comment['user_name'],
+                                parentPostId: comment['parent_post'],
+                              ),
+                              onPressedIcon: (Post selectedComment) {
+                                setState(() {
+                                  _referencedComment = {
+                                    'id_post': selectedComment.id,
+                                    'content': selectedComment.content,
+                                    'user_name': selectedComment.user,
+                                  };
+                                });
+                              },
+                            );
+                          },
+                        ),
+                    ),
           ),
           Column(
             children: [
