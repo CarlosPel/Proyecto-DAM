@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +17,18 @@ class LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  void _checkLoginStatus() async {
+    if (await isLoggedIn()) {
+      goHomeIfAgreed(context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -26,7 +39,8 @@ class LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Card(
             elevation: 8,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Form(
@@ -35,7 +49,8 @@ class LoginScreenState extends State<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Icono estilo templo griego
-                    Icon(Icons.account_balance, size: 72, color: Colors.indigo.shade700),
+                    Icon(Icons.account_balance,
+                        size: 72, color: Colors.indigo.shade700),
 
                     const SizedBox(height: 12),
 
@@ -54,7 +69,8 @@ class LoginScreenState extends State<LoginScreen> {
 
                     Text(
                       'Iniciar sesión en ${AppData.name}',
-                      style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
 
                     const SizedBox(height: 24),
@@ -66,7 +82,8 @@ class LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Correo electrónico',
                         prefixIcon: Icon(Icons.email_outlined),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -85,7 +102,8 @@ class LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Contraseña',
                         prefixIcon: Icon(Icons.lock_outline),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -113,7 +131,8 @@ class LoginScreenState extends State<LoginScreen> {
                         icon: Icon(Icons.login),
                         label: Text('Entrar al Ágora'),
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 14),
                           backgroundColor: Colors.indigo.shade700,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -127,7 +146,8 @@ class LoginScreenState extends State<LoginScreen> {
 
                     // Registro
                     TextButton(
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.singUpScreen),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, AppRoutes.singUpScreen),
                       child: Text('¿No tienes cuenta? Regístrate aquí'),
                     ),
 

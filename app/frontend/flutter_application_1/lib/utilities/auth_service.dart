@@ -7,6 +7,21 @@ import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:http/http.dart' as http;
 
+// Verifica si el usuario ha aceptado los términos y condiciones
+goHomeIfAgreed(BuildContext context) {
+  // Si el usuario ya está logueado, redirigir a la pantalla de inicio
+  Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
+    'loadCondition': () => isDataSaved(hasAgreed()),
+    'action': () async {
+      if ((await hasAgreed())!) {
+        Navigator.pushNamed(context, AppRoutes.homeScreen);
+      } else {
+        Navigator.pushNamed(context, AppRoutes.termsScreen);
+      }
+    }
+  });
+}
+
 Future<void> agreeTerms(BuildContext context) async {
   final String loginUrl = '${AppData.backendUrl}/users/login';
 
@@ -18,8 +33,7 @@ Future<void> agreeTerms(BuildContext context) async {
       await saveAgreement();
 
       // Navegar a la pantalla principal
-      Navigator.pushNamed(context, AppRoutes.homeScreen,
-          arguments: {'hasAgreed': true});
+      Navigator.pushNamed(context, AppRoutes.homeScreen);
     } else {
       // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,29 +77,7 @@ Future<void> loginUser({
       await saveUserData(responseData);
 
       // Navegar a la pantalla principal
-      Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
-        'route': AppRoutes.loadingScreen,
-        'loadCondition': () async {
-          try {
-            await hasAgreed();
-            return true;
-          } catch (e) {
-            return false;
-          }
-        },
-        'args': {
-          'route': AppRoutes.homeScreen,
-          'loadCondition': () async {
-            try {
-              await getUserToken();
-              return true;
-            } catch (e) {
-              return false;
-            }
-          },
-          'args': (await hasAgreed()),
-        },
-      });
+      goHomeIfAgreed(context);
     } else {
       // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -99,14 +91,3 @@ Future<void> loginUser({
     );
   }
 }
-
-/*
-  Future<bool> _isTokenAvailable() async {
-    try {
-      await getUserToken();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-*/
