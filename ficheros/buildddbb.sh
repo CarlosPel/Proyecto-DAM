@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Conexión a PostgreSQL y ejecución del archivo SQL
-FICHERO="./ficheros/bbdd_url.txt"
+cd ./ficheros
+FICHERO="bbdd_url.txt"
 
 if [[ -f "$FICHERO" ]]; then
     # Leer el contenido del archivo
@@ -11,7 +12,6 @@ else
   exit 1
 fi
 
-cd ./ficheros
 echo "Ejecutando script SQL en PostgreSQL..."
 psql $BBDDURL -f ./bbddcopy.sql
 if [ $? -ne 0 ]; then
@@ -21,7 +21,7 @@ fi
 
 # Desplegar el backend
 echo "Desplegando el backend..."
-curl -X POST https://api.render.com/deploy/srv-d0msqdl6ubrc73enccl0?key=iMeAT3s8QP4
+source deploybackend.sh
 
 # Ejecutar comando curl
 echo "Ejecutando comando curl para registrar un usuario..."
