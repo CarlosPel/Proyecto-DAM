@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
     }
 
     const user = result.rows[0];
-    const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.hasagreed };
+    const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.has_agreed };
 
     // Verificar la contraseña
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
@@ -150,7 +150,7 @@ const userPosts = async (req, res) => {
 
 const userConditions = async (req, res) => {
   const id_user = req.user.id_user;
-  const query = 'UPDATE users Set hasAgreed = true where id_user = $1';
+  const query = 'UPDATE users Set hasagreed = true where id_user = $1';
   try {
     const result = await pool.query(query, id_user);
     res.status(200).json({

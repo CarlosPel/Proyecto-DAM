@@ -6,7 +6,7 @@ Future<void> saveUserData(dynamic responseData) async {
       email: responseData['user']['email'],
       countryCode: responseData['user']['nation'],
       token: responseData['token'],
-      hasAgreed: responseData['user']['hasagreed']);
+      hasAgreed: responseData['user']['hasAgreed']);
 }
 
 // Guarda los datos del usuario en SharedPreferences

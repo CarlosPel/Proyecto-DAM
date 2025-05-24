@@ -23,10 +23,18 @@ goHomeIfAgreed(BuildContext context) {
 }
 
 Future<void> agreeTerms(BuildContext context) async {
-  final String loginUrl = '${AppData.backendUrl}/users/login';
+  final String agreeUrl = '${AppData.backendUrl}/users/conditions';
 
   try {
-    final response = await http.post(Uri.parse(loginUrl));
+    final String? token = await getUserToken();
+
+    final response = await http.post(
+      Uri.parse(agreeUrl),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
 
     if (response.statusCode == 200) {
       // Guardar datos del usuario
@@ -68,14 +76,13 @@ Future<void> loginUser({
       // Mostrar mensaje de éxito
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              '${responseData['message']}. Bienvenido ${responseData['user']['username']}'),
+          content: Text('Bienvenido ${responseData['user']['username']}'),
         ),
       );
-
+      
       // Guardar datos del usuario
       await saveUserData(responseData);
-
+      
       // Navegar a la pantalla principal
       goHomeIfAgreed(context);
     } else {

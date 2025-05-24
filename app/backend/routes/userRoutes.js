@@ -9,8 +9,8 @@ const router = express.Router();
 // Rutas para el controlador de usuarios
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.put('/editProfile/', authenticateUser , editProfileUser);
-router.post('/userposts/', authenticateUser , userPosts);
+router.put('/editProfile', authenticateUser , editProfileUser);
+router.post('/userposts', authenticateUser , userPosts);
 router.post('/conditions', authenticateUser, userConditions)
 
 // Exportamos el enrutador para ser utilizado en otros ficheros.

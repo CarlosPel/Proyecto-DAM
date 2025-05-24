@@ -26,7 +26,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     nation VARCHAR(2) NOT NULL,
-    hasAgreed BOOLEAN DEFAULT false,
+    has_agreed BOOLEAN DEFAULT false,
     admin BOOLEAN DEFAULT false,
     FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE SET NULL ON UPDATE CASCADE
 );
