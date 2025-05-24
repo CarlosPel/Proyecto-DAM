@@ -150,7 +150,7 @@ const userPosts = async (req, res) => {
 
 const userConditions = async (req, res) => {
   const id_user = req.user.id_user;
-  const query = 'UPDATE users Set hasagreed = true where id_user = $1';
+  const query = 'UPDATE users Set has_agreed = true where id_user = $1';
   try {
     const result = await pool.query(query, id_user);
     res.status(200).json({
