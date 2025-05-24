@@ -70,6 +70,10 @@ const loginUser = async (req, res) => {
     }
 
     const user = result.rows[0];
+
+    console.log('User from DB:', user);
+    console.log('hasAgreed:', user.hasAgreed);
+
     const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.hasAgreed };
 
     // Verificar la contraseña
@@ -85,7 +89,7 @@ const loginUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({ message: 'Inicio de sesión exitoso prueba2', token, user: userData });
+    res.status(200).json({ message: 'Inicio de sesión exitoso', token, user: userData });
   } catch (error) {
     console.error('Detalle del error:', error);
     res.status(500).json({ error: 'Error al iniciar sesión' });
@@ -131,34 +135,34 @@ const editProfileUser = async (req, res) => {
   }
 };
 
-const userPosts = async(req, res) => {
+const userPosts = async (req, res) => {
   const id_user = req.user.id_user;
   console.log(id_user);
   const query = `SELECT * FROM post WHERE id_user = $1`;
 
-  try{
+  try {
     const resultado = await pool.query(query, [id_user]);
     res.status(200).json({
       message: 'Posts extraídos correctamente',
       data: resultado.rows,
-  });
+    });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({message: 'Error al obtener los post de este usuario'})
-  }  
+    res.status(500).json({ message: 'Error al obtener los post de este usuario' })
+  }
 }
 
-const userConditions = async(req, res) => {
+const userConditions = async (req, res) => {
   const id_user = req.user.id_user;
   const query = 'UPDATE users Set hasAgreed = true where id_user = $1';
-  try{
+  try {
     const result = await pool.query(query, id_user);
     res.status(200).json({
       message: 'Has aceptado los términos y condiciones.'
     });
-  }catch (error) {
+  } catch (error) {
     console.error(error.message);
-    res.status(500).json({message: 'Error al aceptar los términos y condiciones'})
+    res.status(500).json({ message: 'Error al aceptar los términos y condiciones' })
   }
 }
 
