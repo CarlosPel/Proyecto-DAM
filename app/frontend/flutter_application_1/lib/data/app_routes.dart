@@ -53,7 +53,7 @@ class AppRoutes {
             builder: (_) => PostScreen(post: post, article: article));
       case loadingScreen:
         final args = settings.arguments as Map<String, dynamic>;
-        final Future<void> Function() action = args['action'];
+        final void Function() action = args['action'];
         final Future<bool> Function() loadCondition = args['loadCondition'];
         return MaterialPageRoute(
             builder: (_) => LoadingScreen(

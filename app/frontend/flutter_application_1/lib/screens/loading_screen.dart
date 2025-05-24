@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatefulWidget {
   final Future<bool> Function() loadCondition;
-  final Future<void> Function() action;
+  final void Function() action;
 
   const LoadingScreen(
       {super.key,
