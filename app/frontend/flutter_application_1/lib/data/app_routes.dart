@@ -12,7 +12,7 @@ import 'package:flutter_application_1/screens/terms_screen.dart';
 // Almacena las rutas de la aplicación
 class AppRoutes {
   // Ruta de la pantalla inicial
-  static const String homeScreen = '/';
+  static const String homeScreen = '/home';
   // Ruta de la pantalla de inicio de sesión
   static const String loginScreen = '/login';
   // Ruta de la pantalla de registro
