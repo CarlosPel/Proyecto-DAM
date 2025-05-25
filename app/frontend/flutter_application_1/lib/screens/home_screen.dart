@@ -33,9 +33,8 @@ class HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    if (postsState.news.isEmpty) {
-      _postsFuture = _loadPosts();
-    }
+    // Siempre inicializa _postsFuture para evitar LateInitializationError
+    _postsFuture = _loadPosts();
   }
 
   void _toggleExpanded(int index) {

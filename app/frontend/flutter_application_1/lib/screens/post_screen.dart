@@ -21,6 +21,9 @@ class PostScreenState extends State<PostScreen> {
   Map<String, dynamic>? _referencedComment;
   List<dynamic>? _comments;
 
+  // Guarda las keys de los comentarios raíz
+  final Map<int, GlobalKey<CommentWidgetState>> _commentKeys = {};
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,45 @@ class PostScreenState extends State<PostScreen> {
     final data = await fetchComments(widget.post.id!);
     setState(() {
       _comments = data;
+      _saveCommentKeys();
+    });
+  }
+
+  // Recarga los comentarios de la publicación
+  Future<void> _refreshComments() async {
+    final data = await fetchComments(widget.post.id!);
+    setState(() {
+      _comments = data;
+      _referencedComment = null;
+      _commentController.clear();
+      _saveCommentKeys();
+    });
+
+    for (var commentKey in _commentKeys.values) {
+      if (commentKey.currentState != null) {
+        commentKey.currentState!.refreshSubComments();
+      }
+    }
+  }
+
+  _saveCommentKeys() {
+    _commentKeys.clear();
+    if (_comments != null) {
+      for (var comment in _comments!) {
+        _commentKeys[comment['id_post']] = GlobalKey<CommentWidgetState>();
+      }
+    }
+  }
+
+  // Llama al método refreshSubComments de un CommentWidget específico por su id_post
+  void refreshSubCommentsOf(int idPost) {
+    final key = _commentKeys[idPost];
+    setState(() {
+      _referencedComment = null;
+      _commentController.clear();
+      if (key != null && key.currentState != null) {
+        key.currentState!.refreshSubComments();
+      }
     });
   }
 
@@ -44,17 +86,11 @@ class PostScreenState extends State<PostScreen> {
               ? _referencedComment!['id_post']
               : post.id,
         ));
-    _refreshComments(post.id!);
-  }
-
-  // Recarga los comentarios de la publicación
-  Future<void> _refreshComments(int postId) async {
-    final data = await fetchComments(postId);
-    setState(() {
-      _comments = data;
-      _referencedComment = null;
-      _commentController.clear();
-    });
+    if (_referencedComment != null) {
+      refreshSubCommentsOf(_referencedComment!['id_post']);
+    } else {
+      _refreshComments();
+    }
   }
 
   @override
@@ -72,38 +108,45 @@ class PostScreenState extends State<PostScreen> {
             child: Text(post.content),
           ),
           Expanded(
-            child: _comments == null
-                ? const Center(child: CircularProgressIndicator())
-                : _comments!.isEmpty
-                    ? const Center(
-                        child: Text('No hay comentarios disponibles'))
-                    : RefreshIndicator(
-                      onRefresh: () => _refreshComments(post.id!),
-                      child: ListView.builder(
-                          itemCount: _comments!.length,
-                          itemBuilder: (context, index) {
-                            final comment = _comments![index];
-                            return CommentWidget(
-                              key: ValueKey(comment['id_post']),
-                              comment: Post(
-                                id: comment['id_post'],
-                                content: comment['content'],
-                                user: comment['user_name'],
-                                parentPostId: comment['parent_post'],
-                              ),
-                              onPressedIcon: (Post selectedComment) {
-                                setState(() {
-                                  _referencedComment = {
-                                    'id_post': selectedComment.id,
-                                    'content': selectedComment.content,
-                                    'user_name': selectedComment.user,
-                                  };
-                                });
-                              },
-                            );
+            child: RefreshIndicator(
+              onRefresh: () => _refreshComments(),
+              child: _comments == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: _comments!.isEmpty ? 1 : _comments!.length,
+                      itemBuilder: (context, index) {
+                        if (_comments!.isEmpty) {
+                          return const Center(
+                              child: Padding(
+                            padding: EdgeInsets.only(top: 32.0),
+                            child: Text('No hay comentarios disponibles'),
+                          ));
+                        }
+                        final comment = _comments![index];
+                        final key = _commentKeys[comment['id_post']] ??
+                            GlobalKey<CommentWidgetState>();
+                        _commentKeys[comment['id_post']] = key;
+                        return CommentWidget(
+                          key: key,
+                          comment: Post(
+                            id: comment['id_post'],
+                            content: comment['content'],
+                            user: comment['user_name'],
+                            parentPostId: comment['parent_post'],
+                          ),
+                          onPressedIcon: (Post selectedComment) {
+                            setState(() {
+                              _referencedComment = {
+                                'id_post': selectedComment.id,
+                                'content': selectedComment.content,
+                                'user_name': selectedComment.user,
+                              };
+                            });
                           },
-                        ),
+                        );
+                      },
                     ),
+            ),
           ),
           Column(
             children: [
@@ -161,5 +204,5 @@ class PostScreenState extends State<PostScreen> {
         ],
       ),
     );
-    }
+  }
 }
