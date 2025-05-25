@@ -104,3 +104,51 @@ Future<bool> loginUser({
     return false;
   }
 }
+
+Future<bool> singUpUser(
+    {required BuildContext context,
+    required String email,
+    required String password,
+    required String username,
+    required String country}) async {
+  // URL del backend
+  final String backendUrl = '${AppData.backendUrl}/users/register';
+
+  try {
+    // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
+    final response = await http.post(
+      Uri.parse(backendUrl),
+
+      // Se especifica el tipo de contenido como JSON
+      headers: {'Content-Type': 'application/json'},
+
+      // Se envía el cuerpo de la solicitud codificado como JSON
+      body: jsonEncode({
+        'username': username,
+        'email': email,
+        'password': password,
+        'nation': country,
+      }),
+    );
+
+    // Verifica si la respuesta es exitosa (código 200)
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // Mensaje de error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${response.body}')),
+      );
+
+      return false;
+    }
+  } catch (e) {
+    // Manejar errores de conexión con el backend
+    // Mensaje de error
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error de conexión: $e')),
+    );
+
+    return false;
+  }
+}

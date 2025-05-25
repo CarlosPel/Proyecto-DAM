@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
-import 'package:flutter_application_1/utilities/auth_service.dart';
+import 'package:flutter_application_1/utilities/load_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -92,25 +92,8 @@ class LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton.icon(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.loadingScreen,
-                              arguments: {
-                                'loadCondition': () async => true,
-                                'action': () async {
-                                  if ((await loginUser(
-                                    context: context,
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  ))) {
-                                    goHomeIfAgreed(context);
-                                  } else {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.loginScreen);
-                                  }
-                                },
-                              },
-                            );
+                            loadLogin(context: context, email: _emailController.text,
+                                password: _passwordController.text);
                           }
                         },
                         icon: Icon(
@@ -140,9 +123,10 @@ class LoginScreenState extends State<LoginScreen> {
                           child: Text('Inicio rápido'),
                         ),*/
                     DropdownButton<String>(
-                      value: _emailController.text.isEmpty
-                          ? null
-                          : _emailController.text,
+                      value: ['paco@prueba.com', 'lenin@prueba.com', 'hamilton@prueba.com']
+                              .contains(_emailController.text)
+                          ? _emailController.text
+                          : null,
                       hint: Text('Usuarios de prueba'),
                       items: [
                         DropdownMenuItem(

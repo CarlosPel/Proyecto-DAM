@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter_application_1/utilities/auth_service.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application_1/utilities/load_routes.dart';
 
 // Pantalla de registro de cuenta
 class SingUpScreen extends StatefulWidget {
@@ -22,77 +19,11 @@ class SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   // Controlador de texto para el nombre de usuario
   final TextEditingController _usernameController = TextEditingController();
-  // Controlador de texto para el país
-  //final TextEditingController _countryController = TextEditingController();
   // Clave global para el formulario
   // Se utiliza para validar el formulario y acceder a su estado
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // Variable para almacenar el país seleccionado
-  String? country;
-
-  // Método para manejar el registro de cuenta
-  Future<void> _singUp() async {
-    // Valida el formulario ejecutando los métodos de validación de cada campo
-    if (_formKey.currentState!.validate()) {
-      // Email y contraseña ingresados por el usuario
-      final String email = _emailController.text;
-      final String password = _passwordController.text;
-      final String username = _usernameController.text;
-
-      // URL del backend
-      final String backendUrl = '${AppData.backendUrl}/users/register';
-
-      try {
-        // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
-        final response = await http.post(
-          Uri.parse(backendUrl),
-
-          // Se especifica el tipo de contenido como JSON
-          headers: {'Content-Type': 'application/json'},
-
-          // Se envía el cuerpo de la solicitud codificado como JSON
-          body: jsonEncode({
-            'username': username,
-            'email': email,
-            'password': password,
-            'nation': country,
-          }),
-        );
-
-        // Verifica si la respuesta es exitosa (código 200)
-        if (response.statusCode == 200) {
-          if (mounted) {
-            // Decodifica la respuesta JSON
-            final responseData = jsonDecode(response.body);
-
-            // Mensaje de éxito
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      '${responseData['message']}. Bienvenido ${responseData['user']['username']}')),
-            );
-
-            await loginUser(context: context, email: email, password: password);
-          }
-        } else {
-          if (mounted) {
-            // Mensaje de error
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: ${response.body}')),
-            );
-          }
-        }
-      } catch (e) {
-        // Manejar errores de conexión con el backend
-        if (mounted) {
-          // Mensaje de error
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error de conexión: $e')),
-          );
-        }
-      }
-    }
-  }
+  late String? country;
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +140,17 @@ class SingUpScreenState extends State<SingUpScreen> {
                     const SizedBox(height: 24),
                     // Botón de registro
                     ElevatedButton.icon(
-                      onPressed: _singUp,
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          loadSingUp(
+                            context: context,
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            country: country!,
+                            username: _usernameController.text,
+                          );
+                        }
+                      },
                       icon: Icon(Icons.person_add_alt_1),
                       label: const Text('Registrarse'),
                     ),
