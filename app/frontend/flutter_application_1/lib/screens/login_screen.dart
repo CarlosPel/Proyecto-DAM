@@ -20,7 +20,6 @@ class LoginScreenState extends State<LoginScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F5EF), // Color tipo piedra clara
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -38,12 +37,10 @@ class LoginScreenState extends State<LoginScreen> {
                     // Icono estilo templo griego
                     Icon(Icons.account_balance,
                         size: 72, color: Colors.indigo.shade700),
-
                     const SizedBox(height: 12),
-
                     // Frase de bienvenida con tono griego-democrático
                     Text(
-                      'Tu voz en la democracia comienza aquí',
+                      'Bienvenidoa a ${AppData.name}',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w500,
@@ -51,17 +48,13 @@ class LoginScreenState extends State<LoginScreen> {
                         color: Colors.grey[700],
                       ),
                     ),
-
                     const SizedBox(height: 12),
-
                     Text(
-                      'Iniciar sesión en ${AppData.name}',
+                      'Inicio de sesión',
                       style: theme.textTheme.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
-
                     const SizedBox(height: 24),
-
                     // Email
                     TextFormField(
                       controller: _emailController,
@@ -69,8 +62,6 @@ class LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Correo electrónico',
                         prefixIcon: Icon(Icons.email_outlined),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -79,9 +70,7 @@ class LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
-
                     const SizedBox(height: 16),
-
                     // Password
                     TextFormField(
                       controller: _passwordController,
@@ -89,8 +78,6 @@ class LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Contraseña',
                         prefixIcon: Icon(Icons.lock_outline),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -99,12 +86,9 @@ class LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
-
                     const SizedBox(height: 24),
-
                     // Botón de inicio ajustado a contenido
-                    Align(
-                      alignment: Alignment.centerRight,
+                    Center(
                       child: ElevatedButton.icon(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -115,42 +99,62 @@ class LoginScreenState extends State<LoginScreen> {
                             );
                           }
                         },
-                        icon: Icon(Icons.login),
-                        label: Text('Entrar al Ágora'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 14),
-                          backgroundColor: Colors.indigo.shade700,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                        icon: Icon(
+                          Icons.login,
                         ),
+                        label: Text('Entrar'),
                       ),
                     ),
-
                     const SizedBox(height: 16),
-
                     // Registro
                     TextButton(
                       onPressed: () =>
                           Navigator.pushNamed(context, AppRoutes.singUpScreen),
                       child: Text('¿No tienes cuenta? Regístrate aquí'),
                     ),
-
                     // Botón rápido (para pruebas)
-                    TextButton(
-                      onPressed: () {
-                        loginUser(
-                          context: context,
-                          email: 'paco@prueba.com',
-                          password: '123456',
-                        );
+                    /*Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            loginUser(
+                              context: context,
+                              email: 'paco@prueba.com',
+                              password: '123456',
+                            );
+                          },
+                          child: Text('Inicio rápido'),
+                        ),*/
+                    DropdownButton<String>(
+                      value: _emailController.text.isEmpty
+                          ? null
+                          : _emailController.text,
+                      hint: Text('Usuarios de prueba'),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'paco@prueba.com',
+                          child: Text('Paco'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'lenin@prueba.com',
+                          child: Text('Lenin'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'hamilton@prueba.com',
+                          child: Text('Hamilton'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _emailController.text = value ?? '';
+                          _passwordController.text = '123456';
+                        });
                       },
-                      child: Text('Inicio rápido'),
                     ),
                   ],
                 ),
+                //],
+                //),
               ),
             ),
           ),
