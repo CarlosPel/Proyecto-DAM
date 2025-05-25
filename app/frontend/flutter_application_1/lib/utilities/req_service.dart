@@ -60,7 +60,7 @@ List<dynamic> _fetchFakeNews() {
       'title': 'Noticia de ejemplo $i',
       'snippet': 'Esta es una noticia de ejemplo $i.',
       'link': 'https://example.com/noticia-$i',
-      'photo_url': 'https://example.com/foto-$i.jpg',
+      'photo_url': 'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/5760/production/_109286322_gettyimages-120445555.jpg.webp',
       'published_datetime_utc': DateTime.now().toUtc().toString(),
       'source_name': 'Fuente de ejemplo $i',
     });
