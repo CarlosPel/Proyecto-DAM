@@ -35,3 +35,4 @@ app/frontend/flutter_application_1/android/app/.cxx/
 .cxx/
 
 bbdd_url.txt
+run_in_mobile.sh

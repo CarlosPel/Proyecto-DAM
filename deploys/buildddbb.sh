@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Conexión a PostgreSQL y ejecución del archivo SQL
-cd ./ficheros
+cd ./deploys
 FICHERO="bbdd_url.txt"
 
 if [[ -f "$FICHERO" ]]; then
