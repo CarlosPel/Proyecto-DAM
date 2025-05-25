@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/auth_service.dart';
 
 loadLogin(
@@ -53,4 +54,27 @@ loadSingUp(
       },
     },
   );
+}
+
+// Verifica si el usuario ha aceptado los términos y condiciones
+goHomeIfAgreed(BuildContext context) {
+  // Si el usuario ya está logueado, redirigir a la pantalla de inicio
+  Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
+    'loadCondition': () => isDataSaved(hasAgreed()),
+    'action': () async {
+      if ((await hasAgreed())!) {
+        Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
+          'loadCondition': () => isDataSaved(getToken()),
+          'action': () async {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.homeScreen, (Route<dynamic> route) => false);
+          }
+        });
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.termsScreen, (Route<dynamic> route) => false);
+          
+      }
+    }
+  });
 }

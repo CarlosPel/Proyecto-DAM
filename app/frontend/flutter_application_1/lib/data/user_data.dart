@@ -81,8 +81,9 @@ Future<void> logout(BuildContext context) async {
   await prefs.remove('token');
   await prefs.remove('hasAgreed');
   await prefs.setBool('isLoggedIn', false);
-  
-  Navigator.pushNamed(context, AppRoutes.loginScreen);
+
+  Navigator.pushNamedAndRemoveUntil(
+      context, AppRoutes.loginScreen, (Route<dynamic> route) => false);
 }
 
 Future<bool?> hasAgreed() async {
