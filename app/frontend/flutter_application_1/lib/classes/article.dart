@@ -2,16 +2,16 @@ class Article {
   String title;
   String? snippet;
   String url;
-  String imgUrl;
+  String? imgUrl;
   String datetime;
-  String source;
+  String? source;
 
   Article({
     required this.title,
     this.snippet,
     required this.url,
-    required this.imgUrl,
+    this.imgUrl,
     required this.datetime,
-    required this.source,
+    this.source,
   });
 }

@@ -4,6 +4,7 @@ import 'package:flutter_application_1/classes/news_state.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/article_widget.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -20,8 +21,13 @@ class NewsScreenState extends State<NewsScreen> {
   void initState() {
     super.initState();
     if (newsState.news.isEmpty) {
-      _newsFuture = _loadNews();
+      _newsFuture = _initAndLoadNews();
     }
+  }
+
+  Future<List<dynamic>> _initAndLoadNews() async {
+    await initializeDateFormatting('es_ES', null);
+    return await _loadNews();
   }
 
   void _toggleExpanded(int index) {
@@ -104,7 +110,8 @@ class NewsScreenState extends State<NewsScreen> {
                     ),
                   );
                 } else {
-                  return const Center(child: Text('No hay noticias disponibles'));
+                  return const Center(
+                      child: Text('No hay noticias disponibles'));
                 }
               },
             ),
