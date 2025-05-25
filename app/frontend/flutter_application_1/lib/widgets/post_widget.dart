@@ -48,33 +48,8 @@ class PostWidgetState extends State<PostWidget> {
                       style: const TextStyle(color: Colors.black, fontSize: 18),
                     ),
                   ),
-                  /*Icon(
-                    widget.isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Colors.black,
-                  ),*/
                 ],
               ),
-              /*AnimatedCrossFade(
-                firstChild: const SizedBox.shrink(),
-                secondChild: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: [
-                      Text(
-                        post.content,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      Row(
-                        children: [],
-                      ),
-                    ],
-                  ),
-                ),
-                crossFadeState: widget.isExpanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 200),
-              ),*/
             ],
           ),
         ),
