@@ -48,7 +48,7 @@ class SingUpScreenState extends State<SingUpScreen> {
                         size: 72, color: theme.colorScheme.primary),
                     const SizedBox(height: 12),
                     Text(
-                      'Únete a ${AppData.name}',
+                      'Únete a ${AppData.appName}',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontStyle: FontStyle.italic,
                       ),

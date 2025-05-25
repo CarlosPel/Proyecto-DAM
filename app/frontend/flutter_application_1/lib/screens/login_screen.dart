@@ -40,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 12),
                     // Frase de bienvenida con tono griego-democrático
                     Text(
-                      'Bienvenidoa a ${AppData.name}',
+                      'Bienvenidoa a ${AppData.appName}',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w500,
