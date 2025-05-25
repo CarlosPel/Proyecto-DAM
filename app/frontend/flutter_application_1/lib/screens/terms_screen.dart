@@ -44,12 +44,12 @@ class _TermsScreenState extends State<TermsScreen> {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 16.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                    'Política de Privacidad',
-                    style: Theme.of(context).textTheme.headlineSmall,
+                      'Política de Privacidad',
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
                 ),
@@ -363,8 +363,17 @@ class _TermsScreenState extends State<TermsScreen> {
                       });
                     },
                   ),
-                  const Expanded(
-                    child: Text('He leído y acepto los términos y condiciones'),
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isAgreedWithTerms = !_isAgreedWithTerms;
+                          });
+                        },
+                        child: const Text(
+                            'He leído y acepto los términos y condiciones',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black))),
                   ),
                 ],
               ),
@@ -378,9 +387,17 @@ class _TermsScreenState extends State<TermsScreen> {
                       });
                     },
                   ),
-                  const Expanded(
-                    child:
-                        Text('Estoy de acuerdo con la política de privacidad'),
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isAgreedWithPolicy = !_isAgreedWithPolicy;
+                          });
+                        },
+                        child: Text(
+                            'Estoy de acuerdo con la política de privacidad',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black))),
                   ),
                 ],
               ),
