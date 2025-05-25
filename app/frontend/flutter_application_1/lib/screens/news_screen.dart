@@ -68,7 +68,7 @@ class NewsScreenState extends State<NewsScreen> {
                     article: Article(
                       title: article['title'],
                       snippet: article['snippet'],
-                      url: article['link'],
+                      link: article['link'],
                       imgUrl: article['photo_url'],
                       datetime: article['published_datetime_utc'],
                       source: article['source_name'],
@@ -98,7 +98,7 @@ class NewsScreenState extends State<NewsScreen> {
                           article: Article(
                             title: article['title'],
                             snippet: article['snippet'],
-                            url: article['link'],
+                            link: article['link'],
                             imgUrl: article['photo_url'],
                             datetime: article['published_datetime_utc'],
                             source: article['source_name'],

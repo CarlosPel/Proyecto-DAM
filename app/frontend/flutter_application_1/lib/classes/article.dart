@@ -1,7 +1,7 @@
 class Article {
   String title;
   String? snippet;
-  String url;
+  String link;
   String? imgUrl;
   String datetime;
   String? source;
@@ -9,7 +9,7 @@ class Article {
   Article({
     required this.title,
     this.snippet,
-    required this.url,
+    required this.link,
     this.imgUrl,
     required this.datetime,
     this.source,

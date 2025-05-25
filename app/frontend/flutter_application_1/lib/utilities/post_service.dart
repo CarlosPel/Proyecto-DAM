@@ -38,7 +38,7 @@ Future<void> createPost(
         'parent_post': post.parentPostId,
         'noticia_title': article?.title,
         'noticia_content': article?.snippet,
-        'noticia_url': article?.url,
+        'noticia_url': article?.link,
         'noticia_datetime': article?.datetime,
         'noticia_source': article?.source,
       }),
