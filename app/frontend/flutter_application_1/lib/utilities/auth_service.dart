@@ -46,7 +46,7 @@ Future<void> agreeTerms(BuildContext context) async {
       await saveAgreement();
 
       // Navegar a la pantalla principal
-      Navigator.pushNamed(context, AppRoutes.homeScreen);
+      goHomeIfAgreed(context);
     } else {
       // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(

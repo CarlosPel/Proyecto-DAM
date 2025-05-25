@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> saveUserData(dynamic responseData) async {
@@ -68,7 +70,7 @@ Future<bool> isLoggedIn() async {
   return isLoggedIn ?? false;
 }
 
-Future<void> logout() async {
+Future<void> logout(BuildContext context) async {
   // Se obtiene una instancia de SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -79,6 +81,8 @@ Future<void> logout() async {
   await prefs.remove('token');
   await prefs.remove('hasAgreed');
   await prefs.setBool('isLoggedIn', false);
+  
+  Navigator.pushNamed(context, AppRoutes.loginScreen);
 }
 
 Future<bool?> hasAgreed() async {

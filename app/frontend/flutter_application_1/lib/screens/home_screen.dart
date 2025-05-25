@@ -97,7 +97,7 @@ class HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    logout();
+                    logout(context);
                     Navigator.pushNamed(context, AppRoutes.loginScreen);
                   },
                   child: Icon(Icons.logout),

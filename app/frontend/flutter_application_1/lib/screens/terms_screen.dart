@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/auth_service.dart';
 
-class TermsScreen extends StatelessWidget {
+class TermsScreen extends StatefulWidget {
   const TermsScreen({super.key});
+
+  @override
+  State<TermsScreen> createState() => _TermsScreenState();
+}
+
+class _TermsScreenState extends State<TermsScreen> {
+  bool _isAgreed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +54,45 @@ class TermsScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  agreeTerms(context);
-                },
-                child: const Text('Aceptar'),
+              Row(
+                children: [
+                  Checkbox(
+                    value: _isAgreed,
+                    onChanged: (isAgreed) {
+                      setState(() {
+                        _isAgreed = isAgreed!;
+                      });
+                    },
+                  ),
+                  const Text('He leído y acepto los términos y condiciones'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      logout(context);
+                    },
+                    child: const Text('Cerrar Sesión'),
+                  ),
+                  const SizedBox(width: 32),
+                  !_isAgreed
+                      ? ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Aceptar'),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            agreeTerms(context);
+                          },
+                          child: const Text('Aceptar'),
+                        ),
+                ],
               ),
             ],
           ),
