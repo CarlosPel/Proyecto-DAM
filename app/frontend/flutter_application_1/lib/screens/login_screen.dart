@@ -92,10 +92,24 @@ class LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton.icon(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            loginUser(
-                              context: context,
-                              email: _emailController.text,
-                              password: _passwordController.text,
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.loadingScreen,
+                              arguments: {
+                                'loadCondition': () async => true,
+                                'action': () async {
+                                  if ((await loginUser(
+                                    context: context,
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  ))) {
+                                    goHomeIfAgreed(context);
+                                  } else {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.loginScreen);
+                                  }
+                                },
+                              },
                             );
                           }
                         },

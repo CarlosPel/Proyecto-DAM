@@ -61,7 +61,7 @@ Future<void> agreeTerms(BuildContext context) async {
   }
 }
 
-Future<void> loginUser({
+Future<bool> loginUser({
   required BuildContext context,
   required String email,
   required String password,
@@ -88,18 +88,19 @@ Future<void> loginUser({
       // Guardar datos del usuario
       await saveUserData(responseData);
 
-      // Navegar a la pantalla principal
-      goHomeIfAgreed(context);
+      return true;
     } else {
       // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${response.body}')),
       );
+      return false;
     }
   } catch (e) {
     // Manejar errores de conexión
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error de conexión: $e')),
     );
+    return false;
   }
 }
