@@ -3,7 +3,7 @@ import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/classes/posts_notifier.dart';
 import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/auth_service.dart';
+import 'package:flutter_application_1/utilities/load_routes.dart';
 import 'package:provider/provider.dart';
 
 // Método de ejecución de la aplicación
