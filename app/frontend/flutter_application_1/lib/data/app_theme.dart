@@ -4,7 +4,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true, // Activamos Material 3
-      scaffoldBackgroundColor: const Color(0xFFF7F5EF), // fondo tipo piedra
+      scaffoldBackgroundColor: const Color(0xffd1d1c6), // fondo tipo piedra
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.indigo.shade700,
         primary: Colors.indigo.shade700,
