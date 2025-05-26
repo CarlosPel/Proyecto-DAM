@@ -30,8 +30,7 @@ Future<List<dynamic>> fetchPosts(BuildContext context, String? country) async {
           'Content-Type': 'application/json'
         },
         body: jsonEncode({'nation': country}),
-      ),
-      true);
+      ));
 }
 
 // Obtiene los comentarios de un post
@@ -44,8 +43,7 @@ Future<List<dynamic>> fetchComments(BuildContext context, int postId) async {
         Uri.parse(routeUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'id_post': postId}),
-      ),
-      false);
+      ));
 }
 
 // Obtiene las noticias de la url proporcionada
@@ -56,7 +54,7 @@ Future<List<dynamic>> _fetchNews(String url) async {
     Uri.parse(routeUrl),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({'urlFi': url}),
-  ), false);*/
+  ));*/
 }
 
 // Devuelve noticias de ejemplo para no consumir la API
@@ -80,19 +78,14 @@ List<dynamic> _fetchFakeNews() {
 
 // Obtiene las noticias de la url proporcionada
 Future<List<dynamic>> _fetchFromReq(
-    BuildContext context, Future<http.Response> req, bool tokenSent) async {
+    BuildContext context, Future<http.Response> req) async {
   final response = await req;
 
-  dynamic value = handleResponse(
+  return handleTokenSent(
     context: context,
     response: response,
     onSuccess: (responseData) async {
       return jsonDecode(response.body)['data'];
     },
-    tokenSent: tokenSent,
   );
-  if (value is! bool) {
-    return value;
-  }
-  throw Exception('Error al cargar el contenido: ${response.body}');
 }

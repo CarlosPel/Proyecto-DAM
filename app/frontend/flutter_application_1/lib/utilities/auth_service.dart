@@ -31,7 +31,6 @@ Future<void> agreeTerms(BuildContext context) async {
         // Navegar a la pantalla principal
         goHomeIfAgreed(context);
       },
-      tokenSent: true
     );
   } catch (e) {
     // Manejar errores de conexión
@@ -41,12 +40,11 @@ Future<void> agreeTerms(BuildContext context) async {
   }
 }
 
-dynamic handleResponse(
+bool handleResponse(
     {required BuildContext context,
     required http.Response response,
     required Function(dynamic) onSuccess,
-    bool showMessage = false,
-    bool tokenSent = false}) {
+    bool showMessage = false}) {
   if (response.statusCode == 200) {
     // Si la respuesta es exitosa, se puede procesar el cuerpo de la respuesta
     final responseData = jsonDecode(response.body);
@@ -61,16 +59,43 @@ dynamic handleResponse(
     }
 
     return true;
-  } else if (response.statusCode == 401 && tokenSent) {
-    // Si la respuesta es 401, se asume que el token no es válido o ha expirado
-    logout(context);
-    return false;
   } else {
     // Si hay un error, se muestra un mensaje al usuario
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error: ${response.body}')),
     );
     return false;
+  }
+}
+
+Future<List<dynamic>> handleTokenSent(
+    {required BuildContext context,
+    required http.Response response,
+    required Future<List<dynamic>> Function(dynamic) onSuccess,
+    bool showMessage = false}) {
+  if (response.statusCode == 200) {
+    // Si la respuesta es exitosa, se puede procesar el cuerpo de la respuesta
+    final responseData = jsonDecode(response.body);
+
+    if (responseData['message'] != null && showMessage) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(responseData['message'])),
+      );
+    }
+
+    // Llamar a la función de éxito
+    return onSuccess(responseData);
+  } else if (response.statusCode == 401) {
+    // Si la respuesta es 401, se asume que el token no es válido o ha expirado
+    logout(context);
+    throw Exception(
+      'Error: ${response.statusCode} - ${response.body}',
+    );
+  } else {
+    // Si hay un error, se muestra un mensaje al usuario
+    throw Exception(
+      'Error: ${response.statusCode} - ${response.body}',
+    );
   }
 }
 
