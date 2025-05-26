@@ -31,7 +31,7 @@ class PostScreenState extends State<PostScreen> {
   }
 
   Future<void> _loadComments() async {
-    final data = await fetchComments(widget.post.id!);
+    final data = await fetchComments(context, widget.post.id!);
     setState(() {
       _comments = data;
       _saveCommentKeys();
@@ -40,7 +40,7 @@ class PostScreenState extends State<PostScreen> {
 
   // Recarga los comentarios de la publicación
   Future<void> _refreshComments() async {
-    final data = await fetchComments(widget.post.id!);
+    final data = await fetchComments(context, widget.post.id!);
     setState(() {
       _comments = data;
       _referencedComment = null;

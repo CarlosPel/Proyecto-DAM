@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/utilities/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 const String politicsCode =
@@ -15,29 +17,35 @@ Future<List<dynamic>> fetchTopHeadlines(String? country) async {
 }
 
 // Obtiene posts
-Future<List<dynamic>> fetchPosts(String? country) async {
+Future<List<dynamic>> fetchPosts(BuildContext context, String? country) async {
   final String routeUrl = '$backendUrl/posts/get';
   final String userToken = (await getToken())!;
 
-  return await _fetchFromReq(http.post(
-    Uri.parse(routeUrl),
-    headers: {
-      'Authorization': 'Bearer $userToken',
-      'Content-Type': 'application/json'
-    },
-    body: jsonEncode({'nation': country}),
-  ));
+  return await _fetchFromReq(
+      context,
+      http.post(
+        Uri.parse(routeUrl),
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({'nation': country}),
+      ),
+      true);
 }
 
 // Obtiene los comentarios de un post
-Future<List<dynamic>> fetchComments(int postId) async {
+Future<List<dynamic>> fetchComments(BuildContext context, int postId) async {
   final String routeUrl = '$backendUrl/posts/comments';
 
-  return await _fetchFromReq(http.post(
-    Uri.parse(routeUrl),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'id_post': postId}),
-  ));
+  return await _fetchFromReq(
+      context,
+      http.post(
+        Uri.parse(routeUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'id_post': postId}),
+      ),
+      false);
 }
 
 // Obtiene las noticias de la url proporcionada
@@ -48,7 +56,7 @@ Future<List<dynamic>> _fetchNews(String url) async {
     Uri.parse(routeUrl),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({'urlFi': url}),
-  ));*/
+  ), false);*/
 }
 
 // Devuelve noticias de ejemplo para no consumir la API
@@ -71,15 +79,20 @@ List<dynamic> _fetchFakeNews() {
 }
 
 // Obtiene las noticias de la url proporcionada
-Future<List<dynamic>> _fetchFromReq(Future<http.Response> req) async {
-  try {
-    final response = await req;
-    if (response.statusCode == 200) {
+Future<List<dynamic>> _fetchFromReq(
+    BuildContext context, Future<http.Response> req, bool tokenSent) async {
+  final response = await req;
+
+  dynamic value = handleResponse(
+    context: context,
+    response: response,
+    onSuccess: (responseData) async {
       return jsonDecode(response.body)['data'];
-    } else {
-      throw Exception('Error al cargar el contenido: ${response.body}');
-    }
-  } catch (e) {
-    throw Exception('Error de conexión: $e');
+    },
+    tokenSent: tokenSent,
+  );
+  if (value is! bool) {
+    return value;
   }
+  throw Exception('Error al cargar el contenido: ${response.body}');
 }

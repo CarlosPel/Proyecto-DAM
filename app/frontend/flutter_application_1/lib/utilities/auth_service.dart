@@ -31,6 +31,7 @@ Future<void> agreeTerms(BuildContext context) async {
         // Navegar a la pantalla principal
         goHomeIfAgreed(context);
       },
+      tokenSent: true
     );
   } catch (e) {
     // Manejar errores de conexión
@@ -40,11 +41,12 @@ Future<void> agreeTerms(BuildContext context) async {
   }
 }
 
-bool handleResponse(
+dynamic handleResponse(
     {required BuildContext context,
     required http.Response response,
     required Function(dynamic) onSuccess,
-    bool showMessage = false}) {
+    bool showMessage = false,
+    bool tokenSent = false}) {
   if (response.statusCode == 200) {
     // Si la respuesta es exitosa, se puede procesar el cuerpo de la respuesta
     final responseData = jsonDecode(response.body);
@@ -59,7 +61,7 @@ bool handleResponse(
     }
 
     return true;
-  } else if (response.statusCode == 401) {
+  } else if (response.statusCode == 401 && tokenSent) {
     // Si la respuesta es 401, se asume que el token no es válido o ha expirado
     logout(context);
     return false;
@@ -94,7 +96,8 @@ Future<bool> loginUser({
         await saveUserData(responseData);
         // Mensaje de éxito
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Bienvenido, ${responseData['user']['username']}')),
+          SnackBar(
+              content: Text('Bienvenido, ${responseData['user']['username']}')),
         );
       },
     );

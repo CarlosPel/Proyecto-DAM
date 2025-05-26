@@ -56,6 +56,8 @@ Future<void> createPost(
 
       // Notifica a los listeners que se ha creado un nuevo post
       Provider.of<PostsNotifier>(context, listen: false).markForRefresh();
+    } else if (response.statusCode == 401) {
+      logout(context);
     } else {
       // Mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(

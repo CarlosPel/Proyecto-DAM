@@ -46,7 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> _loadPosts() async {
     final userData = await getUserData();
     final countryCode = userData['countryCode'];
-    final posts = await fetchPosts(countryCode);
+    final posts = await fetchPosts(context, countryCode);
     postsState.news = posts;
     return posts;
   }
