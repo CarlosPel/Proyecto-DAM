@@ -21,23 +21,54 @@ Future<void> agreeTerms(BuildContext context) async {
       },
     );
 
-    if (response.statusCode == 200) {
-      // Guardar datos del usuario
-      await saveAgreement();
+    handleResponse(
+      context: context,
+      response: response,
+      onSuccess: (responseData) async {
+        // Guardar datos del usuario
+        await saveAgreement();
 
-      // Navegar a la pantalla principal
-      goHomeIfAgreed(context);
-    } else {
-      // Mostrar mensaje de error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${response.body}')),
-      );
-    }
+        // Navegar a la pantalla principal
+        goHomeIfAgreed(context);
+      },
+    );
   } catch (e) {
     // Manejar errores de conexión
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error de conexión: $e')),
     );
+  }
+}
+
+bool handleResponse(
+    {required BuildContext context,
+    required http.Response response,
+    required Function(dynamic) onSuccess,
+    bool showMessage = false}) {
+  if (response.statusCode == 200) {
+    // Si la respuesta es exitosa, se puede procesar el cuerpo de la respuesta
+    final responseData = jsonDecode(response.body);
+
+    // Llamar a la función de éxito
+    onSuccess(responseData);
+
+    if (responseData['message'] != null && showMessage) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(responseData['message'])),
+      );
+    }
+
+    return true;
+  } else if (response.statusCode == 401) {
+    // Si la respuesta es 401, se asume que el token no es válido o ha expirado
+    logout(context);
+    return false;
+  } else {
+    // Si hay un error, se muestra un mensaje al usuario
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${response.body}')),
+    );
+    return false;
   }
 }
 
@@ -55,27 +86,18 @@ Future<bool> loginUser({
       body: jsonEncode({'email': email, 'password': password}),
     );
 
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-
-      // Mostrar mensaje de éxito
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Bienvenido ${responseData['user']['username']}'),
-        ),
-      );
-
-      // Guardar datos del usuario
-      await saveUserData(responseData);
-
-      return true;
-    } else {
-      // Mostrar mensaje de error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${response.body}')),
-      );
-      return false;
-    }
+    return handleResponse(
+      context: context,
+      response: response,
+      onSuccess: (responseData) async {
+        // Guardar datos del usuario
+        await saveUserData(responseData);
+        // Mensaje de éxito
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Bienvenido, ${responseData['user']['username']}')),
+        );
+      },
+    );
   } catch (e) {
     // Manejar errores de conexión
     ScaffoldMessenger.of(context).showSnackBar(
@@ -111,17 +133,16 @@ Future<bool> singUpUser(
       }),
     );
 
-    // Verifica si la respuesta es exitosa (código 200)
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      // Mensaje de error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${response.body}')),
-      );
-
-      return false;
-    }
+    return handleResponse(
+      context: context,
+      response: response,
+      onSuccess: (responseData) async {
+        // Mensaje de éxito
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuario registrado correctamente')),
+        );
+      },
+    );
   } catch (e) {
     // Manejar errores de conexión con el backend
     // Mensaje de error
