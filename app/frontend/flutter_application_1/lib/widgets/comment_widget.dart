@@ -20,6 +20,16 @@ class CommentWidgetState extends State<CommentWidget> {
   bool _isExpanded = false;
   List<dynamic>? _subComments; // ⬅️ Guarda comentarios hijos
 
+  // Método público para refrescar subcomentarios
+  Future<void> refreshSubComments() async {
+    final fetched = await fetchComments(widget.comment.id!);
+    if (mounted) {
+      setState(() {
+        _subComments = fetched;
+      });
+    }
+  }
+
   void _toggleExpanded() async {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -27,12 +37,7 @@ class CommentWidgetState extends State<CommentWidget> {
 
     // Solo cargar si se expande y aún no hay comentarios
     if (_isExpanded && _subComments == null) {
-      final fetched = await fetchComments(widget.comment.id!);
-      if (mounted) {
-        setState(() {
-          _subComments = fetched;
-        });
-      }
+      await refreshSubComments();
     }
   }
 

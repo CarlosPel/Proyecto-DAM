@@ -17,7 +17,7 @@ Future<List<dynamic>> fetchTopHeadlines(String? country) async {
 // Obtiene posts
 Future<List<dynamic>> fetchPosts(String? country) async {
   final String routeUrl = '$backendUrl/posts/get';
-  final String userToken = await getUserToken();
+  final String userToken = (await getToken())!;
 
   return await _fetchFromReq(http.post(
     Uri.parse(routeUrl),
@@ -57,10 +57,12 @@ List<dynamic> _fetchFakeNews() {
   final List<dynamic> fakenews = [];
   for (int i = 0; i < 100; i++) {
     fakenews.add({
-      'title': 'Noticia de ejemplo $i',
-      'snippet': 'Esta es una noticia de ejemplo $i.',
-      'link': 'https://example.com/noticia-$i',
-      'photo_url': 'https://example.com/foto-$i.jpg',
+      'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'snippet':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      'link': 'https://matchlyric.com/kanye-west-hh-traduccion-al-espanol',
+      'photo_url':
+          'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/5760/production/_109286322_gettyimages-120445555.jpg.webp',
       'published_datetime_utc': DateTime.now().toUtc().toString(),
       'source_name': 'Fuente de ejemplo $i',
     });

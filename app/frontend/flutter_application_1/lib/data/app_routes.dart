@@ -12,7 +12,7 @@ import 'package:flutter_application_1/screens/terms_screen.dart';
 // Almacena las rutas de la aplicación
 class AppRoutes {
   // Ruta de la pantalla inicial
-  static const String homeScreen = '/';
+  static const String homeScreen = '/home';
   // Ruta de la pantalla de inicio de sesión
   static const String loginScreen = '/login';
   // Ruta de la pantalla de registro
@@ -34,9 +34,7 @@ class AppRoutes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homeScreen:
-        final args = settings.arguments as Map<String, dynamic>;
-        final bool hasAgreed = args['hasAgreed'];
-        return MaterialPageRoute(builder: (_) => HomeScreen(hasAgreed: hasAgreed,));
+        return MaterialPageRoute(builder: (_) => HomeScreen());
       case loginScreen:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case singUpScreen:
@@ -55,12 +53,11 @@ class AppRoutes {
             builder: (_) => PostScreen(post: post, article: article));
       case loadingScreen:
         final args = settings.arguments as Map<String, dynamic>;
-        final String route = args['route'];
+        final void Function() action = args['action'];
         final Future<bool> Function() loadCondition = args['loadCondition'];
-        final Map<String, dynamic>? screenArgs = args['args'];
         return MaterialPageRoute(
             builder: (_) => LoadingScreen(
-                route: route, loadCondition: loadCondition, args: screenArgs));
+                action: action, loadCondition: loadCondition));
       case termsScreen:
         return MaterialPageRoute(builder: (_) => TermsScreen());
       default:

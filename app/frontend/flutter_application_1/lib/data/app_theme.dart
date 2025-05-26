@@ -29,6 +29,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+          iconColor: Colors.white,
         ),
       ),
     );

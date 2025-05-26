@@ -9,9 +9,7 @@ import 'package:flutter_application_1/widgets/post_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final bool hasAgreed;
-
-  const HomeScreen({super.key, required this.hasAgreed});
+  const HomeScreen({super.key});
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -25,13 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    if (!widget.hasAgreed) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamed(context, AppRoutes.termsScreen);
-      });
-      return;
-    }
+    
     // Escucha los cambios en PostsNotifier
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final postsNotifier = Provider.of<PostsNotifier>(context, listen: false);
@@ -41,9 +33,8 @@ class HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    if (postsState.news.isEmpty) {
-      _postsFuture = _loadPosts();
-    }
+    // Siempre inicializa _postsFuture para evitar LateInitializationError
+    _postsFuture = _loadPosts();
   }
 
   void _toggleExpanded(int index) {
@@ -101,6 +92,15 @@ class HomeScreenState extends State<HomeScreen> {
                     Navigator.pushNamed(context, AppRoutes.profileScreen);
                   },
                   child: Icon(Icons.person),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    logout(context);
+                    Navigator.pushNamed(context, AppRoutes.loginScreen);
+                  },
+                  child: Icon(Icons.logout),
                 ),
               ),
             ],

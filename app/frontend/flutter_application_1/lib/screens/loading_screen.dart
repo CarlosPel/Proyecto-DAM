@@ -4,15 +4,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatefulWidget {
-  final String route;
   final Future<bool> Function() loadCondition;
-  final Map<String, dynamic>? args;
+  final void Function() action;
 
   const LoadingScreen(
       {super.key,
-      required this.route,
       required this.loadCondition,
-      required this.args});
+      required this.action});
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
@@ -27,7 +25,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (await widget.loadCondition()) {
         _timer.cancel();
-        Navigator.pushNamed(context, widget.route, arguments: widget.args);
+        widget.action();
       }
     });
   }

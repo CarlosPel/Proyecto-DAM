@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
     }
 
     const user = result.rows[0];
-    const userData = { username: user.username, email: user.email, nation: user.nation };
+    const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.has_agreed };
 
     // Verificar la contraseña
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
@@ -82,7 +82,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       { id_user: user.id_user, username: user.username, email: user.email, nation: user.nation },
       process.env.JWT_SECRET || 'clave_secreta',
-      { expiresIn: '1h' }
+      { expiresIn: '12h' }
     );
 
     res.status(200).json({ message: 'Inicio de sesión exitoso', token, user: userData });
@@ -131,21 +131,35 @@ const editProfileUser = async (req, res) => {
   }
 };
 
-const userPosts = async(req, res) => {
+const userPosts = async (req, res) => {
   const id_user = req.user.id_user;
   console.log(id_user);
   const query = `SELECT * FROM post WHERE id_user = $1`;
 
-  try{
+  try {
     const resultado = await pool.query(query, [id_user]);
     res.status(200).json({
       message: 'Posts extraídos correctamente',
       data: resultado.rows,
-  });
+    });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({message: 'Error al obtener los post de este usuario'})
-  }  
+    res.status(500).json({ message: 'Error al obtener los post de este usuario' })
+  }
 }
 
-module.exports = { registerUser, loginUser, editProfileUser, userPosts };
+const userConditions = async (req, res) => {
+  const id_user = req.user.id_user;
+  const query = 'UPDATE users SET has_agreed = TRUE WHERE id_user = $1';
+  try {
+    const result = await pool.query(query, [id_user]);
+    res.status(200).json({
+      message: 'Has aceptado los términos y condiciones.'
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al aceptar los términos y condiciones' })
+  }
+}
+
+module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions };

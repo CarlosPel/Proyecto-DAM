@@ -21,6 +21,9 @@ class PostScreenState extends State<PostScreen> {
   Map<String, dynamic>? _referencedComment;
   List<dynamic>? _comments;
 
+  // Guarda las keys de los comentarios raíz
+  final Map<int, GlobalKey<CommentWidgetState>> _commentKeys = {};
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,45 @@ class PostScreenState extends State<PostScreen> {
     final data = await fetchComments(widget.post.id!);
     setState(() {
       _comments = data;
+      _saveCommentKeys();
+    });
+  }
+
+  // Recarga los comentarios de la publicación
+  Future<void> _refreshComments() async {
+    final data = await fetchComments(widget.post.id!);
+    setState(() {
+      _comments = data;
+      _referencedComment = null;
+      _commentController.clear();
+      _saveCommentKeys();
+    });
+
+    for (var commentKey in _commentKeys.values) {
+      if (commentKey.currentState != null) {
+        commentKey.currentState!.refreshSubComments();
+      }
+    }
+  }
+
+  _saveCommentKeys() {
+    _commentKeys.clear();
+    if (_comments != null) {
+      for (var comment in _comments!) {
+        _commentKeys[comment['id_post']] = GlobalKey<CommentWidgetState>();
+      }
+    }
+  }
+
+  // Llama al método refreshSubComments de un CommentWidget específico por su id_post
+  void refreshSubCommentsOf(int idPost) {
+    final key = _commentKeys[idPost];
+    setState(() {
+      _referencedComment = null;
+      _commentController.clear();
+      if (key != null && key.currentState != null) {
+        key.currentState!.refreshSubComments();
+      }
     });
   }
 
@@ -44,125 +86,123 @@ class PostScreenState extends State<PostScreen> {
               ? _referencedComment!['id_post']
               : post.id,
         ));
-    _refreshComments(post.id!);
-  }
-
-  // Recarga los comentarios de la publicación
-  void _refreshComments(int postId) async {
-    final data = await fetchComments(postId);
-    setState(() {
-      _comments = data;
-      _referencedComment = null;
-      _commentController.clear();
-    });
+    if (_referencedComment != null) {
+      refreshSubCommentsOf(_referencedComment!['id_post']);
+    } else {
+      _refreshComments();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Post? post = widget.post;
+    final Post post = widget.post;
 
-    if (post != null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(post.title!),
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(post.content),
-            ),
-            Expanded(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(post.title!),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(post.content),
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => _refreshComments(),
               child: _comments == null
                   ? const Center(child: CircularProgressIndicator())
-                  : _comments!.isEmpty
-                      ? const Center(
-                          child: Text('No hay comentarios disponibles'))
-                      : ListView.builder(
-                          itemCount: _comments!.length,
-                          itemBuilder: (context, index) {
-                            final comment = _comments![index];
-                            return CommentWidget(
-                              key: ValueKey(comment['id_post']),
-                              comment: Post(
-                                id: comment['id_post'],
-                                content: comment['content'],
-                                user: comment['user_name'],
-                                parentPostId: comment['parent_post'],
-                              ),
-                              onPressedIcon: (Post selectedComment) {
-                                setState(() {
-                                  _referencedComment = {
-                                    'id_post': selectedComment.id,
-                                    'content': selectedComment.content,
-                                    'user_name': selectedComment.user,
-                                  };
-                                });
-                              },
-                            );
-                          },
-                        ),
-            ),
-            Column(
-              children: [
-                if (_referencedComment != null)
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${_referencedComment!['user_name']}: ${_referencedComment!['content']}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                  : ListView.builder(
+                      itemCount: _comments!.isEmpty ? 1 : _comments!.length,
+                      itemBuilder: (context, index) {
+                        if (_comments!.isEmpty) {
+                          return const Center(
+                              child: Padding(
+                            padding: EdgeInsets.only(top: 32.0),
+                            child: Text('No hay comentarios disponibles'),
+                          ));
+                        }
+                        final comment = _comments![index];
+                        final key = _commentKeys[comment['id_post']] ??
+                            GlobalKey<CommentWidgetState>();
+                        _commentKeys[comment['id_post']] = key;
+                        return CommentWidget(
+                          key: key,
+                          comment: Post(
+                            id: comment['id_post'],
+                            content: comment['content'],
+                            user: comment['user_name'],
+                            parentPostId: comment['parent_post'],
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
+                          onPressedIcon: (Post selectedComment) {
                             setState(() {
-                              _referencedComment = null;
+                              _referencedComment = {
+                                'id_post': selectedComment.id,
+                                'content': selectedComment.content,
+                                'user_name': selectedComment.user,
+                              };
                             });
                           },
-                        ),
-                      ],
+                        );
+                      },
                     ),
+            ),
+          ),
+          Column(
+            children: [
+              if (_referencedComment != null)
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16.0, right: 16.0, bottom: 64.0),
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          controller: _commentController,
-                          decoration: const InputDecoration(
-                            hintText: 'Escribe un comentario...',
-                          ),
+                        child: Text(
+                          '${_referencedComment!['user_name']}: ${_referencedComment!['content']}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () => _commentPost(post),
-                        child: const Icon(Icons.send),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          setState(() {
+                            _referencedComment = null;
+                          });
+                        },
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const Scaffold(
-        body: Center(child: Text('No hay publicación disponible')),
-      );
-    }
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 64.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _commentController,
+                        decoration: const InputDecoration(
+                          hintText: 'Escribe un comentario...',
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _commentPost(post),
+                      child: const Icon(Icons.send),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

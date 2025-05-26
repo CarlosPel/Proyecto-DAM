@@ -4,22 +4,29 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/utilities/load_routes.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> agreeTerms(BuildContext context) async {
-  final String loginUrl = '${AppData.backendUrl}/users/login';
+  final String agreeUrl = '${AppData.backendUrl}/users/conditions';
 
   try {
-    final response = await http.post(Uri.parse(loginUrl));
+    final String? token = await getToken();
+
+    final response = await http.post(
+      Uri.parse(agreeUrl),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
 
     if (response.statusCode == 200) {
       // Guardar datos del usuario
       await saveAgreement();
 
       // Navegar a la pantalla principal
-      Navigator.pushNamed(context, AppRoutes.homeScreen,
-          arguments: {'hasAgreed': true});
+      goHomeIfAgreed(context);
     } else {
       // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,7 +41,7 @@ Future<void> agreeTerms(BuildContext context) async {
   }
 }
 
-Future<void> loginUser({
+Future<bool> loginUser({
   required BuildContext context,
   required String email,
   required String password,
@@ -54,59 +61,74 @@ Future<void> loginUser({
       // Mostrar mensaje de éxito
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              '${responseData['message']}. Bienvenido ${responseData['user']['username']}'),
+          content: Text('Bienvenido ${responseData['user']['username']}'),
         ),
       );
 
       // Guardar datos del usuario
       await saveUserData(responseData);
 
-      // Navegar a la pantalla principal
-      Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
-        'route': AppRoutes.loadingScreen,
-        'loadCondition': () async {
-          try {
-            await hasAgreed();
-            return true;
-          } catch (e) {
-            return false;
-          }
-        },
-        'args': {
-          'route': AppRoutes.homeScreen,
-          'loadCondition': () async {
-            try {
-              await getUserToken();
-              return true;
-            } catch (e) {
-              return false;
-            }
-          },
-          'args': (await hasAgreed()),
-        },
-      });
+      return true;
     } else {
       // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${response.body}')),
       );
+      return false;
     }
   } catch (e) {
     // Manejar errores de conexión
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error de conexión: $e')),
     );
+    return false;
   }
 }
 
-/*
-  Future<bool> _isTokenAvailable() async {
-    try {
-      await getUserToken();
+Future<bool> singUpUser(
+    {required BuildContext context,
+    required String email,
+    required String password,
+    required String username,
+    required String country}) async {
+  // URL del backend
+  final String backendUrl = '${AppData.backendUrl}/users/register';
+
+  try {
+    // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
+    final response = await http.post(
+      Uri.parse(backendUrl),
+
+      // Se especifica el tipo de contenido como JSON
+      headers: {'Content-Type': 'application/json'},
+
+      // Se envía el cuerpo de la solicitud codificado como JSON
+      body: jsonEncode({
+        'username': username,
+        'email': email,
+        'password': password,
+        'nation': country,
+      }),
+    );
+
+    // Verifica si la respuesta es exitosa (código 200)
+    if (response.statusCode == 200) {
       return true;
-    } catch (e) {
+    } else {
+      // Mensaje de error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${response.body}')),
+      );
+
       return false;
     }
+  } catch (e) {
+    // Manejar errores de conexión con el backend
+    // Mensaje de error
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error de conexión: $e')),
+    );
+
+    return false;
   }
-*/
+}

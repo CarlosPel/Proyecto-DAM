@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> saveUserData(dynamic responseData) async {
@@ -29,17 +31,14 @@ Future<void> _saveUserData(
 }
 
 // Obtener el token del usuario desde SharedPreferences
-Future<String> getUserToken() async {
+Future<String?> getToken() async {
   // Instancia de SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Token del usuario
   String? token = prefs.getString('token');
 
-  if (token != null) {
-    return token;
-  }
-  throw Exception('Token no encontrado');
+  return token;
 }
 
 // Obtener datos del usuario desde SharedPreferences
@@ -71,14 +70,30 @@ Future<bool> isLoggedIn() async {
   return isLoggedIn ?? false;
 }
 
-Future<bool> hasAgreed() async {
+Future<void> logout(BuildContext context) async {
+  // Se obtiene una instancia de SharedPreferences
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Se eliminan los datos del usuario
+  await prefs.remove('nombre');
+  await prefs.remove('email');
+  await prefs.remove('countryCode');
+  await prefs.remove('token');
+  await prefs.remove('hasAgreed');
+  await prefs.setBool('isLoggedIn', false);
+
+  Navigator.pushNamedAndRemoveUntil(
+      context, AppRoutes.loginScreen, (Route<dynamic> route) => false);
+}
+
+Future<bool?> hasAgreed() async {
   // Se obtiene una instancia de SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Se obtiene el estado de acuerdo
   bool? hasAgreed = prefs.getBool('hasAgreed');
 
-  return hasAgreed ?? false;
+  return hasAgreed;
 }
 
 Future<void> saveAgreement() async {
@@ -87,4 +102,12 @@ Future<void> saveAgreement() async {
 
   // Se guarda el estado de acuerdo
   prefs.setBool('hasAgreed', true);
+}
+
+Future<bool> isDataSaved(Future<dynamic> getData) async {
+  if (await getData != null) {
+    return true;
+  } else {
+    return false;
+  }
 }
