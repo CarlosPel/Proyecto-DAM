@@ -67,7 +67,7 @@ goHomeIfAgreed(BuildContext context) {
           'loadCondition': () => isDataSaved(getToken()),
           'action': () async {
             Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.homeScreen, (Route<dynamic> route) => false);
+                context, AppRoutes.postScrollScreen, (Route<dynamic> route) => false);
           }
         });
       } else {

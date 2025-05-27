@@ -9,14 +9,14 @@ import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class PostScrollScreen extends StatefulWidget {
+  const PostScrollScreen({super.key});
 
   @override
-  HomeScreenState createState() => HomeScreenState();
+  PostScrollScreenState createState() => PostScrollScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class PostScrollScreenState extends State<PostScrollScreen> {
   late Future<List<dynamic>> _postsFuture;
   // int _expandedIndex = -1;
   bool isOpen = false;
@@ -73,17 +73,46 @@ class HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(8.0),
         child: NewspaperWrapper(
           onFoldTap: () {
-            // Acción al pulsar el doblez
-            showModalBottomSheet(
-              context: context,
-              builder: (_) => Center(child: Text("¡Doblazón tocada!")),
+            Navigator.pushNamed(
+              context,
+              AppRoutes.newsScrollScreen,
             );
           },
-          child: Column(
-            children: [
-              Expanded(
-                child: postsState.news.isNotEmpty
-                    ? RefreshIndicator(
+          child: postsState.news.isNotEmpty
+              ? RefreshIndicator(
+                  onRefresh: _refreshPosts,
+                  child: ListView.builder(
+                    itemCount: postsState.news.length,
+                    itemBuilder: (c, i) {
+                      final post = postsState.news[i];
+                      return PostWidget(
+                        post: Post(
+                          id: post['id_post'],
+                          title: post['title'],
+                          content: post['content'],
+                          datetime: post['post_date'],
+                          user: post['user_name'],
+                        ),
+                        //isExpanded: false,
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          AppRoutes.postScreen,
+                          arguments: {'post': post},
+                        ),
+                      );
+                    },
+                  ),
+                )
+              : FutureBuilder<List<dynamic>>(
+                  future: _postsFuture,
+                  builder: (c, snap) {
+                    if (snap.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snap.hasError) {
+                      return Center(child: Text('Error: ${snap.error}'));
+                    } else if (snap.hasData) {
+                      postsState.news = snap.data!;
+                      return RefreshIndicator(
                         onRefresh: _refreshPosts,
                         child: ListView.builder(
                           itemCount: postsState.news.length,
@@ -106,50 +135,12 @@ class HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                      )
-                    : FutureBuilder<List<dynamic>>(
-                        future: _postsFuture,
-                        builder: (c, snap) {
-                          if (snap.connectionState == ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (snap.hasError) {
-                            return Center(child: Text('Error: ${snap.error}'));
-                          } else if (snap.hasData) {
-                            postsState.news = snap.data!;
-                            return RefreshIndicator(
-                              onRefresh: _refreshPosts,
-                              child: ListView.builder(
-                                itemCount: postsState.news.length,
-                                itemBuilder: (c, i) {
-                                  final post = postsState.news[i];
-                                  return PostWidget(
-                                    post: Post(
-                                      id: post['id_post'],
-                                      title: post['title'],
-                                      content: post['content'],
-                                      datetime: post['post_date'],
-                                      user: post['user_name'],
-                                    ),
-                                    //isExpanded: false,
-                                    onTap: () => Navigator.pushNamed(
-                                      context,
-                                      AppRoutes.postScreen,
-                                      arguments: {'post': post},
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          } else {
-                            return const Center(
-                                child: Text('No hay publicaciones'));
-                          }
-                        },
-                      ),
-              ),
-            ],
-          ),
+                      );
+                    } else {
+                      return const Center(child: Text('No hay publicaciones'));
+                    }
+                  },
+                ),
         ),
       ),
     );

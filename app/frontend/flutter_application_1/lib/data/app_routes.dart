@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/create_post_screen.dart';
-import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/screens/loading_screen.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
-import 'package:flutter_application_1/screens/news_screen.dart';
+import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/screens/post_screen.dart';
 import 'package:flutter_application_1/screens/profile_screen.dart';
 import 'package:flutter_application_1/screens/singup_screen.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_application_1/screens/terms_screen.dart';
 // Almacena las rutas de la aplicación
 class AppRoutes {
   // Ruta de la pantalla inicial
-  static const String homeScreen = '/home';
+  static const String postScrollScreen = '/home';
   // Ruta de la pantalla de inicio de sesión
   static const String loginScreen = '/login';
   // Ruta de la pantalla de registro
@@ -20,7 +20,7 @@ class AppRoutes {
   // Ruta de la pantalla de perfil
   static const String profileScreen = '/profile';
   // Ruta de la pantalla de noticias
-  static const String newsScreen = '/news';
+  static const String newsScrollScreen = '/news';
   // Ruta de la pantalla de creación de publicaciones
   static const String createPostScreen = '/createPost';
   // Ruta pantalla de publicación
@@ -33,16 +33,16 @@ class AppRoutes {
   // Devuelve un mapa con las rutas de la aplicación
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case homeScreen:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+      case postScrollScreen:
+        return MaterialPageRoute(builder: (_) => PostScrollScreen());
       case loginScreen:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case singUpScreen:
         return MaterialPageRoute(builder: (_) => SingUpScreen());
       case profileScreen:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
-      case newsScreen:
-        return MaterialPageRoute(builder: (_) => NewsScreen());
+      case newsScrollScreen:
+        return MaterialPageRoute(builder: (_) => NewsScrollScreen());
       case createPostScreen:
         return MaterialPageRoute(builder: (_) => CreatePostScreen());
       case postScreen:
