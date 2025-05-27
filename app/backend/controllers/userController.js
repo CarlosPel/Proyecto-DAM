@@ -19,7 +19,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
     }
 
-    email = email.toLowerCase()
+    const normalizedEmail = email.toLowerCase()
 
     // Validar longitud de la contraseña
     if (password.length < 6) {
@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
       INSERT INTO users (username, password_hash, email, nation)
       VALUES ($1, $2, $3, $4) RETURNING *;
     `;
-    const values = [username, hashedPassword, email, nation];
+    const values = [username, hashedPassword, normalizedEmail, nation];
     const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
@@ -62,11 +62,12 @@ const loginUser = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ error: 'El correo y la contraseña son obligatorios' });
     }
-    email = email.toLowerCase()
+
+    const normalizedEmail = email.toLowerCase()
 
     // Consultar la base de datos para verificar si el usuario existe
     const query = 'SELECT * FROM users WHERE email = $1';
-    const result = await pool.query(query, [email]);
+    const result = await pool.query(query, [normalizedEmail]);
 
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Email no registrado' });
@@ -110,14 +111,16 @@ const editProfileUser = async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
     }
-    email = email.toLowerCase()
+
+    const normalizedEmail = email.toLowerCase();
+
     // Actualizar los datos en la base de datos
     const query = `
       UPDATE users
       SET username = $1, email = $2, nation = $3
       WHERE id_user = $4 RETURNING *;
     `;
-    const values = [username, email, nation, id_user];
+    const values = [username, normalizedEmail, nation, id_user];
 
     const result = await pool.query(query, values);
 
