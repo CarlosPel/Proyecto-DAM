@@ -1,0 +1,21 @@
+ESCALETA DE TAREAS ULTIMO SPRINT TFG
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+ENTREGAS:
++ MEMORIA 		1 JUN 23:59
++ VIDEO PRESENTACIÓN	1 JUN 23:59
++ PRESENTACIÓN		6 JUN 9:45
+------------------------------------
+
+COSAS PENDIENTES:					ASIGNADOS:				FECHA LÍMITE:
+- FRONTEND
+	<> Estética					CARLOS					1 JUN 23:59
+- BACKEND
+	<> Guardar emails en minúscula, 		MIGUEL					1 JUN 23:59
+	   y validarlos con minúsculas
+	<> ***Revisar códigos http***
+- ENTREGABLES
+	<> Terminar memoria				CARLOS & MIGUEL				1 JUN 23:59
+	<> Grabar video					CARLOS & MIGUEL				1 JUN 23:59
+		<> PWP					MIGUEL					1 JUN 23:59
+		<> Guión				MIGUEL					1 JUN 23:59
