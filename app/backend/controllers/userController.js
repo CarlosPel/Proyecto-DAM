@@ -19,6 +19,8 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
     }
 
+    email = email.toLowerCase()
+
     // Validar longitud de la contraseña
     if (password.length < 6) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
@@ -60,6 +62,7 @@ const loginUser = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ error: 'El correo y la contraseña son obligatorios' });
     }
+    email = email.toLowerCase()
 
     // Consultar la base de datos para verificar si el usuario existe
     const query = 'SELECT * FROM users WHERE email = $1';
@@ -107,7 +110,7 @@ const editProfileUser = async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
     }
-
+    email = email.toLowerCase()
     // Actualizar los datos en la base de datos
     const query = `
       UPDATE users
