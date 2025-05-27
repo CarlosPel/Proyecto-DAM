@@ -23,7 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Escucha los cambios en PostsNotifier
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final postsNotifier = Provider.of<PostsNotifier>(context, listen: false);
@@ -52,10 +52,14 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refreshPosts() async {
-    final newPosts = await _loadPosts();
+    try {final newPosts = await _loadPosts();
     setState(() {
       postsState.news = newPosts;
-    });
+    });} catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bienvenido de nuevo')),
+      );
+    }
   }
 
   @override
