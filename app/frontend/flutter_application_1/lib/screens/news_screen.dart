@@ -57,64 +57,66 @@ class NewsScreenState extends State<NewsScreen> {
       appBar: AppBar(
         title: const Text('Noticias'),
       ),
-      body: newsState.news.isNotEmpty
-          ? RefreshIndicator(
-              onRefresh: _refreshNews,
-              child: ListView.builder(
-                itemCount: newsState.news.length,
-                itemBuilder: (context, index) {
-                  final article = newsState.news[index];
-                  return ArticleWidget(
-                    article: Article(
-                      title: article['title'],
-                      snippet: article['snippet'],
-                      link: article['link'],
-                      imgUrl: article['photo_url'],
-                      datetime: article['published_datetime_utc'],
-                      source: article['source_name'],
-                    ),
-                    isExpanded: _expandedIndex == index,
-                    onTap: () => _toggleExpanded(index),
-                  );
+      body: Expanded(
+        child: newsState.news.isNotEmpty
+            ? RefreshIndicator(
+                onRefresh: _refreshNews,
+                child: ListView.builder(
+                  itemCount: newsState.news.length,
+                  itemBuilder: (context, index) {
+                    final article = newsState.news[index];
+                    return ArticleWidget(
+                      article: Article(
+                        title: article['title'],
+                        snippet: article['snippet'],
+                        link: article['link'],
+                        imgUrl: article['photo_url'],
+                        datetime: article['published_datetime_utc'],
+                        source: article['source_name'],
+                      ),
+                      isExpanded: _expandedIndex == index,
+                      onTap: () => _toggleExpanded(index),
+                    );
+                  },
+                ),
+              )
+            : FutureBuilder<List<dynamic>>(
+                future: _newsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    newsState.news = snapshot.data!;
+                    return RefreshIndicator(
+                      onRefresh: _refreshNews,
+                      child: ListView.builder(
+                        itemCount: newsState.news.length,
+                        itemBuilder: (context, index) {
+                          final article = newsState.news[index];
+                          return ArticleWidget(
+                            article: Article(
+                              title: article['title'],
+                              snippet: article['snippet'],
+                              link: article['link'],
+                              imgUrl: article['photo_url'],
+                              datetime: article['published_datetime_utc'],
+                              source: article['source_name'],
+                            ),
+                            isExpanded: _expandedIndex == index,
+                            onTap: () => _toggleExpanded(index),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                        child: Text('No hay noticias disponibles'));
+                  }
                 },
               ),
-            )
-          : FutureBuilder<List<dynamic>>(
-              future: _newsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  newsState.news = snapshot.data!;
-                  return RefreshIndicator(
-                    onRefresh: _refreshNews,
-                    child: ListView.builder(
-                      itemCount: newsState.news.length,
-                      itemBuilder: (context, index) {
-                        final article = newsState.news[index];
-                        return ArticleWidget(
-                          article: Article(
-                            title: article['title'],
-                            snippet: article['snippet'],
-                            link: article['link'],
-                            imgUrl: article['photo_url'],
-                            datetime: article['published_datetime_utc'],
-                            source: article['source_name'],
-                          ),
-                          isExpanded: _expandedIndex == index,
-                          onTap: () => _toggleExpanded(index),
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  return const Center(
-                      child: Text('No hay noticias disponibles'));
-                }
-              },
-            ),
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_application_1/classes/posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   late Future<List<dynamic>> _postsFuture;
-  int _expandedIndex = -1;
+  // int _expandedIndex = -1;
   bool isOpen = false;
 
   @override
@@ -37,11 +38,11 @@ class HomeScreenState extends State<HomeScreen> {
     _postsFuture = _loadPosts();
   }
 
-  void _toggleExpanded(int index) {
-    setState(() {
-      _expandedIndex = (_expandedIndex == index) ? -1 : index;
-    });
-  }
+  // void _toggleExpanded(int index) {
+  //   setState(() {
+  //     _expandedIndex = (_expandedIndex == index) ? -1 : index;
+  //   });
+  // }
 
   Future<List<dynamic>> _loadPosts() async {
     final userData = await getUserData();
@@ -52,10 +53,12 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refreshPosts() async {
-    try {final newPosts = await _loadPosts();
-    setState(() {
-      postsState.news = newPosts;
-    });} catch (e) {
+    try {
+      final newPosts = await _loadPosts();
+      setState(() {
+        postsState.news = newPosts;
+      });
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bienvenido de nuevo')),
       );
@@ -65,111 +68,89 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // automaticallyImplyLeading: false,
-        title: Text('What\'s New'),
-      ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      appBar: AppBar(title: const Text("What's New")),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: NewspaperWrapper(
+          onFoldTap: () {
+            // Acción al pulsar el doblez
+            showModalBottomSheet(
+              context: context,
+              builder: (_) => Center(child: Text("¡Doblazón tocada!")),
+            );
+          },
+          child: Column(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.newsScreen);
-                  },
-                  child: Icon(Icons.newspaper),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.createPostScreen);
-                  },
-                  child: Icon(Icons.add_a_photo),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.profileScreen);
-                  },
-                  child: Icon(Icons.person),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    logout(context);
-                    Navigator.pushNamed(context, AppRoutes.loginScreen);
-                  },
-                  child: Icon(Icons.logout),
-                ),
+                child: postsState.news.isNotEmpty
+                    ? RefreshIndicator(
+                        onRefresh: _refreshPosts,
+                        child: ListView.builder(
+                          itemCount: postsState.news.length,
+                          itemBuilder: (c, i) {
+                            final post = postsState.news[i];
+                            return PostWidget(
+                              post: Post(
+                                id: post['id_post'],
+                                title: post['title'],
+                                content: post['content'],
+                                datetime: post['post_date'],
+                                user: post['user_name'],
+                              ),
+                              //isExpanded: false,
+                              onTap: () => Navigator.pushNamed(
+                                context,
+                                AppRoutes.postScreen,
+                                arguments: {'post': post},
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : FutureBuilder<List<dynamic>>(
+                        future: _postsFuture,
+                        builder: (c, snap) {
+                          if (snap.connectionState == ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snap.hasError) {
+                            return Center(child: Text('Error: ${snap.error}'));
+                          } else if (snap.hasData) {
+                            postsState.news = snap.data!;
+                            return RefreshIndicator(
+                              onRefresh: _refreshPosts,
+                              child: ListView.builder(
+                                itemCount: postsState.news.length,
+                                itemBuilder: (c, i) {
+                                  final post = postsState.news[i];
+                                  return PostWidget(
+                                    post: Post(
+                                      id: post['id_post'],
+                                      title: post['title'],
+                                      content: post['content'],
+                                      datetime: post['post_date'],
+                                      user: post['user_name'],
+                                    ),
+                                    //isExpanded: false,
+                                    onTap: () => Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.postScreen,
+                                      arguments: {'post': post},
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          } else {
+                            return const Center(
+                                child: Text('No hay publicaciones'));
+                          }
+                        },
+                      ),
               ),
             ],
           ),
-          postsState.news.isNotEmpty
-              ? Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: _refreshPosts,
-                    child: ListView.builder(
-                      itemCount: postsState.news.length,
-                      itemBuilder: (context, index) {
-                        final post = postsState.news[index];
-                        return PostWidget(
-                          post: Post(
-                            id: post['id_post'],
-                            title: post['title'],
-                            content: post['content'],
-                            datetime: post['post_date'],
-                            user: post['user_name'],
-                          ),
-                          isExpanded: _expandedIndex == index,
-                          onTap: () => _toggleExpanded(index),
-                        );
-                      },
-                    ),
-                  ),
-                )
-              : Expanded(
-                  child: FutureBuilder<List<dynamic>>(
-                    future: _postsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (snapshot.hasData) {
-                        postsState.news = snapshot.data!;
-                        return RefreshIndicator(
-                          onRefresh: _refreshPosts,
-                          child: ListView.builder(
-                            itemCount: postsState.news.length,
-                            itemBuilder: (context, index) {
-                              final post = postsState.news[index];
-                              return PostWidget(
-                                post: Post(
-                                  id: post['id_post'],
-                                  title: post['title'],
-                                  content: post['content'],
-                                  datetime: post['post_date'],
-                                  user: post['user_name'],
-                                ),
-                                isExpanded: _expandedIndex == index,
-                                onTap: () => _toggleExpanded(index),
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        return const Center(
-                            child: Text('No hay publicaciones disponibles'));
-                      }
-                    },
-                  ),
-                )
-        ],
+        ),
       ),
     );
   }

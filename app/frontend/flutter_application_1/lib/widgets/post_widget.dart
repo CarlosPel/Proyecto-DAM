@@ -5,14 +5,14 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class PostWidget extends StatelessWidget {
   final Post post;
-  final bool isExpanded; // lo mantenemos por compatibilidad
+  // final bool isExpanded; // lo mantenemos por compatibilidad
   final VoidCallback onTap;
 
   const PostWidget({
     super.key,
     required this.post,
     required this.onTap,
-    required this.isExpanded,
+    //required this.isExpanded,
   });
 
   @override
