@@ -16,7 +16,7 @@ class NewspaperWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final foldSize = AppData.foldSize;
     
-    return Card(
+    return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
       ),
