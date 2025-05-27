@@ -81,11 +81,15 @@ Future<List<dynamic>> _fetchFromReq(
     BuildContext context, Future<http.Response> req) async {
   final response = await req;
 
-  return handleTokenSent(
+  if (handleResponse(
     context: context,
     response: response,
     onSuccess: (responseData) async {
-      return jsonDecode(response.body)['data'];
+      return true;
     },
-  );
+  )) {
+    return jsonDecode(response.body)['data'];
+  } else {
+    return [];
+  }
 }
