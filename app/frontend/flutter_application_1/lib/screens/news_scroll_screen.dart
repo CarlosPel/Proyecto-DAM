@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/news_state.dart';
-import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/article_widget.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:turn_page_transition/turn_page_transition.dart';
 
 class NewsScrollScreen extends StatefulWidget {
   const NewsScrollScreen({super.key});
@@ -63,7 +64,16 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
         padding: const EdgeInsets.all(8.0),
         child: NewspaperWrapper(
           onFoldTap: () {
-            Navigator.pushNamed(context, AppRoutes.postScrollScreen);
+            Navigator.of(context).push(
+                // Use TurnPageRoute instead of MaterialPageRoute.
+                TurnPageRoute(
+              overleafColor: Colors.grey,
+              animationTransitionPoint: 0.5,
+              transitionDuration: const Duration(milliseconds: 1000),
+              reverseTransitionDuration: const Duration(milliseconds: 1000),
+              direction: TurnDirection.leftToRight,
+              builder: (context) => const PostsScrollScreen(),
+            ));
           },
           child: newsState.news.isNotEmpty
               ? RefreshIndicator(

@@ -4,19 +4,21 @@ import 'package:flutter_application_1/classes/posts_notifier.dart';
 import 'package:flutter_application_1/classes/posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:turn_page_transition/turn_page_transition.dart';
 
-class PostScrollScreen extends StatefulWidget {
-  const PostScrollScreen({super.key});
+class PostsScrollScreen extends StatefulWidget {
+  const PostsScrollScreen({super.key});
 
   @override
-  PostScrollScreenState createState() => PostScrollScreenState();
+  PostsScrollScreenState createState() => PostsScrollScreenState();
 }
 
-class PostScrollScreenState extends State<PostScrollScreen> {
+class PostsScrollScreenState extends State<PostsScrollScreen> {
   late Future<List<dynamic>> _postsFuture;
   // int _expandedIndex = -1;
   bool isOpen = false;
@@ -73,10 +75,20 @@ class PostScrollScreenState extends State<PostScrollScreen> {
         padding: const EdgeInsets.all(8.0),
         child: NewspaperWrapper(
           onFoldTap: () {
-            Navigator.pushNamed(
-              context,
-              AppRoutes.newsScrollScreen,
-            );
+            Navigator.of(context).push(
+                // Use TurnPageRoute instead of MaterialPageRoute.
+                TurnPageRoute(
+              overleafColor: Colors.grey,
+              animationTransitionPoint:
+                  0.5, 
+              transitionDuration: const Duration(milliseconds: 1000),
+              reverseTransitionDuration: const Duration(milliseconds: 1000),
+              builder: (context) => const NewsScrollScreen(),
+            ));
+            // Navigator.pushNamed(
+            //   context,
+            //   AppRoutes.newsScrollScreen,
+            // );
           },
           child: postsState.news.isNotEmpty
               ? RefreshIndicator(

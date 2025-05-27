@@ -38,7 +38,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
         ),
       ).then((_) {
         // Navega a la pantalla de inicio después de crear el post
-        Navigator.pushNamed(context, AppRoutes.postScrollScreen);
+        Navigator.pushNamed(context, AppRoutes.postsScrollScreen);
       });
     }
   }

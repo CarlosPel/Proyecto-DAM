@@ -12,7 +12,7 @@ import 'package:flutter_application_1/screens/terms_screen.dart';
 // Almacena las rutas de la aplicación
 class AppRoutes {
   // Ruta de la pantalla inicial
-  static const String postScrollScreen = '/home';
+  static const String postsScrollScreen = '/home';
   // Ruta de la pantalla de inicio de sesión
   static const String loginScreen = '/login';
   // Ruta de la pantalla de registro
@@ -33,8 +33,8 @@ class AppRoutes {
   // Devuelve un mapa con las rutas de la aplicación
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case postScrollScreen:
-        return MaterialPageRoute(builder: (_) => PostScrollScreen());
+      case postsScrollScreen:
+        return MaterialPageRoute(builder: (_) => PostsScrollScreen());
       case loginScreen:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case singUpScreen:
