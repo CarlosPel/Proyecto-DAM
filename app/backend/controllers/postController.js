@@ -109,7 +109,7 @@ const getPost = async (req, res) => {
 
     query += ' ORDER BY POST.post_date DESC;';
     const queryUser = 'SELECT * FROM users WHERE id_user = $1';
-    const resultUser = await pool.query(query, [id_user])
+    const resultUser = await pool.query(queryUser, [id_user])
     const user = resultUser.rows[0];
 
     try {
