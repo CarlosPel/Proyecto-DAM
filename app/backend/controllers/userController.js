@@ -141,7 +141,13 @@ const editProfileUser = async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    await loginUser(req, res);
+    const queryUser = 'SELECT * FROM users WHERE id_user = $1';
+    const resultUser = await pool.query(queryUser, [id_user])
+    const user = resultUser.rows[0];
+    const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.has_agreed };
+    const token = generateToken(user)
+
+    return res.status(200).json({message: 'Perfil actualizado con éxito', token, user: userData})
     // res.status(200).json({ message: 'Perfil actualizado con éxito', user: result.rows[0] });
   } catch (error) {
     console.error('Detalle del error:', error);
