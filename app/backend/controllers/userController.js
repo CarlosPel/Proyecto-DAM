@@ -2,7 +2,7 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authenticateUser = require('../middlewares/auth');
-const {generateToken} = require('../middlewares/auth');
+const { generateToken } = require('../middlewares/auth');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
@@ -98,7 +98,7 @@ const editProfileUser = async (req, res) => {
   const { username, email, nation, password } = req.body;
   const id_user = req.user.id_user; // Extraído del token JWT
   try {
-    
+
     // Validar formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -114,12 +114,13 @@ const editProfileUser = async (req, res) => {
       values.push(nation);
     }
 
-    if (password.length > 6){
+    if (password.length > 6) {
+      const hashedPassword = await bcrypt.hash(password, 10);
       conditions.push(`password_hash = $${index++}`);
-      values.push(password)
+      values.push(hashedPassword)
     }
 
-    if (username && username.trim() !== ""){
+    if (username && username.trim() !== "") {
       conditions.push(`username = $${index++}`);
       values.push(username)
     }
@@ -135,9 +136,9 @@ const editProfileUser = async (req, res) => {
     // Actualizar los datos en la base de datos
     let query = `
       UPDATE users SET`// WHERE id_user = $4 RETURNING *;`
-    ;
+      ;
     if (conditions.length > 0) {
-        query += ` ${conditions.join(', ')}`;
+      query += ` ${conditions.join(', ')}`;
     }
     query += ` WHERE id_user = $${index} RETURNING *;`;
     values.push(id_user)
@@ -155,7 +156,7 @@ const editProfileUser = async (req, res) => {
     const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.has_agreed };
     const token = generateToken(user)
 
-    return res.status(200).json({message: 'Perfil actualizado con éxito', token, user: userData})
+    return res.status(200).json({ message: 'Perfil actualizado con éxito', token, user: userData })
     // res.status(200).json({ message: 'Perfil actualizado con éxito', user: result.rows[0] });
   } catch (error) {
     console.error('Detalle del error:', error);
