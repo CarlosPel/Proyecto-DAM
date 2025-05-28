@@ -142,6 +142,7 @@ const editProfileUser = async (req, res) => {
     }
     query += ` WHERE id_user = $${index}`;
     values.push(id_user)
+    console.error(query)
     const result = await pool.query(query, values);
 
     // Verificar si el usuario existe
