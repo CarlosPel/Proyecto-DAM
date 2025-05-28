@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     // Manejo de errores específicos
     if (error.code === '23505') { // Código para violación de clave única
-      return res.status(409).json({ error: 'El correo electrónico ya está registrado' });
+      return res.status(409).json({ error: 'El correo electrónico/nombre ya está registrado' });
     }
     console.error('Detalle del error:', error);
     res.status(500).json({ error: 'Error al registrar el usuario' });
@@ -130,7 +130,7 @@ const editProfileUser = async (req, res) => {
     // Actualizar los datos en la base de datos
     const query = `
       UPDATE users
-      SET username = $1, email = $2, nation = $3` //WHERE id_user = $4 RETURNING *;
+      SET username = $1, email = $2, nation = $3`// WHERE id_user = $4 RETURNING *;`
     ;
     const queryFi = ` WHERE id_user = $4 RETURNING *;`
     query += passChange
