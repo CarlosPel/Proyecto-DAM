@@ -134,13 +134,12 @@ const editProfileUser = async (req, res) => {
 
     // Actualizar los datos en la base de datos
     let query = `
-      UPDATE users
-      SET`// WHERE id_user = $4 RETURNING *;`
+      UPDATE users SET`// WHERE id_user = $4 RETURNING *;`
     ;
     if (conditions.length > 0) {
-        query += ` ${conditions.join(' AND ')}`;
+        query += ` ${conditions.join(', ')}`;
     }
-    query += ` WHERE id_user = $${index}`;
+    query += ` WHERE id_user = $${index} RETURNING *;`;
     values.push(id_user)
     console.error(query)
     const result = await pool.query(query, values);
