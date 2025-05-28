@@ -102,9 +102,22 @@ const editProfileUser = async (req, res) => {
   const id_user = req.user.id_user; // Extraído del token JWT
   try {
     // Validar que se envíen todos los campos obligatorios desde el frontend
-    if (!username || !email || !nation || !password) {
+    if (!username || !email || !nation ) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
+
+    
+    const passChange = ""
+    if (!password) {
+      passChange
+    }else{
+      if (password.length < 6) {
+        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+      }else{
+        passChange = `, password_hash = $5`
+      }
+    }
+
 
     // Validar formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -117,9 +130,11 @@ const editProfileUser = async (req, res) => {
     // Actualizar los datos en la base de datos
     const query = `
       UPDATE users
-      SET username = $1, email = $2, nation = $3, password_hash = $5
-      WHERE id_user = $4 RETURNING *;
-    `;
+      SET username = $1, email = $2, nation = $3` //WHERE id_user = $4 RETURNING *;
+    ;
+    const queryFi = ` WHERE id_user = $4 RETURNING *;`
+    query += passChange
+    query += queryFi
     const values = [username, normalizedEmail, nation, id_user, password];
 
     const result = await pool.query(query, values);
