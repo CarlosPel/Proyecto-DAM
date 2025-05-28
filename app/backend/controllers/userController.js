@@ -2,6 +2,7 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authenticateUser = require('../middlewares/auth');
+const generateToken = require('../middlewares/auth');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
@@ -46,7 +47,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     // Manejo de errores específicos
     if (error.code === '23505') { // Código para violación de clave única
-      return res.status(409).json({ error: 'El correo electrónico ya está registrado' });
+      return res.status(409).json({ error: 'El correo electrónico/nombre ya está registrado' });
     }
     console.error('Detalle del error:', error);
     res.status(500).json({ error: 'Error al registrar el usuario' });
@@ -83,11 +84,7 @@ const loginUser = async (req, res) => {
     }
 
     // Generar un token JWT
-    const token = jwt.sign(
-      { id_user: user.id_user, username: user.username, email: user.email, nation: user.nation },
-      process.env.JWT_SECRET || 'clave_secreta',
-      { expiresIn: '12h' }
-    );
+    const token = generateToken(user)
 
     res.status(200).json({ message: 'Inicio de sesión exitoso', token, user: userData });
   } catch (error) {
@@ -98,13 +95,26 @@ const loginUser = async (req, res) => {
 
 
 const editProfileUser = async (req, res) => {
-  const { username, email, nation } = req.body;
+  const { username, email, nation, password } = req.body;
   const id_user = req.user.id_user; // Extraído del token JWT
   try {
     // Validar que se envíen todos los campos obligatorios desde el frontend
-    if (!username || !email || !nation) {
+    if (!username || !email || !nation ) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
+
+    
+    const passChange = ""
+    if (!password) {
+      passChange
+    }else{
+      if (password.length < 6) {
+        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+      }else{
+        passChange = `, password_hash = $5`
+      }
+    }
+
 
     // Validar formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -117,10 +127,12 @@ const editProfileUser = async (req, res) => {
     // Actualizar los datos en la base de datos
     const query = `
       UPDATE users
-      SET username = $1, email = $2, nation = $3
-      WHERE id_user = $4 RETURNING *;
-    `;
-    const values = [username, normalizedEmail, nation, id_user];
+      SET username = $1, email = $2, nation = $3`// WHERE id_user = $4 RETURNING *;`
+    ;
+    const queryFi = ` WHERE id_user = $4 RETURNING *;`
+    query += passChange
+    query += queryFi
+    const values = [username, normalizedEmail, nation, id_user, password];
 
     const result = await pool.query(query, values);
 
