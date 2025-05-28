@@ -33,6 +33,21 @@ Future<List<dynamic>> fetchPosts(BuildContext context, String? country) async {
       ));
 }
 
+Future<List<dynamic>> fetchUserPosts(BuildContext context) async {
+  final String routeUrl = '$backendUrl/users/userposts';
+  final String userToken = (await getToken())!;
+
+  return await _fetchFromReq(
+      context,
+      http.post(
+        Uri.parse(routeUrl),
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Content-Type': 'application/json'
+        },
+      ));
+}
+
 // Obtiene los comentarios de un post
 Future<List<dynamic>> fetchComments(BuildContext context, int postId) async {
   final String routeUrl = '$backendUrl/posts/comments';

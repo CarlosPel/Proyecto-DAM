@@ -28,7 +28,7 @@ class FoldPainter extends CustomPainter {
           size.height - foldSize * 0.5)
       ..lineTo(size.width - foldSize * 0.85 - shadDist * 0.7,
           size.height - foldSize * 0.80)
-      ..lineTo(size.width - foldSize * 0.5, size.height - foldSize * 0.70)
+      ..lineTo(size.width - foldSize * 0.5, size.height - foldSize * 0.76)
       ..lineTo(size.width - foldSize * 0.2, size.height - foldSize * 0.70)
       ..lineTo(size.width, size.height - foldSize)
       ..lineTo(size.width - foldSize * 0.10, size.height - foldSize * 0.80)

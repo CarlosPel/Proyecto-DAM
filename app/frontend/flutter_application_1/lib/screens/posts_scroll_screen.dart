@@ -51,7 +51,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     final userData = await getUserData();
     final countryCode = userData['countryCode'];
     final posts = await fetchPosts(context, countryCode);
-    postsState.news = posts;
+    postsState.posts = posts;
     return posts;
   }
 
@@ -59,7 +59,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     try {
       final newPosts = await _loadPosts();
       setState(() {
-        postsState.news = newPosts;
+        postsState.posts = newPosts;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -110,13 +110,13 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
               //   AppRoutes.newsScrollScreen,
               // );
             },
-            child: postsState.news.isNotEmpty
+            child: postsState.posts.isNotEmpty
                 ? RefreshIndicator(
                     onRefresh: _refreshPosts,
                     child: ListView.builder(
-                      itemCount: postsState.news.length,
+                      itemCount: postsState.posts.length,
                       itemBuilder: (c, i) {
-                        final post = postsState.news[i];
+                        final post = postsState.posts[i];
                         return PostWidget(
                           post: Post(
                             id: post['id_post'],
@@ -143,13 +143,13 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                       } else if (snap.hasError) {
                         return Center(child: Text('Error: ${snap.error}'));
                       } else if (snap.hasData) {
-                        postsState.news = snap.data!;
+                        postsState.posts = snap.data!;
                         return RefreshIndicator(
                           onRefresh: _refreshPosts,
                           child: ListView.builder(
-                            itemCount: postsState.news.length,
+                            itemCount: postsState.posts.length,
                             itemBuilder: (c, i) {
-                              final post = postsState.news[i];
+                              final post = postsState.posts[i];
                               return PostWidget(
                                 post: Post(
                                   id: post['id_post'],

@@ -93,7 +93,7 @@ Future<void> logout(BuildContext context) async {
 
 clearStatesLists() {
   newsState.news.clear();
-  postsState.news.clear();
+  postsState.posts.clear();
 }
 
 Future<bool?> hasAgreed() async {
