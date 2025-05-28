@@ -1,5 +1,6 @@
 const pool = require('../config/db');
 const authenticateUser = require('../middlewares/auth'); // Middleware de autenticación
+const generateToken = require('../middlewares/auth'); 
 const loginUser = require ('../controllers/userController')
 
 // Función para crear un postq
