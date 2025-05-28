@@ -135,13 +135,13 @@ const editProfileUser = async (req, res) => {
     // Actualizar los datos en la base de datos
     let query = `
       UPDATE users
-      SET username = $1, email = $2, nation = $3`// WHERE id_user = $4 RETURNING *;`
+      SET`// WHERE id_user = $4 RETURNING *;`
     ;
-    conditions.push(` WHERE id_user = $${index++}`);
     if (conditions.length > 0) {
-        query += ` AND ${conditions.join(' AND ')}`;
+        query += ` ${conditions.join(' AND ')}`;
     }
-
+    query += ` WHERE id_user = $${index}`;
+    values.push(id_user)
     const result = await pool.query(query, values);
 
     // Verificar si el usuario existe
