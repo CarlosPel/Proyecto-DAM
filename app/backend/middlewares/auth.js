@@ -25,5 +25,5 @@ const generateToken = (user) => {
       { expiresIn: '12h' });
 }
 
-module.exports = { authenticateUser };
+module.exports = { authenticateUser, generateToken };
 
