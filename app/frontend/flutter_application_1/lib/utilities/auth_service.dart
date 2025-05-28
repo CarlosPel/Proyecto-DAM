@@ -152,7 +152,7 @@ bool handleResponse(
   } else {
     // Si hay un error, se muestra un mensaje al usuario
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error: ${response.body}')),
+      SnackBar(content: Text(response.body)),
     );
     return false;
   }
