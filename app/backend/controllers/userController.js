@@ -113,13 +113,17 @@ const editProfileUser = async (req, res) => {
       conditions.push(`nation = $${index++}`);
       values.push(nation);
     }
+
+    
     console.error("CONTRASEÑA: ", password)
     if (password.length < 6) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }else{
+      if (password.length > 0){
       const hashedPassword = await bcrypt.hash(password, 10);
       conditions.push(`password_hash = $${index++}`);
       values.push(hashedPassword)
+      }
     }
 
     if (username && username.trim() !== "") {
