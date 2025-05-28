@@ -98,11 +98,11 @@ const loginUser = async (req, res) => {
 
 
 const editProfileUser = async (req, res) => {
-  const { username, email, nation } = req.body;
+  const { username, email, nation, password } = req.body;
   const id_user = req.user.id_user; // Extraído del token JWT
   try {
     // Validar que se envíen todos los campos obligatorios desde el frontend
-    if (!username || !email || !nation) {
+    if (!username || !email || !nation || !password) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
@@ -117,10 +117,10 @@ const editProfileUser = async (req, res) => {
     // Actualizar los datos en la base de datos
     const query = `
       UPDATE users
-      SET username = $1, email = $2, nation = $3
+      SET username = $1, email = $2, nation = $3, password_hash = $5
       WHERE id_user = $4 RETURNING *;
     `;
-    const values = [username, normalizedEmail, nation, id_user];
+    const values = [username, normalizedEmail, nation, id_user, password];
 
     const result = await pool.query(query, values);
 
