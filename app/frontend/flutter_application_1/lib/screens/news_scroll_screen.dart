@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/news_state.dart';
+import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
@@ -59,6 +60,7 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Noticias'),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -69,8 +71,8 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
                 TurnPageRoute(
               overleafColor: Colors.grey,
               animationTransitionPoint: 0.5,
-              transitionDuration: const Duration(milliseconds: 1000),
-              reverseTransitionDuration: const Duration(milliseconds: 1000),
+              transitionDuration: const Duration(milliseconds: AppData.pageTurnTime),
+              reverseTransitionDuration: const Duration(milliseconds: AppData.pageTurnTime),
               direction: TurnDirection.leftToRight,
               builder: (context) => const PostsScrollScreen(),
             ));

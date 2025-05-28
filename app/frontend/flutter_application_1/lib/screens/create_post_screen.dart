@@ -49,7 +49,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear Nuevo Post'),
+        title: Text('Nueva Publicación'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

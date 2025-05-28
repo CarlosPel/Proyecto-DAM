@@ -5,4 +5,5 @@ class AppData {
   static const String companyName = 'Nombre100%SinCogerS.A.';
   static const String companyEmail = '$companyName@gmail.com';
   static const double foldSize = 100;
+  static const int pageTurnTime = 500;
 }
