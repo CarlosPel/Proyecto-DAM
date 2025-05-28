@@ -26,14 +26,21 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    getUserData().then((userData) {
+    _refreshProfile();
+  }
+  
+  void _refreshProfile() {
+    setState(() {
+      getUserData().then((userData) {
       _nameController.text = userData['nombre'] ?? '';
       _emailController.text = userData['email'] ?? '';
       _countryCodeController = userData['countryCode'] ?? 'ES';
+      _passwordController.clear();
 
       setState(() {
         _isUserDataLoaded = true;
       });
+    });
     });
   }
 
@@ -75,6 +82,9 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final double fieldsWdth = 300;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mi Perfil'),
@@ -84,7 +94,7 @@ class ProfileScreenState extends State<ProfileScreen> {
           : Container(
               width: double.infinity,
               height: double.infinity,
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(32.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -94,71 +104,138 @@ class ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.person, size: 50),
                     ),
                     const SizedBox(height: 16.0),
+                    // Nombre de usuario
                     !editing
-                        ? Text(_nameController.text)
-                        : TextFormField(
-                            controller: _nameController,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.person_outline),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'El nombre no puede quedar vacío';
-                              }
-                              return null;
-                            },
+                        ? Text(
+                            _nameController.text,
+                            style: theme.textTheme.headlineSmall,
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.person_outline, size: 30),
+                              const SizedBox(width: 16.0),
+                              SizedBox(
+                                width: fieldsWdth, // O el ancho que tú quieras
+                                child: TextFormField(
+                                  controller: _nameController,
+                                  textAlign: TextAlign
+                                      .center, // Centra el texto dentro del campo
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                  decoration: const InputDecoration(
+                                    isDense: true,
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 4),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'El nombre no puede quedar vacío';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 16.0),
+                    // Correo electrónico
                     !editing
                         ? Text(
                             _emailController.text,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.headlineSmall,
                           )
-                        : TextFormField(
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.email_outlined),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'El correo no puede estar vacío';
-                              }
-                              return null;
-                            },
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.email, size: 30),
+                              const SizedBox(width: 16.0),
+                              SizedBox(
+                                width: fieldsWdth,
+                                child: TextFormField(
+                                  controller: _emailController,
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                  decoration: const InputDecoration(
+                                    isDense: true,
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 4),
+                                  ),
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'El correo no puede estar vacío';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
+                    // Campos contraseñas
                     if (editing) ...[
-                      const SizedBox(height: 8.0),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock_outline),
-                        ),
-                        validator: (value) {
-                          if (value != null &&
-                              value.isNotEmpty &&
-                              value.length < 6) {
-                            return 'La contraseña debe tener al menos 6 caracteres';
-                          }
-                          return null;
-                        },
+                      const SizedBox(height: 16.0),
+                      // Campo cambiar contraseña
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lock_outline, size: 30),
+                          const SizedBox(width: 16.0),
+                          SizedBox(
+                            width: fieldsWdth,
+                            child: TextFormField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headlineSmall,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 4),
+                              ),
+                              validator: (value) {
+                                if (value != null &&
+                                    value.isNotEmpty &&
+                                    value.length < 6) {
+                                  return 'La contraseña debe tener al menos 6 caracteres';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8.0),
-                      TextFormField(
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock_reset_outlined),
-                        ),
-                        validator: (value) {
-                          if (value != _passwordController.text) {
-                            return 'Las contraseñas no coinciden';
-                          }
-                          return null;
-                        },
+                      const SizedBox(height: 16.0),
+                      // Campo repetir contraseña
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lock_reset_outlined, size: 30),
+                          const SizedBox(width: 16.0),
+                          SizedBox(
+                            width: fieldsWdth,
+                            child: TextFormField(
+                              obscureText: true,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headlineSmall,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 4),
+                              ),
+                              validator: (value) {
+                                if (value != _passwordController.text) {
+                                  return 'Las contraseñas no coinciden';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ],
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 16.0),
                     CountryCodePicker(
                       enabled: editing,
                       onChanged: (code) {
@@ -172,31 +249,33 @@ class ProfileScreenState extends State<ProfileScreen> {
                       },
                       showCountryOnly: true,
                       showOnlyCountryWhenClosed: true,
+                      textStyle: theme.textTheme.headlineSmall,
                     ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            if (editing) {
-                              if (_formKey.currentState!.validate()) {
-                                _editProfile();
-                                setState(() => editing = false);
-                              }
-                            } else {
-                              setState(() => editing = true);
-                            }
-                          },
-                          child: Text(editing ? 'Guardar' : 'Editar Perfil'),
-                        ),
-                        const SizedBox(height: 8.0),
-                        ElevatedButton(
-                          onPressed: () {
-                            logout(context);
-                          },
-                          child: const Text('Cerrar Sesión'),
-                        ),
-                      ],
+                    const SizedBox(height: 16.0),
+                    //Expanded(child: child),
+                    const SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (editing) {
+                          if (_formKey.currentState!.validate()) {
+                            _editProfile();
+                            setState(() {
+                              editing = false;
+                            });
+                            _refreshProfile();
+                          }
+                        } else {
+                          setState(() => editing = true);
+                        }
+                      },
+                      child: Text(editing ? 'Guardar' : 'Editar Perfil'),
+                    ),
+                    const SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        logout(context);
+                      },
+                      child: const Text('Cerrar Sesión'),
                     ),
                   ],
                 ),
