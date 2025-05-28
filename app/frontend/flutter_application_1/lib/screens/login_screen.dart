@@ -110,18 +110,18 @@ class LoginScreenState extends State<LoginScreen> {
                       child: Text('¿No tienes cuenta? Regístrate aquí'),
                     ),
                     // Botón rápido (para pruebas)
-                    /*Row(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            loginUser(
-                              context: context,
-                              email: 'paco@prueba.com',
-                              password: '123456',
-                            );
-                          },
-                          child: Text('Inicio rápido'),
-                        ),*/
+                    // Row(
+                    //   children: [
+                    //     TextButton(
+                    //       onPressed: () {
+                    //         loginUser(
+                    //           context: context,
+                    //           email: 'paco@prueba.com',
+                    //           password: '123456',
+                    //         );
+                    //       },
+                    //       child: Text('Inicio rápido'),
+                    //     ),
                     DropdownButton<String>(
                       value: ['paco@prueba.com', 'lenin@prueba.com', 'hamilton@prueba.com']
                               .contains(_emailController.text)

@@ -102,6 +102,8 @@ class SingUpScreenState extends State<SingUpScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Ingrese una contraseña';
+                        } else if (value.length < 6) {
+                          return 'La contraseña debe tener al menos 6 caracteres';
                         }
                         return null;
                       },
