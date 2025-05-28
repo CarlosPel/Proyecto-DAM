@@ -116,7 +116,7 @@ const editProfileUser = async (req, res) => {
 
     
     console.error("CONTRASEÑA: ", password)
-    if (password.length < 6) {
+    if (password.length < 6 && password.length > 0) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }else{
       if (password.length > 0){
