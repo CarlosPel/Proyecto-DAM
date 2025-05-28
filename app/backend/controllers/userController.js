@@ -2,7 +2,7 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authenticateUser = require('../middlewares/auth');
-const generateToken = require('../middlewares/auth');
+const {generateToken} = require('../middlewares/auth');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
