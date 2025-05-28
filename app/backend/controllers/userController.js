@@ -98,41 +98,49 @@ const editProfileUser = async (req, res) => {
   const { username, email, nation, password } = req.body;
   const id_user = req.user.id_user; // Extraído del token JWT
   try {
-    // Validar que se envíen todos los campos obligatorios desde el frontend
-    if (!username || !email || !nation ) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-
     
-    let passChange = ""
-    if (!password) {
-      
-    }else{
-      if (password.length < 6) {
-        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
-      }else{
-        passChange = `, password_hash = $5`
-      }
-    }
-
-
     // Validar formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
     }
 
-    const normalizedEmail = email.toLowerCase();
+    const conditions = []
+    let values = [];
+    let index = 1;
+
+    if (nation && nation.trim() !== "") {
+      conditions.push(`nation = $${index++}`);
+      values.push(nation);
+    }
+
+    if (password.length > 6){
+      conditions.push(`password_hash = $${index++}`);
+      values.push(password)
+    }
+
+    if (username && username.trim() !== ""){
+      conditions.push(`username = $${index++}`);
+      values.push(username)
+    }
+
+    if (email && email.trim() !== "") {
+      const normalizedEmail = email.toLowerCase();
+      conditions.push(`email = $${index++}`);
+      values.push(normalizedEmail)
+    }
+
+
 
     // Actualizar los datos en la base de datos
     let query = `
       UPDATE users
       SET username = $1, email = $2, nation = $3`// WHERE id_user = $4 RETURNING *;`
     ;
-    const queryFi = ` WHERE id_user = $4 RETURNING *;`
-    query += passChange
-    query += queryFi
-    const values = [username, normalizedEmail, nation, id_user, password];
+    conditions.push(` WHERE id_user = $${index++}`);
+    if (conditions.length > 0) {
+        query += ` AND ${conditions.join(' AND ')}`;
+    }
 
     const result = await pool.query(query, values);
 
