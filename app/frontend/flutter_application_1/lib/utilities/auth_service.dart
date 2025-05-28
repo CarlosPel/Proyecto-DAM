@@ -145,6 +145,9 @@ bool handleResponse(
   } else if (response.statusCode == 403) {
     // Si la respuesta es 403, se asume que el token no es válido o ha expirado
     logout(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Ha expirado la sesión, por favor inicie sesión de nuevo')),
+    );
     return false;
   } else {
     // Si hay un error, se muestra un mensaje al usuario
