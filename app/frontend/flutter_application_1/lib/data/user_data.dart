@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/classes/news_state.dart';
+import 'package:flutter_application_1/classes/posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -82,8 +84,16 @@ Future<void> logout(BuildContext context) async {
   await prefs.remove('hasAgreed');
   await prefs.setBool('isLoggedIn', false);
 
+  // Limpia las listas de caché de las pantallas ya cargadas
+  clearStatesLists();
+
   Navigator.pushNamedAndRemoveUntil(
       context, AppRoutes.loginScreen, (Route<dynamic> route) => false);
+}
+
+clearStatesLists() {
+  newsState.news.clear();
+  postsState.news.clear();
 }
 
 Future<bool?> hasAgreed() async {
