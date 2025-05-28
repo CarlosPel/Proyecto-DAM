@@ -2,7 +2,7 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authenticateUser = require('../middlewares/auth');
-const generateToken = require('../middlewares/auth');
+const { generateToken } = require('../middlewares/auth');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
@@ -98,23 +98,6 @@ const editProfileUser = async (req, res) => {
   const { username, email, nation, password } = req.body;
   const id_user = req.user.id_user; // Extraído del token JWT
   try {
-    // Validar que se envíen todos los campos obligatorios desde el frontend
-    if (!username || !email || !nation ) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-
-    
-    const passChange = ""
-    if (!password) {
-      passChange
-    }else{
-      if (password.length < 6) {
-        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
-      }else{
-        passChange = `, password_hash = $5`
-      }
-    }
-
 
     // Validar formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -122,18 +105,50 @@ const editProfileUser = async (req, res) => {
       return res.status(400).json({ error: 'El formato del correo electrónico es inválido' });
     }
 
-    const normalizedEmail = email.toLowerCase();
+    const conditions = []
+    let values = [];
+    let index = 1;
+
+    if (nation && nation.trim() !== "") {
+      conditions.push(`nation = $${index++}`);
+      values.push(nation);
+    }
+
+    
+    console.error("CONTRASEÑA: ", password)
+    if (password.length < 6 && password.length > 0) {
+      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+    }else{
+      if (password.length > 0){
+      const hashedPassword = await bcrypt.hash(password, 10);
+      conditions.push(`password_hash = $${index++}`);
+      values.push(hashedPassword)
+      }
+    }
+
+    if (username && username.trim() !== "") {
+      conditions.push(`username = $${index++}`);
+      values.push(username)
+    }
+
+    if (email && email.trim() !== "") {
+      const normalizedEmail = email.toLowerCase();
+      conditions.push(`email = $${index++}`);
+      values.push(normalizedEmail)
+    }
+
+
 
     // Actualizar los datos en la base de datos
-    const query = `
-      UPDATE users
-      SET username = $1, email = $2, nation = $3`// WHERE id_user = $4 RETURNING *;`
-    ;
-    const queryFi = ` WHERE id_user = $4 RETURNING *;`
-    query += passChange
-    query += queryFi
-    const values = [username, normalizedEmail, nation, id_user, password];
-
+    let query = `
+      UPDATE users SET`// WHERE id_user = $4 RETURNING *;`
+      ;
+    if (conditions.length > 0) {
+      query += ` ${conditions.join(', ')}`;
+    }
+    query += ` WHERE id_user = $${index} RETURNING *;`;
+    values.push(id_user)
+    console.error(query)
     const result = await pool.query(query, values);
 
     // Verificar si el usuario existe
@@ -141,7 +156,13 @@ const editProfileUser = async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    await loginUser(req, res);
+    const queryUser = 'SELECT * FROM users WHERE id_user = $1';
+    const resultUser = await pool.query(queryUser, [id_user])
+    const user = resultUser.rows[0];
+    const userData = { username: user.username, email: user.email, nation: user.nation, hasAgreed: user.has_agreed };
+    const token = generateToken(user)
+
+    return res.status(200).json({ message: 'Perfil actualizado con éxito', token, user: userData })
     // res.status(200).json({ message: 'Perfil actualizado con éxito', user: result.rows[0] });
   } catch (error) {
     console.error('Detalle del error:', error);

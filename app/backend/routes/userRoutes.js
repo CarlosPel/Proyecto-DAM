@@ -11,7 +11,7 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/editProfile', authenticateUser , editProfileUser);
 router.post('/userposts', authenticateUser , userPosts);
-router.post('/conditions', authenticateUser, userConditions)
+router.post('/conditions', authenticateUser, userConditions);
 
 // Exportamos el enrutador para ser utilizado en otros ficheros.
 module.exports = router;
