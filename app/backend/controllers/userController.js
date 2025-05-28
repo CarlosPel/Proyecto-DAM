@@ -104,9 +104,9 @@ const editProfileUser = async (req, res) => {
     }
 
     
-    const passChange = ""
+    let passChange = ""
     if (!password) {
-      passChange
+      
     }else{
       if (password.length < 6) {
         return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
@@ -125,7 +125,7 @@ const editProfileUser = async (req, res) => {
     const normalizedEmail = email.toLowerCase();
 
     // Actualizar los datos en la base de datos
-    const query = `
+    let query = `
       UPDATE users
       SET username = $1, email = $2, nation = $3`// WHERE id_user = $4 RETURNING *;`
     ;
