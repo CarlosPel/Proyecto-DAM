@@ -18,5 +18,12 @@ const authenticateUser = (req, res, next) => {
     }
 };
 
+const generateToken = (user) => {
+    return jwt.sign(
+         { id_user: user.id_user, username: user.username, email: user.email, nation: user.nation },
+      process.env.JWT_SECRET || 'clave_secreta',
+      { expiresIn: '12h' });
+}
+
 module.exports = { authenticateUser };
 

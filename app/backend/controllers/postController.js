@@ -1,5 +1,6 @@
 const pool = require('../config/db');
 const authenticateUser = require('../middlewares/auth'); // Middleware de autenticación
+const loginUser = require ('../controllers/userController')
 
 // Función para crear un postq
 const createPost = async (req, res) => {
@@ -106,13 +107,19 @@ const getPost = async (req, res) => {
     }
 
     query += ' ORDER BY POST.post_date DESC;';
+    const queryUser = 'SELECT * FROM users WHERE id_user = $1';
+    const resultUser = await pool.query(query, [id_user])
+    const user = resultUser.rows[0];
 
     try {
+        const token = generateToken(user)
         const result = await pool.query(query, values);
         res.status(200).json({
             message: 'Post extraídos correctamente',
             data: result.rows, // Incluye tanto los datos del post como el nombre del usuario
+            token
         });
+
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Error al obtener posts' });

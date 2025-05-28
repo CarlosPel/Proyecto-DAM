@@ -2,6 +2,7 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authenticateUser = require('../middlewares/auth');
+const generateToken = require('../middlewares/auth');
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
@@ -83,11 +84,7 @@ const loginUser = async (req, res) => {
     }
 
     // Generar un token JWT
-    const token = jwt.sign(
-      { id_user: user.id_user, username: user.username, email: user.email, nation: user.nation },
-      process.env.JWT_SECRET || 'clave_secreta',
-      { expiresIn: '12h' }
-    );
+    const token = generateToken(user)
 
     res.status(200).json({ message: 'Inicio de sesión exitoso', token, user: userData });
   } catch (error) {
