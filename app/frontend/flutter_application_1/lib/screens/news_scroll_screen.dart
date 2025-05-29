@@ -111,10 +111,30 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
                       newsState.news = snapshot.data!;
+                      
                       return RefreshIndicator(
                         onRefresh: _refreshNews,
                         child: ScrollContainer(
-                          child: ListView.builder(
+                          child: newsState.news.isEmpty
+                                ? SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'No hay noticias disponibles',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 24),
+                                        ElevatedButton(
+                                          onPressed: _refreshNews,
+                                          child: const Icon(Icons.refresh),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
                             itemCount: newsState.news.length,
                             itemBuilder: (context, index) {
                               final article = newsState.news[index];

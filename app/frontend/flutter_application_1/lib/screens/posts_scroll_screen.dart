@@ -59,7 +59,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
   Future<void> _refreshPosts() async {
     try {
       final newPosts = await _loadPosts();
-      
+
       setState(() {
         postsState.posts = newPosts;
       });
@@ -148,35 +148,55 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                         return Center(child: Text('Error: ${snap.error}'));
                       } else if (snap.hasData) {
                         postsState.posts = snap.data!;
+                        
                         return RefreshIndicator(
                           onRefresh: _refreshPosts,
                           child: ScrollContainer(
-                            child: ListView.builder(
-                              itemCount: postsState.posts.length,
-                              itemBuilder: (c, i) {
-                                final post = postsState.posts[i];
-                                return PostCard(
-                                  post: Post(
-                                    id: post['id_post'],
-                                    title: post['title'],
-                                    content: post['content'],
-                                    datetime: post['post_date'],
-                                    user: post['user_name'],
+                            child: postsState.posts.isEmpty
+                                ? SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'No hay publicaciones disponibles',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 24),
+                                        ElevatedButton(
+                                          onPressed: _refreshPosts,
+                                          child: const Icon(Icons.refresh),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: postsState.posts.length,
+                                    itemBuilder: (c, i) {
+                                      final post = postsState.posts[i];
+                                      return PostCard(
+                                        post: Post(
+                                          id: post['id_post'],
+                                          title: post['title'],
+                                          content: post['content'],
+                                          datetime: post['post_date'],
+                                          user: post['user_name'],
+                                        ),
+                                        //isExpanded: false,
+                                        onTap: () => Navigator.pushNamed(
+                                          context,
+                                          AppRoutes.postScreen,
+                                          arguments: {'post': post},
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  //isExpanded: false,
-                                  onTap: () => Navigator.pushNamed(
-                                    context,
-                                    AppRoutes.postScreen,
-                                    arguments: {'post': post},
-                                  ),
-                                );
-                              },
-                            ),
                           ),
                         );
                       } else {
                         return const Center(
-                            child: Text('No hay publicaciones'));
+                            child: Text('No hay publicaciones disponibles...'));
                       }
                     },
                   ),
@@ -198,56 +218,3 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     );
   }
 }
-// Botón Perfil
-          /*AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            bottom: isOpen ? 100 : 40,
-            right: isOpen ? 40 : 30,
-            child: Visibility(
-              visible: isOpen,
-              child: FloatingActionButton(
-                mini: true,
-                onPressed: () {
-                  if (Navigator.canPop(context) || AppRoutes.profileScreen != null) {
-                    Navigator.pushNamed(context, AppRoutes.profileScreen);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Ruta no encontrada: profileScreen')),
-                    );
-                  }
-                },
-                child: Icon(Icons.person),
-              ),
-            ),
-          ),
-          // Botón 2
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            bottom: isOpen ? 160 : 40,
-            right: isOpen ? 100 : 30,
-            child: Visibility(
-              visible: isOpen,
-              child: FloatingActionButton(
-                mini: true,
-                onPressed: () {
-                  print('Botón 2');
-                },
-                child: Icon(Icons.photo),
-              ),
-            ),
-          ),*/
-      // Botón flotante de menú
-      /*floatingActionButton: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                isOpen = !isOpen;
-              });
-            },
-            child: Icon(isOpen ? Icons.close : Icons.add),
-          ),
-        ),
-      ),*/

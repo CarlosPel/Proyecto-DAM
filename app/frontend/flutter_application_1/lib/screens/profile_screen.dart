@@ -444,30 +444,49 @@ class ProfileScreenState extends State<ProfileScreen> {
                 return Center(child: Text('Error: ${snap.error}'));
               } else if (snap.hasData) {
                 userPostsState.posts = snap.data!;
+
                 return RefreshIndicator(
                   onRefresh: _refreshPosts,
                   child: ScrollContainer(
-                    child: ListView.builder(
-                      itemCount: userPostsState.posts.length,
-                      itemBuilder: (c, i) {
-                        final post = userPostsState.posts[i];
-                        return PostCard(
-                          post: Post(
-                            id: post['id_post'],
-                            title: post['title'],
-                            content: post['content'],
-                            datetime: post['post_date'],
-                            user: post['user_name'],
+                    child: userPostsState.posts.isEmpty
+                        ? SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'No has publicado nada...',
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 24),
+                                ElevatedButton(
+                                  onPressed: _refreshPosts,
+                                  child: const Icon(Icons.refresh),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: userPostsState.posts.length,
+                            itemBuilder: (c, i) {
+                              final post = userPostsState.posts[i];
+                              return PostCard(
+                                post: Post(
+                                  id: post['id_post'],
+                                  title: post['title'],
+                                  content: post['content'],
+                                  datetime: post['post_date'],
+                                  user: post['user_name'],
+                                ),
+                                //isExpanded: false,
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.postScreen,
+                                  arguments: {'post': post},
+                                ),
+                              );
+                            },
                           ),
-                          //isExpanded: false,
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            AppRoutes.postScreen,
-                            arguments: {'post': post},
-                          ),
-                        );
-                      },
-                    ),
                   ),
                 );
               } else {
