@@ -56,6 +56,7 @@ class ArticleCard extends StatelessWidget {
                 ],
               ),
               AnimatedCrossFade(
+                duration: const Duration(milliseconds: 500),
                 firstChild: const SizedBox.shrink(),
                 secondChild: Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -138,7 +139,6 @@ class ArticleCard extends StatelessWidget {
                 crossFadeState: isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 200),
               ),
             ],
           ),

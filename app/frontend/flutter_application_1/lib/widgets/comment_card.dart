@@ -62,6 +62,7 @@ class CommentCardState extends State<CommentCard> {
                 ),
               ),
               AnimatedCrossFade(
+                duration: const Duration(milliseconds: 500),
                 firstChild: const SizedBox.shrink(),
                 secondChild: _subComments == null
                     ? const Center(child: CircularProgressIndicator())
@@ -86,7 +87,6 @@ class CommentCardState extends State<CommentCard> {
                 crossFadeState: _isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 200),
               ),
             ],
           ),
