@@ -85,12 +85,12 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
               Center(
                   child: Text(
                 AppData.appName,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'NYTCheltenham',
+                style: GoogleFonts.playfairDisplay(
                   fontSize: 36,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
                 ),
+                textAlign: TextAlign.center,
               )),
               Positioned(
                 right: 0,
