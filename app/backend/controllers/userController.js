@@ -115,7 +115,7 @@ const editProfileUser = async (req, res) => {
     }
 
     
-    console.error("CONTRASEÑA: ", password)
+    // console.error("CONTRASEÑA: ", password)
     if (password.length < 6 && password.length > 0) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }else{
@@ -172,11 +172,10 @@ const editProfileUser = async (req, res) => {
 
 const userPosts = async (req, res) => {
   const id_user = req.user.id_user;
-  console.log(id_user);
-  const query = `SELECT * FROM post WHERE id_user = $1`;
-
+  const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;`;
   try {
     const resultado = await pool.query(query, [id_user]);
+    console.log(resultado.rows[0].idPost)
     res.status(200).json({
       message: 'Posts extraídos correctamente',
       data: resultado.rows,
@@ -189,7 +188,7 @@ const userPosts = async (req, res) => {
 
 const userConditions = async (req, res) => {
   const id_user = req.user.id_user;
-  const query = 'UPDATE users SET has_agreed = TRUE WHERE id_user = $1';
+  const query = 'UPDATE users SET has_agreed = TRUE WHERE id_user = $1;';
   try {
     const result = await pool.query(query, [id_user]);
     res.status(200).json({
