@@ -172,7 +172,6 @@ const editProfileUser = async (req, res) => {
 
 const userPosts = async (req, res) => {
   const id_user = req.user.id_user;
-  console.log(id_user);
   const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;`;
   try {
     const resultado = await pool.query(query, [id_user]);
