@@ -1,9 +1,9 @@
 class Article {
   String title;
   String? snippet;
-  String link;
+  String? link;
   String? imgUrl;
-  String datetime;
+  String? datetime;
   String? source;
 
   Article({

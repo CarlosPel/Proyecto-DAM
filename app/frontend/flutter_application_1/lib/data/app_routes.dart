@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/classes/article.dart';
+import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/screens/create_post_screen.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/screens/loading_screen.dart';
@@ -35,31 +37,46 @@ class AppRoutes {
     switch (settings.name) {
       case postsScrollScreen:
         return MaterialPageRoute(builder: (_) => PostsScrollScreen());
+
       case loginScreen:
         return MaterialPageRoute(builder: (_) => LoginScreen());
+
       case singUpScreen:
         return MaterialPageRoute(builder: (_) => SingUpScreen());
+
       case profileScreen:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
+
       case newsScrollScreen:
         return MaterialPageRoute(builder: (_) => NewsScrollScreen());
+
       case createPostScreen:
-        return MaterialPageRoute(builder: (_) => CreatePostScreen());
+        final args = settings.arguments as Map<String, dynamic>;
+        final Article? article = args['article'];
+
+        return MaterialPageRoute(
+            builder: (_) => CreatePostScreen(article: article));
+
       case postScreen:
         final args = settings.arguments as Map<String, dynamic>;
-        final post = args['post'];
-        final article = args['article'];
+        final Post post = args['post'];
+        final Article? article = args['article'];
+
         return MaterialPageRoute(
             builder: (_) => PostScreen(post: post, article: article));
+
       case loadingScreen:
         final args = settings.arguments as Map<String, dynamic>;
         final void Function() action = args['action'];
         final Future<bool> Function() loadCondition = args['loadCondition'];
+
         return MaterialPageRoute(
-            builder: (_) => LoadingScreen(
-                action: action, loadCondition: loadCondition));
+            builder: (_) =>
+                LoadingScreen(action: action, loadCondition: loadCondition));
+
       case termsScreen:
         return MaterialPageRoute(builder: (_) => TermsScreen());
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
