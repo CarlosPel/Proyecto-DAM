@@ -58,6 +58,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
   Future<void> _refreshPosts() async {
     try {
       final newPosts = await _loadPosts();
+      
       setState(() {
         postsState.posts = newPosts;
       });

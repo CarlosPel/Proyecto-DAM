@@ -11,6 +11,7 @@ import 'package:flutter_application_1/utilities/auth_service.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/post_widget.dart';
+import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -408,26 +409,31 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildPostList() {
     return userPostsState.posts.isNotEmpty
-        ? ListView.builder(
-            itemCount: userPostsState.posts.length,
-            itemBuilder: (c, i) {
-              final post = userPostsState.posts[i];
-              return PostWidget(
-                post: Post(
-                  id: post['id_post'],
-                  title: post['title'],
-                  content: post['content'],
-                  datetime: post['post_date'],
-                  user: post['user_name'],
-                ),
-                //isExpanded: false,
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  AppRoutes.postScreen,
-                  arguments: {'post': post},
-                ),
-              );
-            },
+        ? RefreshIndicator(
+            onRefresh: _refreshPosts,
+            child: ScrollContainer(
+              child: ListView.builder(
+                itemCount: userPostsState.posts.length,
+                itemBuilder: (c, i) {
+                  final post = userPostsState.posts[i];
+                  return PostWidget(
+                    post: Post(
+                      id: post['id_post'],
+                      title: post['title'],
+                      content: post['content'],
+                      datetime: post['post_date'],
+                      user: post['user_name'],
+                    ),
+                    //isExpanded: false,
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      AppRoutes.postScreen,
+                      arguments: {'post': post},
+                    ),
+                  );
+                },
+              ),
+            ),
           )
         : FutureBuilder<List<dynamic>>(
             future: _postsFuture,
@@ -438,26 +444,31 @@ class ProfileScreenState extends State<ProfileScreen> {
                 return Center(child: Text('Error: ${snap.error}'));
               } else if (snap.hasData) {
                 userPostsState.posts = snap.data!;
-                return ListView.builder(
-                  itemCount: userPostsState.posts.length,
-                  itemBuilder: (c, i) {
-                    final post = userPostsState.posts[i];
-                    return PostWidget(
-                      post: Post(
-                        id: post['id_post'],
-                        title: post['title'],
-                        content: post['content'],
-                        datetime: post['post_date'],
-                        user: post['user_name'],
-                      ),
-                      //isExpanded: false,
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        AppRoutes.postScreen,
-                        arguments: {'post': post},
-                      ),
-                    );
-                  },
+                return RefreshIndicator(
+                  onRefresh: _refreshPosts,
+                  child: ScrollContainer(
+                    child: ListView.builder(
+                      itemCount: userPostsState.posts.length,
+                      itemBuilder: (c, i) {
+                        final post = userPostsState.posts[i];
+                        return PostWidget(
+                          post: Post(
+                            id: post['id_post'],
+                            title: post['title'],
+                            content: post['content'],
+                            datetime: post['post_date'],
+                            user: post['user_name'],
+                          ),
+                          //isExpanded: false,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            AppRoutes.postScreen,
+                            arguments: {'post': post},
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               } else {
                 return const Center(child: Text('No hay publicaciones'));
