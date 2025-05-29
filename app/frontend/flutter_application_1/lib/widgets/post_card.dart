@@ -3,12 +3,12 @@ import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class PostWidget extends StatelessWidget {
+class PostCard extends StatelessWidget {
   final Post post;
   // final bool isExpanded; // lo mantenemos por compatibilidad
   final VoidCallback onTap;
 
-  const PostWidget({
+  const PostCard({
     super.key,
     required this.post,
     required this.onTap,

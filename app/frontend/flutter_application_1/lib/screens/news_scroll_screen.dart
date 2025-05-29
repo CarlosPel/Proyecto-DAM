@@ -5,8 +5,9 @@ import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
-import 'package:flutter_application_1/widgets/article_widget.dart';
+import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
+import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
@@ -80,23 +81,25 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
           child: newsState.news.isNotEmpty
               ? RefreshIndicator(
                   onRefresh: _refreshNews,
-                  child: ListView.builder(
-                    itemCount: newsState.news.length,
-                    itemBuilder: (context, index) {
-                      final article = newsState.news[index];
-                      return ArticleWidget(
-                        article: Article(
-                          title: article['title'],
-                          snippet: article['snippet'],
-                          link: article['link'],
-                          imgUrl: article['photo_url'],
-                          datetime: article['published_datetime_utc'],
-                          source: article['source_name'],
-                        ),
-                        isExpanded: _expandedIndex == index,
-                        onTap: () => _toggleExpanded(index),
-                      );
-                    },
+                  child: ScrollContainer(
+                    child: ListView.builder(
+                      itemCount: newsState.news.length,
+                      itemBuilder: (context, index) {
+                        final article = newsState.news[index];
+                        return ArticleCard(
+                          article: Article(
+                            title: article['title'],
+                            snippet: article['snippet'],
+                            link: article['link'],
+                            imgUrl: article['photo_url'],
+                            datetime: article['published_datetime_utc'],
+                            source: article['source_name'],
+                          ),
+                          isExpanded: _expandedIndex == index,
+                          onTap: () => _toggleExpanded(index),
+                        );
+                      },
+                    ),
                   ),
                 )
               : FutureBuilder<List<dynamic>>(
@@ -110,23 +113,25 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
                       newsState.news = snapshot.data!;
                       return RefreshIndicator(
                         onRefresh: _refreshNews,
-                        child: ListView.builder(
-                          itemCount: newsState.news.length,
-                          itemBuilder: (context, index) {
-                            final article = newsState.news[index];
-                            return ArticleWidget(
-                              article: Article(
-                                title: article['title'],
-                                snippet: article['snippet'],
-                                link: article['link'],
-                                imgUrl: article['photo_url'],
-                                datetime: article['published_datetime_utc'],
-                                source: article['source_name'],
-                              ),
-                              isExpanded: _expandedIndex == index,
-                              onTap: () => _toggleExpanded(index),
-                            );
-                          },
+                        child: ScrollContainer(
+                          child: ListView.builder(
+                            itemCount: newsState.news.length,
+                            itemBuilder: (context, index) {
+                              final article = newsState.news[index];
+                              return ArticleCard(
+                                article: Article(
+                                  title: article['title'],
+                                  snippet: article['snippet'],
+                                  link: article['link'],
+                                  imgUrl: article['photo_url'],
+                                  datetime: article['published_datetime_utc'],
+                                  source: article['source_name'],
+                                ),
+                                isExpanded: _expandedIndex == index,
+                                onTap: () => _toggleExpanded(index),
+                              );
+                            },
+                          ),
                         ),
                       );
                     } else {

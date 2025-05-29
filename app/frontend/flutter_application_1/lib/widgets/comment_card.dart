@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 
-class CommentWidget extends StatefulWidget {
+class CommentCard extends StatefulWidget {
   final Post comment;
   final void Function(Post) onPressedIcon;
 
-  const CommentWidget({
+  const CommentCard({
     super.key,
     required this.comment,
     required this.onPressedIcon,
   });
 
   @override
-  CommentWidgetState createState() => CommentWidgetState();
+  CommentCardState createState() => CommentCardState();
 }
 
-class CommentWidgetState extends State<CommentWidget> {
+class CommentCardState extends State<CommentCard> {
   bool _isExpanded = false;
   List<dynamic>? _subComments; // ⬅️ Guarda comentarios hijos
 
@@ -71,7 +71,7 @@ class CommentWidgetState extends State<CommentWidget> {
                         itemCount: _subComments!.length,
                         itemBuilder: (context, index) {
                           final sub = _subComments![index];
-                          return CommentWidget(
+                          return CommentCard(
                             key: ValueKey(sub['id_post']),
                             comment: Post(
                               id: sub['id_post'],

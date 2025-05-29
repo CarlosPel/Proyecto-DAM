@@ -3,7 +3,8 @@ import 'package:flutter_application_1/classes/article.dart';
 import 'package:flutter_application_1/classes/post.dart';
 import 'package:flutter_application_1/utilities/post_service.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
-import 'package:flutter_application_1/widgets/comment_widget.dart';
+import 'package:flutter_application_1/widgets/comment_card.dart';
+import 'package:flutter_application_1/widgets/scroll_container.dart';
 
 class PostScreen extends StatefulWidget {
   final Post post;
@@ -22,7 +23,7 @@ class PostScreenState extends State<PostScreen> {
   List<dynamic>? _comments;
 
   // Guarda las keys de los comentarios raíz
-  final Map<int, GlobalKey<CommentWidgetState>> _commentKeys = {};
+  final Map<int, GlobalKey<CommentCardState>> _commentKeys = {};
 
   @override
   void initState() {
@@ -59,7 +60,7 @@ class PostScreenState extends State<PostScreen> {
     _commentKeys.clear();
     if (_comments != null) {
       for (var comment in _comments!) {
-        _commentKeys[comment['id_post']] = GlobalKey<CommentWidgetState>();
+        _commentKeys[comment['id_post']] = GlobalKey<CommentCardState>();
       }
     }
   }
@@ -112,40 +113,42 @@ class PostScreenState extends State<PostScreen> {
               onRefresh: () => _refreshComments(),
               child: _comments == null
                   ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: _comments!.isEmpty ? 1 : _comments!.length,
-                      itemBuilder: (context, index) {
-                        if (_comments!.isEmpty) {
-                          return const Center(
-                              child: Padding(
-                            padding: EdgeInsets.only(top: 32.0),
-                            child: Text('No hay comentarios disponibles'),
-                          ));
-                        }
-                        final comment = _comments![index];
-                        final key = _commentKeys[comment['id_post']] ??
-                            GlobalKey<CommentWidgetState>();
-                        _commentKeys[comment['id_post']] = key;
-                        return CommentWidget(
-                          key: key,
-                          comment: Post(
-                            id: comment['id_post'],
-                            content: comment['content'],
-                            user: comment['user_name'],
-                            parentPostId: comment['parent_post'],
-                          ),
-                          onPressedIcon: (Post selectedComment) {
-                            setState(() {
-                              _referencedComment = {
-                                'id_post': selectedComment.id,
-                                'content': selectedComment.content,
-                                'user_name': selectedComment.user,
-                              };
-                            });
-                          },
-                        );
-                      },
-                    ),
+                  : ScrollContainer(
+                    child: ListView.builder(
+                        itemCount: _comments!.isEmpty ? 1 : _comments!.length,
+                        itemBuilder: (context, index) {
+                          if (_comments!.isEmpty) {
+                            return const Center(
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 32.0),
+                              child: Text('No hay comentarios disponibles'),
+                            ));
+                          }
+                          final comment = _comments![index];
+                          final key = _commentKeys[comment['id_post']] ??
+                              GlobalKey<CommentCardState>();
+                          _commentKeys[comment['id_post']] = key;
+                          return CommentCard(
+                            key: key,
+                            comment: Post(
+                              id: comment['id_post'],
+                              content: comment['content'],
+                              user: comment['user_name'],
+                              parentPostId: comment['parent_post'],
+                            ),
+                            onPressedIcon: (Post selectedComment) {
+                              setState(() {
+                                _referencedComment = {
+                                  'id_post': selectedComment.id,
+                                  'content': selectedComment.content,
+                                  'user_name': selectedComment.user,
+                                };
+                              });
+                            },
+                          );
+                        },
+                      ),
+                  ),
             ),
           ),
           Column(

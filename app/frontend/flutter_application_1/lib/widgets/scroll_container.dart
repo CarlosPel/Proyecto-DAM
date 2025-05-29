@@ -7,7 +7,7 @@ class ScrollContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: const Color.fromARGB(255, 191, 177, 177),
       child: child,
     );
   }

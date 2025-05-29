@@ -8,7 +8,8 @@ import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
-import 'package:flutter_application_1/widgets/post_widget.dart';
+import 'package:flutter_application_1/widgets/post_card.dart';
+import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:provider/provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
@@ -114,26 +115,28 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
             child: postsState.posts.isNotEmpty
                 ? RefreshIndicator(
                     onRefresh: _refreshPosts,
-                    child: ListView.builder(
-                      itemCount: postsState.posts.length,
-                      itemBuilder: (c, i) {
-                        final post = postsState.posts[i];
-                        return PostWidget(
-                          post: Post(
-                            id: post['id_post'],
-                            title: post['title'],
-                            content: post['content'],
-                            datetime: post['post_date'],
-                            user: post['user_name'],
-                          ),
-                          //isExpanded: false,
-                          onTap: () => Navigator.pushNamed(
-                            context,
-                            AppRoutes.postScreen,
-                            arguments: {'post': post},
-                          ),
-                        );
-                      },
+                    child: ScrollContainer(
+                      child: ListView.builder(
+                        itemCount: postsState.posts.length,
+                        itemBuilder: (c, i) {
+                          final post = postsState.posts[i];
+                          return PostCard(
+                            post: Post(
+                              id: post['id_post'],
+                              title: post['title'],
+                              content: post['content'],
+                              datetime: post['post_date'],
+                              user: post['user_name'],
+                            ),
+                            //isExpanded: false,
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              AppRoutes.postScreen,
+                              arguments: {'post': post},
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   )
                 : FutureBuilder<List<dynamic>>(
@@ -147,26 +150,28 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                         postsState.posts = snap.data!;
                         return RefreshIndicator(
                           onRefresh: _refreshPosts,
-                          child: ListView.builder(
-                            itemCount: postsState.posts.length,
-                            itemBuilder: (c, i) {
-                              final post = postsState.posts[i];
-                              return PostWidget(
-                                post: Post(
-                                  id: post['id_post'],
-                                  title: post['title'],
-                                  content: post['content'],
-                                  datetime: post['post_date'],
-                                  user: post['user_name'],
-                                ),
-                                //isExpanded: false,
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.postScreen,
-                                  arguments: {'post': post},
-                                ),
-                              );
-                            },
+                          child: ScrollContainer(
+                            child: ListView.builder(
+                              itemCount: postsState.posts.length,
+                              itemBuilder: (c, i) {
+                                final post = postsState.posts[i];
+                                return PostCard(
+                                  post: Post(
+                                    id: post['id_post'],
+                                    title: post['title'],
+                                    content: post['content'],
+                                    datetime: post['post_date'],
+                                    user: post['user_name'],
+                                  ),
+                                  //isExpanded: false,
+                                  onTap: () => Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.postScreen,
+                                    arguments: {'post': post},
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         );
                       } else {

@@ -10,7 +10,7 @@ import 'package:flutter_application_1/data/user_data.dart';
 import 'package:flutter_application_1/utilities/auth_service.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/utilities/req_service.dart';
-import 'package:flutter_application_1/widgets/post_widget.dart';
+import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -416,7 +416,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                 itemCount: userPostsState.posts.length,
                 itemBuilder: (c, i) {
                   final post = userPostsState.posts[i];
-                  return PostWidget(
+                  return PostCard(
                     post: Post(
                       id: post['id_post'],
                       title: post['title'],
@@ -451,7 +451,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                       itemCount: userPostsState.posts.length,
                       itemBuilder: (c, i) {
                         final post = userPostsState.posts[i];
-                        return PostWidget(
+                        return PostCard(
                           post: Post(
                             id: post['id_post'],
                             title: post['title'],

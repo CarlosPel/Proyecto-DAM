@@ -4,12 +4,12 @@ import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ArticleWidget extends StatelessWidget {
+class ArticleCard extends StatelessWidget {
   final Article article;
   final bool isExpanded;
   final VoidCallback onTap;
 
-  const ArticleWidget({
+  const ArticleCard({
     super.key,
     required this.article,
     required this.isExpanded,
