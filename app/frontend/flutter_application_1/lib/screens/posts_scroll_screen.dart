@@ -12,6 +12,7 @@ import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:provider/provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PostsScrollScreen extends StatefulWidget {
   const PostsScrollScreen({super.key});
@@ -75,19 +76,33 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
-        title: Row(
-          children: [
-            Align(
-                alignment: Alignment.centerLeft,
-                child: const Text("Publicaciones")),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.profileScreen);
-              },
-              child: Icon(Icons.person, size: 30), // Icono del botón
-            ),
-          ],
+        title: SizedBox(
+          height: 100,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Center(
+                  child: Text(
+                AppData.appName,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'NYTCheltenham',
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+              Positioned(
+                right: 0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.profileScreen);
+                  },
+                  child: Icon(Icons.person, size: 30), // Icono del botón
+                ),
+              ),
+            ],
+          ),
         ),
         automaticallyImplyLeading: false,
       ),
@@ -148,7 +163,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                         return Center(child: Text('Error: ${snap.error}'));
                       } else if (snap.hasData) {
                         postsState.posts = snap.data!;
-                        
+
                         return RefreshIndicator(
                           onRefresh: _refreshPosts,
                           child: ScrollContainer(
