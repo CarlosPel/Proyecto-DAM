@@ -12,20 +12,22 @@ class ArticlePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formattedDate = DateFormat.yMMMMd('es_ES')
-        .add_Hm()
-        .format(datetime != null ? DateTime.parse(datetime!) : DateTime.now());
+      .format(datetime != null ? DateTime.parse(datetime!) : DateTime.now());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
           style: const TextStyle(
-            fontFamily: 'Georgia',
+            fontFamily: 'Times New Roman',
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            // letterSpacing: 0.5,
           ),
         ),
         const SizedBox(height: 6),
+        Container(color: Colors.grey,width: double.infinity, height: 2,),
+        const SizedBox(height: 3),
         Row(
           children: [
             Text(
@@ -39,6 +41,8 @@ class ArticlePreview extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 3),
+        Container(color: Colors.grey,width: double.infinity, height: 2,),
       ],
     );
   }

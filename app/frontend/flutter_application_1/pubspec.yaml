@@ -31,6 +31,12 @@ flutter:
   uses-material-design: true
   
   fonts:
-    - family: NYTCheltenham
+    - family: Chomsky
       fonts:
-        - asset: fonts/nyt-cheltenham-bold.ttf
+        - asset: assets/fonts/Chomsky.otf
+    - family: NYTCheltenhamNormal
+      fonts:
+        - asset: assets/fonts/nyt-cheltenham-normal.ttf
+    - family: NYTCheltenhamBold
+      fonts:
+        - asset: assets/fonts/nyt-cheltenham-bold.ttf

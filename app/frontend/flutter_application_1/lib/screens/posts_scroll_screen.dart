@@ -86,10 +86,10 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                   child: Text(
                 AppData.appName,
                 style: const TextStyle(
-                  fontFamily: 'NYTCheltenham', // Usa tu fuente personalizada
-                  fontSize: 36,
+                  fontFamily: 'Chomsky', // Usa tu fuente personalizada
+                  fontSize: 50,
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 1.5,
+                  letterSpacing: 3,
                 ),
                 textAlign: TextAlign.center,
               )),

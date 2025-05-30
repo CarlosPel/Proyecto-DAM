@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static Color newsPaperBackgroundColor = Color.fromARGB(130, 230, 219, 116);
   static Color postBackgroundColor = Color.fromARGB(255, 255, 255, 255);
-  static Color newBackgroundColor = Color.fromARGB(130, 230, 219, 116);
+  static Color articleBackgroundColor = Color.fromARGB(130, 230, 219, 116);
 
   static ThemeData get lightTheme {
     return ThemeData(
