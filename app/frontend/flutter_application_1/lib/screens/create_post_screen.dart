@@ -52,10 +52,62 @@ class CreatePostScreenState extends State<CreatePostScreen> {
       appBar: AppBar(
         title: Text('Nueva Publicación'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Título'),
+                      controller: _titleController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor ingresa un título';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Contenido'),
+                      controller: _contentController,
+                      maxLines: 5,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor ingresa el contenido';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    DropdownButtonFormField<Topic>(
+                      decoration: InputDecoration(labelText: 'Tema'),
+                      items: Topic.values.map((Topic topic) {
+                        return DropdownMenuItem<Topic>(
+                          value: topic,
+                          child: Text(topic.name),
+                        );
+                      }).toList(),
+                      onChanged: (Topic? newValue) {
+                        setState(() {
+                          _topic = newValue!;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => _createPost(article: article),
+                      child: Text('Publicar'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             if (article != null)
               articleCard(
                 child: Column(children: [
@@ -69,7 +121,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                     child: Text(
                       article.snippet!,
                       style: const TextStyle(
-                        fontFamily: 'Georgia',
+                        fontFamily: 'Times New Roman',
                         fontSize: 16,
                         height: 1.5,
                       ),
@@ -77,56 +129,6 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                   ),
                 ]),
               ),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Título'),
-                    controller: _titleController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor ingresa un título';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Contenido'),
-                    controller: _contentController,
-                    maxLines: 5,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor ingresa el contenido';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  DropdownButtonFormField<Topic>(
-                    decoration: InputDecoration(labelText: 'Tema'),
-                    items: Topic.values.map((Topic topic) {
-                      return DropdownMenuItem<Topic>(
-                        value: topic,
-                        child: Text(topic.name),
-                      );
-                    }).toList(),
-                    onChanged: (Topic? newValue) {
-                      setState(() {
-                        _topic = newValue!;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => _createPost(article: article),
-                    child: Text('Publicar'),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
