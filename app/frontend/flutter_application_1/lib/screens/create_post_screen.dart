@@ -50,7 +50,14 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nueva Publicación'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, size: 28),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text('Nueva Publicación',
+        style: TextStyle(
+          fontSize: 25,
+        )),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -108,7 +115,18 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                 ),
               ),
             ),
-            if (article != null)
+            if (article != null) ...[
+              SizedBox(
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      'Artículo',
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    ),
+                  )),
               articleCard(
                 child: Column(children: [
                   ArticlePreview(
@@ -129,6 +147,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                   ),
                 ]),
               ),
+            ]
           ],
         ),
       ),

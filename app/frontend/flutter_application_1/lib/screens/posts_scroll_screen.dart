@@ -77,7 +77,6 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
       appBar: AppBar(
         toolbarHeight: 100,
         title: SizedBox(
-          height: 100,
           width: double.infinity,
           child: Stack(
             alignment: Alignment.center,

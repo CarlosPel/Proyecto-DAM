@@ -51,8 +51,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => NewsScrollScreen());
 
       case createPostScreen:
-        final args = settings.arguments as Map<String, dynamic>;
-        final Article? article = args['article'];
+        final args = settings.arguments as Map<String, dynamic>?;
+        final Article? article = args?['article'];
 
         return MaterialPageRoute(
             builder: (_) => CreatePostScreen(article: article));

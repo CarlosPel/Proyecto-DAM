@@ -60,6 +60,7 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         title: SizedBox(
           height: 100,
           width: double.infinity,
@@ -68,7 +69,7 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
             'NOTICIAS',
             style: const TextStyle(
               fontFamily: 'Times New Roman', // Usa tu fuente personalizada
-              fontSize: 40,
+              fontSize: 35,
               fontWeight: FontWeight.w700,
               letterSpacing: 3,
             ),
