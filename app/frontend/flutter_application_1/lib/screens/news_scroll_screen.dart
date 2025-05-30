@@ -81,7 +81,8 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
           child: newsState.news.isNotEmpty
               ? RefreshIndicator(
                   onRefresh: _refreshNews,
-                  child: ScrollContainer(
+                  child: Container(
+                    color: const Color.fromARGB(255, 204, 11, 11),
                     child: ListView.builder(
                       itemCount: newsState.news.length,
                       itemBuilder: (context, index) {
