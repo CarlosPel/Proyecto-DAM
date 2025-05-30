@@ -29,8 +29,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-fonts:
-  - family: NYTCheltenham
-    fonts:
-      - asset: assets/fonts/nyt-cheltenham-bold.ttf
+  
+  fonts:
+    - family: NYTCheltenham
+      fonts:
+        - asset: fonts/nyt-cheltenham-bold.ttf

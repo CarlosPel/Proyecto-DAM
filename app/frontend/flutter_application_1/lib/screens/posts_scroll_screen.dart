@@ -12,7 +12,7 @@ import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:provider/provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class PostsScrollScreen extends StatefulWidget {
   const PostsScrollScreen({super.key});
@@ -85,7 +85,8 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
               Center(
                   child: Text(
                 AppData.appName,
-                style: GoogleFonts.playfairDisplay(
+                style: const TextStyle(
+                  fontFamily: 'NYTCheltenham', // Usa tu fuente personalizada
                   fontSize: 36,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.5,
