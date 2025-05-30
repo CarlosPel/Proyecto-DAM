@@ -175,7 +175,7 @@ const userPosts = async (req, res) => {
   const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;`;
   try {
     const resultado = await pool.query(query, [id_user]);
-    console.log(resultado.rows[0].idPost)
+    //console.log(resultado.rows[0].idPost)
     res.status(200).json({
       message: 'Posts extraídos correctamente',
       data: resultado.rows,
