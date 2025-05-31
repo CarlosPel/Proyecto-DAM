@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Conexión a PostgreSQL y ejecución del archivo SQL
-cd ./deploys
+cd ./app/deploys
 FICHERO="bbdd_url.txt"
 
 if [[ -f "$FICHERO" ]]; then
@@ -13,7 +13,7 @@ else
 fi
 
 echo "Ejecutando script SQL en PostgreSQL..."
-psql $BBDDURL -f ./bbddcopy.sql
+psql $BBDDURL -f ./bbdd.sql
 if [ $? -ne 0 ]; then
     echo "Error al ejecutar el script SQL. Verifica la conexión y el archivo."
     exit 1
@@ -52,7 +52,7 @@ fi
 
 # Ejecutar el segundo script SQL (inserts.sql)
 echo "Ejecutando script inserts.sql en PostgreSQL..."
-psql $BBDDURL -f ./insertscopy.sql
+psql $BBDDURL -f ./inserts.sql
 if [ $? -ne 0 ]; then
     echo "Error al ejecutar inserts.sql. Verifica la conexión y el archivo."
     exit 1
