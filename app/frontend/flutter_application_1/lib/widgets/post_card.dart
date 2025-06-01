@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

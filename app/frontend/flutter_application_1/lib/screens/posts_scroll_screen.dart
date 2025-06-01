@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/classes/posts_notifier.dart';
-import 'package:flutter_application_1/classes/posts_state.dart';
+import 'package:flutter_application_1/models/post.dart';
+import 'package:flutter_application_1/models/posts_notifier.dart';
+import 'package:flutter_application_1/models/posts_state.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
-import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/screens/news_scroll_screen.dart';
-import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:provider/provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
-// import 'package:google_fonts/google_fonts.dart';
 
 class PostsScrollScreen extends StatefulWidget {
   const PostsScrollScreen({super.key});
@@ -23,14 +22,13 @@ class PostsScrollScreen extends StatefulWidget {
 
 class PostsScrollScreenState extends State<PostsScrollScreen> {
   late Future<List<dynamic>> _postsFuture;
-  // int _expandedIndex = -1;
   bool isOpen = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Escucha los cambios en PostsNotifier
+    // Escucha los cambios en PostsNotifier para recargar publicaciones si es necesario
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final postsNotifier = Provider.of<PostsNotifier>(context, listen: false);
       if (postsNotifier.shouldRefresh) {
@@ -39,16 +37,11 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
       }
     });
 
-    // Siempre inicializa _postsFuture para evitar LateInitializationError
+    // Inicializa el Future para evitar errores de inicialización tardía
     _postsFuture = _loadPosts();
   }
 
-  // void _toggleExpanded(int index) {
-  //   setState(() {
-  //     _expandedIndex = (_expandedIndex == index) ? -1 : index;
-  //   });
-  // }
-
+  // Carga publicaciones desde la API según el país del usuario
   Future<List<dynamic>> _loadPosts() async {
     final userData = await getUserData();
     final countryCode = userData['countryCode'];
@@ -57,10 +50,10 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     return posts;
   }
 
+  // Refresca las publicaciones y muestra mensaje en caso de error
   Future<void> _refreshPosts() async {
     try {
       final newPosts = await _loadPosts();
-
       setState(() {
         postsState.posts = newPosts;
       });
@@ -69,6 +62,29 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
         SnackBar(content: Text('Bienvenido de nuevo')),
       );
     }
+  }
+
+  Widget _buildPostsList(List<dynamic> posts) {
+    return ListView.builder(
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        final post = posts[index];
+        return PostCard(
+          post: Post(
+            id: post['id_post'],
+            title: post['title'],
+            content: post['content'],
+            datetime: post['post_date'],
+            user: post['user_name'],
+          ),
+          onTap: () => Navigator.pushNamed(
+            context,
+            AppRoutes.postScreen,
+            arguments: {'post': post},
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -81,24 +97,27 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
           child: Stack(
             alignment: Alignment.center,
             children: [
+              // Título centrado
               Center(
-                  child: Text(
-                AppData.appName,
-                style: const TextStyle(
-                  fontFamily: 'Chomsky', // Usa tu fuente personalizada
-                  fontSize: 50,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 3,
+                child: Text(
+                  AppData.appName,
+                  style: const TextStyle(
+                    fontFamily: 'Chomsky',
+                    fontSize: 50,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 3,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              )),
+              ),
+              // Botón de perfil en la esquina superior derecha
               Positioned(
                 right: 0,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.profileScreen);
                   },
-                  child: Icon(Icons.person, size: 30), // Icono del botón
+                  child: Icon(Icons.person, size: 30),
                 ),
               ),
             ],
@@ -108,127 +127,88 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(0),
-        child: Stack(children: [
-          NewspaperWrapper(
-            onFoldTap: () {
-              Navigator.of(context).push(
-                  // Use TurnPageRoute instead of MaterialPageRoute.
+        child: Stack(
+          children: [
+            // Envoltura con apariencia de periódico
+            NewspaperWrapper(
+              onFoldTap: () {
+                // Transición estilo "voltear página"
+                Navigator.of(context).push(
                   TurnPageRoute(
-                overleafColor: Colors.grey,
-                animationTransitionPoint: 0.5,
-                transitionDuration:
-                    const Duration(milliseconds: AppData.pageTurnTime),
-                reverseTransitionDuration:
-                    const Duration(milliseconds: AppData.pageTurnTime),
-                builder: (context) => const NewsScrollScreen(),
-              ));
-              // Navigator.pushNamed(
-              //   context,
-              //   AppRoutes.newsScrollScreen,
-              // );
-            },
-            child: postsState.posts.isNotEmpty
-                ? RefreshIndicator(
-                    onRefresh: _refreshPosts,
-                    child: ScrollContainer(
-                      child: ListView.builder(
-                        itemCount: postsState.posts.length,
-                        itemBuilder: (c, i) {
-                          final post = postsState.posts[i];
-                          return PostCard(
-                            post: Post(
-                              id: post['id_post'],
-                              title: post['title'],
-                              content: post['content'],
-                              datetime: post['post_date'],
-                              user: post['user_name'],
-                            ),
-                            //isExpanded: false,
-                            onTap: () => Navigator.pushNamed(
-                              context,
-                              AppRoutes.postScreen,
-                              arguments: {'post': post},
+                    overleafColor: Colors.grey,
+                    animationTransitionPoint: 0.5,
+                    transitionDuration:
+                        const Duration(milliseconds: AppData.pageTurnTime),
+                    reverseTransitionDuration:
+                        const Duration(milliseconds: AppData.pageTurnTime),
+                    builder: (context) => const NewsScrollScreen(),
+                  ),
+                );
+              },
+              child: postsState.posts.isNotEmpty
+                  ? RefreshIndicator(
+                      onRefresh: _refreshPosts,
+                      child: ScrollContainer(
+                        child: _buildPostsList(postsState.posts),
+                      ),
+                    )
+                  : FutureBuilder<List<dynamic>>(
+                      future: _postsFuture,
+                      builder: (c, snap) {
+                        if (snap.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snap.hasError) {
+                          return Center(child: Text('Error: ${snap.error}'));
+                        } else if (snap.hasData) {
+                          postsState.posts = snap.data!;
+                          return RefreshIndicator(
+                            onRefresh: _refreshPosts,
+                            child: ScrollContainer(
+                              child: postsState.posts.isEmpty
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                              'No hay publicaciones disponibles',
+                                              textAlign: TextAlign.center),
+                                          const SizedBox(height: 24),
+                                          ElevatedButton(
+                                            onPressed: _refreshPosts,
+                                            child: const Icon(Icons.refresh),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : _buildPostsList(postsState.posts),
                             ),
                           );
-                        },
-                      ),
+                        } else {
+                          return const Center(
+                              child:
+                                  Text('No hay publicaciones disponibles...'));
+                        }
+                      },
                     ),
-                  )
-                : FutureBuilder<List<dynamic>>(
-                    future: _postsFuture,
-                    builder: (c, snap) {
-                      if (snap.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snap.hasError) {
-                        return Center(child: Text('Error: ${snap.error}'));
-                      } else if (snap.hasData) {
-                        postsState.posts = snap.data!;
-
-                        return RefreshIndicator(
-                          onRefresh: _refreshPosts,
-                          child: ScrollContainer(
-                            child: postsState.posts.isEmpty
-                                ? SizedBox(
-                                    width: double.infinity,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          'No hay publicaciones disponibles',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(height: 24),
-                                        ElevatedButton(
-                                          onPressed: _refreshPosts,
-                                          child: const Icon(Icons.refresh),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    itemCount: postsState.posts.length,
-                                    itemBuilder: (c, i) {
-                                      final post = postsState.posts[i];
-                                      return PostCard(
-                                        post: Post(
-                                          id: post['id_post'],
-                                          title: post['title'],
-                                          content: post['content'],
-                                          datetime: post['post_date'],
-                                          user: post['user_name'],
-                                        ),
-                                        //isExpanded: false,
-                                        onTap: () => Navigator.pushNamed(
-                                          context,
-                                          AppRoutes.postScreen,
-                                          arguments: {'post': post},
-                                        ),
-                                      );
-                                    },
-                                  ),
-                          ),
-                        );
-                      } else {
-                        return const Center(
-                            child: Text('No hay publicaciones disponibles...'));
-                      }
-                    },
-                  ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 24.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.createPostScreen);
-                },
-                child: Icon(Icons.add, size: 30), // Icono del botón
+            ),
+            // Botón flotante para crear nueva publicación
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 24.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.createPostScreen);
+                  },
+                  child: Icon(Icons.add, size: 30),
+                ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }

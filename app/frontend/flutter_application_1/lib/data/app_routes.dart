@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/screens/create_post_screen.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/screens/loading_screen.dart';

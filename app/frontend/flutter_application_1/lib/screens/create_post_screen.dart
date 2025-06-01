@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/enums/topic.dart';
-import 'package:flutter_application_1/utilities/post_service.dart';
+import 'package:flutter_application_1/services/post_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/article_preview.dart';
 

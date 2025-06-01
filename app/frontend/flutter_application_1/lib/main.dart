@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
-import 'package:flutter_application_1/classes/posts_notifier.dart';
+import 'package:flutter_application_1/models/posts_notifier.dart';
 import 'package:flutter_application_1/data/app_theme.dart';
-import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/load_routes.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
+import 'package:flutter_application_1/services/load_routes.dart';
 import 'package:provider/provider.dart';
 
 // Método de ejecución de la aplicación

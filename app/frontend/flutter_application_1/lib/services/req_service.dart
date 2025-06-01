@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/auth_service.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 const String politicsCode =

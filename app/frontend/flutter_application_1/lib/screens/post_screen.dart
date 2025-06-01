@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/utilities/post_service.dart';
-import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/post.dart';
+import 'package:flutter_application_1/services/post_service.dart';
+import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 

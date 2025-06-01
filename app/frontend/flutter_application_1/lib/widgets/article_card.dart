@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
+import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/widgets/article_preview.dart';

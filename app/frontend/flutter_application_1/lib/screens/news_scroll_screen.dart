@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/news_state.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/news_state.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
-import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
@@ -25,9 +25,8 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
   @override
   void initState() {
     super.initState();
-    if (newsState.news.isEmpty) {
-      _newsFuture = _initAndLoadNews();
-    }
+
+    _newsFuture = _initAndLoadNews();
   }
 
   Future<List<dynamic>> _initAndLoadNews() async {

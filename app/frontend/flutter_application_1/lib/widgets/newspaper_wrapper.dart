@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/utilities/fold_painter.dart';
+import 'package:flutter_application_1/widgets/fold_painter.dart';
 
 class NewspaperWrapper extends StatelessWidget {
   final Widget child;
