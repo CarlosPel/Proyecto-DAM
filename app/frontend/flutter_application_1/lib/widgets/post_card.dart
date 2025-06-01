@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
-import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostCard extends StatelessWidget {
   final Post post;
+  final bool isPreview;
   // final bool isExpanded; // lo mantenemos por compatibilidad
   final VoidCallback onTap;
 
   const PostCard({
     super.key,
     required this.post,
+    this.isPreview = true,
     required this.onTap,
     //required this.isExpanded,
   });
@@ -23,14 +24,7 @@ class PostCard extends StatelessWidget {
         : 'Fecha desconocida';
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        AppRoutes.postScreen,
-        arguments: {
-          'post': post,
-          'article': post.article,
-        },
-      ),
+      onTap: onTap,
       child: Card(
         elevation: 2,
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -53,7 +47,7 @@ class PostCard extends StatelessWidget {
               const SizedBox(height: 8),
               // Extracto del contenido
               Text(
-                (post.content).length > 160
+                (post.content).length > 160 && isPreview
                     ? '${post.content.substring(0, 160)}...'
                     : post.content,
                 style: const TextStyle(

@@ -10,6 +10,7 @@ import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:http/http.dart' as http;
@@ -146,6 +147,7 @@ class ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: LeadingButton(),
         title: const Text('Mi Perfil'),
       ),
       body: !_isUserDataLoaded

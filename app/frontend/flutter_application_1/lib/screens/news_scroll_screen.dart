@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/news_state.dart';
-import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/services/req_service.dart';
@@ -78,20 +77,9 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
         automaticallyImplyLeading: false,
       ),
       body: NewspaperWrapper(
-        onFoldTap: () {
-          Navigator.of(context).push(
-              // Use TurnPageRoute instead of MaterialPageRoute.
-              TurnPageRoute(
-            overleafColor: Colors.grey,
-            animationTransitionPoint: 0.5,
-            transitionDuration:
-                const Duration(milliseconds: AppData.pageTurnTime),
-            reverseTransitionDuration:
-                const Duration(milliseconds: AppData.pageTurnTime),
-            direction: TurnDirection.leftToRight,
-            builder: (context) => const PostsScrollScreen(),
-          ));
-        },
+        screen: const PostsScrollScreen(),
+        previusScreen: context,
+        turnDirection: TurnDirection.leftToRight,
         child: newsState.news.isNotEmpty
             ? RefreshIndicator(
                 onRefresh: _refreshNews,
@@ -140,9 +128,9 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
                                       textAlign: TextAlign.center,
                                     ),
                                     const SizedBox(height: 24),
-                                    ElevatedButton(
+                                    IconButton(
                                       onPressed: _refreshNews,
-                                      child: const Icon(Icons.refresh),
+                                      icon: const Icon(Icons.refresh),
                                     ),
                                   ],
                                 ),

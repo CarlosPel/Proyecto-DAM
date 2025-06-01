@@ -60,10 +60,9 @@ class AppRoutes {
       case postScreen:
         final args = settings.arguments as Map<String, dynamic>;
         final Post post = args['post'];
-        final Article? article = args['article'];
 
         return MaterialPageRoute(
-            builder: (_) => PostScreen(post: post, article: article));
+            builder: (_) => PostScreen(post: post));
 
       case loadingScreen:
         final args = settings.arguments as Map<String, dynamic>;

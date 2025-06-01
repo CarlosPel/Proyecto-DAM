@@ -11,7 +11,6 @@ import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:provider/provider.dart';
-import 'package:turn_page_transition/turn_page_transition.dart';
 
 class PostsScrollScreen extends StatefulWidget {
   const PostsScrollScreen({super.key});
@@ -64,29 +63,6 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     }
   }
 
-  Widget _buildPostsList(List<dynamic> posts) {
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        return PostCard(
-          post: Post(
-            id: post['id_post'],
-            title: post['title'],
-            content: post['content'],
-            datetime: post['post_date'],
-            user: post['user_name'],
-          ),
-          onTap: () => Navigator.pushNamed(
-            context,
-            AppRoutes.postScreen,
-            arguments: {'post': post},
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +77,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
               Center(
                 child: Text(
                   AppData.appName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Chomsky',
                     fontSize: 50,
                     fontWeight: FontWeight.w700,
@@ -113,11 +89,11 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
               // Botón de perfil en la esquina superior derecha
               Positioned(
                 right: 0,
-                child: ElevatedButton(
+                child: IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.profileScreen);
                   },
-                  child: Icon(Icons.person, size: 30),
+                  icon: Icon(Icons.person, size: 30),
                 ),
               ),
             ],
@@ -131,20 +107,8 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
           children: [
             // Envoltura con apariencia de periódico
             NewspaperWrapper(
-              onFoldTap: () {
-                // Transición estilo "voltear página"
-                Navigator.of(context).push(
-                  TurnPageRoute(
-                    overleafColor: Colors.grey,
-                    animationTransitionPoint: 0.5,
-                    transitionDuration:
-                        const Duration(milliseconds: AppData.pageTurnTime),
-                    reverseTransitionDuration:
-                        const Duration(milliseconds: AppData.pageTurnTime),
-                    builder: (context) => const NewsScrollScreen(),
-                  ),
-                );
-              },
+              screen: const NewsScrollScreen(),
+              previusScreen: context,
               child: postsState.posts.isNotEmpty
                   ? RefreshIndicator(
                       onRefresh: _refreshPosts,
@@ -176,9 +140,9 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                                               'No hay publicaciones disponibles',
                                               textAlign: TextAlign.center),
                                           const SizedBox(height: 24),
-                                          ElevatedButton(
+                                          IconButton(
                                             onPressed: _refreshPosts,
-                                            child: const Icon(Icons.refresh),
+                                            icon: const Icon(Icons.refresh),
                                           ),
                                         ],
                                       ),
@@ -199,17 +163,42 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 24.0),
-                child: ElevatedButton(
+                child: IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.createPostScreen);
                   },
-                  child: Icon(Icons.add, size: 30),
+                  icon: Icon(Icons.add, size: 40),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPostsList(List<dynamic> posts) {
+    return ListView.builder(
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        final postData = posts[index];
+        final post = Post(
+          id: postData['id_post'],
+          title: postData['title'],
+          content: postData['content'],
+          datetime: postData['post_date'],
+          user: postData['user_name'],
+          article: postData[''],
+        );
+        return PostCard(
+          post: post,
+          onTap: () => Navigator.pushNamed(
+            context,
+            AppRoutes.postScreen,
+            arguments: {'post': post},
+          ),
+        );
+      },
     );
   }
 }

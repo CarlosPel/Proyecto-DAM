@@ -4,7 +4,7 @@ class AppTheme {
   static Color newsPaperBackgroundColor = Color.fromARGB(130, 230, 219, 116);
   static Color postBackgroundColor = Color.fromARGB(255, 255, 255, 255);
   static Color articleBackgroundColor = Color.fromARGB(130, 230, 219, 116);
-  static Color primary =  const Color(0xff6f5335);
+  static Color primary = Color(0xff6f5335);
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -36,6 +36,17 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           iconColor: Colors.white,
         ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(primary), 
+          foregroundColor: WidgetStateProperty.all(Colors.white)
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.blue,
+        )
       ),
     );
   }

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/services/post_service.dart';
 import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
+import 'package:flutter_application_1/widgets/fixed_article.dart';
+import 'package:flutter_application_1/widgets/leading_button.dart';
+import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 
 class PostScreen extends StatefulWidget {
   final Post post;
-  final Article? article;
 
-  const PostScreen({super.key, required this.post, this.article});
+  const PostScreen({super.key, required this.post});
 
   @override
   State<PostScreen> createState() => PostScreenState();
@@ -100,65 +101,67 @@ class PostScreenState extends State<PostScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(post.title!),
+        leading: LeadingButton(),
+        title: Text(post.user!),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(post.content),
-          ),
+          if(post.article != null) FixedArticle(post.article!),
+          PostCard(post: post, onTap: () {}, isPreview: false,),
           Expanded(
             child: RefreshIndicator(
               onRefresh: _refreshComments,
               child: _comments == null
                   ? const Center(child: CircularProgressIndicator())
                   : ScrollContainer(
-                      child: _comments!.isEmpty
-                          ? SizedBox(
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'No hay comentarios disponibles',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 24),
-                                  ElevatedButton(
-                                    onPressed: _refreshComments,
-                                    child: const Icon(Icons.refresh),
-                                  ),
-                                ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _comments!.isEmpty
+                            ? SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'No hay comentarios disponibles',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 24),
+                                    IconButton(
+                                      onPressed: _refreshComments,
+                                      icon: const Icon(Icons.refresh),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: _comments!.length,
+                                itemBuilder: (context, index) {
+                                  final comment = _comments![index];
+                                  final key = _commentKeys[comment['id_post']] ??
+                                      GlobalKey<CommentCardState>();
+                                  _commentKeys[comment['id_post']] = key;
+                                  return CommentCard(
+                                    key: key,
+                                    comment: Post(
+                                      id: comment['id_post'],
+                                      content: comment['content'],
+                                      user: comment['user_name'],
+                                      parentPostId: comment['parent_post'],
+                                    ),
+                                    onPressedIcon: (Post selectedComment) {
+                                      setState(() {
+                                        _referencedComment = {
+                                          'id_post': selectedComment.id,
+                                          'content': selectedComment.content,
+                                          'user_name': selectedComment.user,
+                                        };
+                                      });
+                                    },
+                                  );
+                                },
                               ),
-                            )
-                          : ListView.builder(
-                              itemCount: _comments!.length,
-                              itemBuilder: (context, index) {
-                                final comment = _comments![index];
-                                final key = _commentKeys[comment['id_post']] ??
-                                    GlobalKey<CommentCardState>();
-                                _commentKeys[comment['id_post']] = key;
-                                return CommentCard(
-                                  key: key,
-                                  comment: Post(
-                                    id: comment['id_post'],
-                                    content: comment['content'],
-                                    user: comment['user_name'],
-                                    parentPostId: comment['parent_post'],
-                                  ),
-                                  onPressedIcon: (Post selectedComment) {
-                                    setState(() {
-                                      _referencedComment = {
-                                        'id_post': selectedComment.id,
-                                        'content': selectedComment.content,
-                                        'user_name': selectedComment.user,
-                                      };
-                                    });
-                                  },
-                                );
-                              },
-                            ),
+                      ),
                     ),
             ),
           ),
