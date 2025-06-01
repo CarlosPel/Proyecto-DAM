@@ -40,3 +40,5 @@ flutter:
     - family: NYTCheltenhamBold
       fonts:
         - asset: assets/fonts/nyt-cheltenham-bold.ttf
+  assets:
+    - assets/images/

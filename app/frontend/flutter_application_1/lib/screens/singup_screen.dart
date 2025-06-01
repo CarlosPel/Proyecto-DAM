@@ -45,7 +45,7 @@ class SingUpScreenState extends State<SingUpScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.person,
-                        size: 72, color: theme.colorScheme.primary),
+                        size: 100, color: theme.colorScheme.primary),
                     const SizedBox(height: 12),
                     Text(
                       'Únete a ${AppData.appName}',

@@ -47,8 +47,10 @@ class LoginScreenState extends State<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Icono estilo templo griego
-                    Icon(Icons.account_balance,
-                        size: 72, color: Colors.indigo.shade700),
+                    Image.asset(
+                      'assets/images/logo_pnyx_no_back_color.png',
+                      height: 100,
+                    ),
                     // Espaciador
                     const SizedBox(height: 12),
                     // Frase de bienvenida en contenedor de texto fijo
@@ -89,7 +91,7 @@ class LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16),
                     // Campo de texto para la contraseña
                     TextFormField(
-                      // Variable en la que se almacena el contenido del campo 
+                      // Variable en la que se almacena el contenido del campo
                       // cada vez que se modifica
                       controller: _passwordController,
                       // Oculta el texto para contraseñas

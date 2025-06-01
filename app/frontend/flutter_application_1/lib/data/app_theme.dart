@@ -4,6 +4,7 @@ class AppTheme {
   static Color newsPaperBackgroundColor = Color.fromARGB(130, 230, 219, 116);
   static Color postBackgroundColor = Color.fromARGB(255, 255, 255, 255);
   static Color articleBackgroundColor = Color.fromARGB(130, 230, 219, 116);
+  static Color primary =  const Color(0xff6f5335);
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -11,7 +12,7 @@ class AppTheme {
       scaffoldBackgroundColor: const Color(0xffd1d1c6), // fondo tipo piedra
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.indigo.shade700,
-        primary: Colors.indigo.shade700,
+        primary: primary,
         secondary: Colors.indigo.shade200,
         surface: const Color(0xFFF7F5EF),
       ),
@@ -27,7 +28,7 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.indigo.shade700,
+          backgroundColor: primary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
