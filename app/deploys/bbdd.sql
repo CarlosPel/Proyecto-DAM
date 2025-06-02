@@ -66,7 +66,8 @@ CREATE TABLE noticia (
     source_name VARCHAR(100),
     title VARCHAR(200),
     content TEXT,
-    link TEXT 
+    link TEXT,
+    fecha date 
 );
 
 DROP TABLE IF EXISTS post CASCADE;
