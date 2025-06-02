@@ -3,6 +3,7 @@ import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/services/create_post_service.dart';
 import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
+import 'package:flutter_application_1/widgets/article_container.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
 import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
@@ -108,14 +109,16 @@ class PostScreenState extends State<PostScreen> {
       body: Column(
         children: [
           if (post.article != null)
-            ArticleCard(
-              article: post.article!,
-              isExpanded: _expandedIndex,
-              onTap: () {
-                setState(() {
-                  _expandedIndex = !_expandedIndex;
-                });
-              },
+            ArticleContainer(
+              ArticleCard(
+                article: post.article!,
+                isExpanded: _expandedIndex,
+                onTap: () {
+                  setState(() {
+                    _expandedIndex = !_expandedIndex;
+                  });
+                },
+              ),
             ),
           PostCard(
             post: post,
