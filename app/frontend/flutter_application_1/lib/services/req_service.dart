@@ -84,7 +84,7 @@ List<dynamic> _fetchFakeNews() {
           //Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       'link': 'https://matchlyric.com/kanye-west-hh-traduccion-al-espanol',
       'photo_url':
-          'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/5760/production/_109286322_gettyimages-120445555.jpg.webp',
+          'https://mbblancabelzunce.com/wp-content/uploads/2024/05/360_F_419176802_9s4AoYMfzxDt3kaSYV55whCkTB76NsHN.jpg',
       'published_datetime_utc': DateTime.now().toUtc().toString(),
       'source_name': 'Fuente de ejemplo $i',
     });
