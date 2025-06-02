@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/models/post.dart';
+import 'package:flutter_application_1/services/req_service.dart';
 
 class CommentCard extends StatefulWidget {
   final Post comment;

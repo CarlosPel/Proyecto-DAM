@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
+import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/widgets/article_preview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,7 +41,7 @@ class ArticleCard extends StatelessWidget {
                       Text(
                         article.snippet!,
                         style: const TextStyle(
-                          fontFamily: 'Georgia',
+                          fontFamily: 'Times New Roman',
                           fontSize: 16,
                           height: 1.5,
                         ),
@@ -119,6 +120,7 @@ class ArticleCard extends StatelessWidget {
 
 Widget articleCard({required Column child}) {
   return Card(
+    color: AppTheme.articleBackgroundColor,
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

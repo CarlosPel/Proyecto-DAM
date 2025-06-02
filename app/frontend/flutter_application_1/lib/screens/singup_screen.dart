@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter_application_1/utilities/load_routes.dart';
+import 'package:flutter_application_1/services/load_routes.dart';
 
 // Pantalla de registro de cuenta
 class SingUpScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class SingUpScreenState extends State<SingUpScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.person,
-                        size: 72, color: theme.colorScheme.primary),
+                        size: 100, color: theme.colorScheme.primary),
                     const SizedBox(height: 12),
                     Text(
                       'Únete a ${AppData.appName}',

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/news_state.dart';
-import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/user_data.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/news_state.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
-import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
@@ -25,9 +24,8 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
   @override
   void initState() {
     super.initState();
-    if (newsState.news.isEmpty) {
-      _newsFuture = _initAndLoadNews();
-    }
+
+    _newsFuture = _initAndLoadNews();
   }
 
   Future<List<dynamic>> _initAndLoadNews() async {
@@ -60,108 +58,110 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Noticias'),
+        toolbarHeight: 100,
+        title: SizedBox(
+          height: 100,
+          width: double.infinity,
+          child: Center(
+              child: Text(
+            'NOTICIAS',
+            style: const TextStyle(
+              fontFamily: 'Times New Roman', // Usa tu fuente personalizada
+              fontSize: 35,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 3,
+            ),
+            textAlign: TextAlign.center,
+          )),
+        ),
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: NewspaperWrapper(
-          onFoldTap: () {
-            Navigator.of(context).push(
-                // Use TurnPageRoute instead of MaterialPageRoute.
-                TurnPageRoute(
-              overleafColor: Colors.grey,
-              animationTransitionPoint: 0.5,
-              transitionDuration: const Duration(milliseconds: AppData.pageTurnTime),
-              reverseTransitionDuration: const Duration(milliseconds: AppData.pageTurnTime),
-              direction: TurnDirection.leftToRight,
-              builder: (context) => const PostsScrollScreen(),
-            ));
-          },
-          child: newsState.news.isNotEmpty
-              ? RefreshIndicator(
-                  onRefresh: _refreshNews,
-                  child: Container(
-                    color: const Color.fromARGB(255, 204, 11, 11),
-                    child: ListView.builder(
-                      itemCount: newsState.news.length,
-                      itemBuilder: (context, index) {
-                        final article = newsState.news[index];
-                        return ArticleCard(
-                          article: Article(
-                            title: article['title'],
-                            snippet: article['snippet'],
-                            link: article['link'],
-                            imgUrl: article['photo_url'],
-                            datetime: article['published_datetime_utc'],
-                            source: article['source_name'],
-                          ),
-                          isExpanded: _expandedIndex == index,
-                          onTap: () => _toggleExpanded(index),
-                        );
-                      },
-                    ),
-                  ),
-                )
-              : FutureBuilder<List<dynamic>>(
-                  future: _newsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
-                      newsState.news = snapshot.data!;
-                      
-                      return RefreshIndicator(
-                        onRefresh: _refreshNews,
-                        child: ScrollContainer(
-                          child: newsState.news.isEmpty
-                                ? SizedBox(
-                                    width: double.infinity,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          'No hay noticias disponibles',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(height: 24),
-                                        ElevatedButton(
-                                          onPressed: _refreshNews,
-                                          child: const Icon(Icons.refresh),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : ListView.builder(
-                            itemCount: newsState.news.length,
-                            itemBuilder: (context, index) {
-                              final article = newsState.news[index];
-                              return ArticleCard(
-                                article: Article(
-                                  title: article['title'],
-                                  snippet: article['snippet'],
-                                  link: article['link'],
-                                  imgUrl: article['photo_url'],
-                                  datetime: article['published_datetime_utc'],
-                                  source: article['source_name'],
-                                ),
-                                isExpanded: _expandedIndex == index,
-                                onTap: () => _toggleExpanded(index),
-                              );
-                            },
-                          ),
+      body: NewspaperWrapper(
+        screen: const PostsScrollScreen(),
+        previusScreen: context,
+        turnDirection: TurnDirection.leftToRight,
+        child: newsState.news.isNotEmpty
+            ? RefreshIndicator(
+                onRefresh: _refreshNews,
+                child: ScrollContainer(
+                  child: ListView.builder(
+                    itemCount: newsState.news.length,
+                    itemBuilder: (context, index) {
+                      final article = newsState.news[index];
+                      return ArticleCard(
+                        article: Article(
+                          title: article['title'],
+                          snippet: article['snippet'],
+                          link: article['link'],
+                          imgUrl: article['photo_url'],
+                          datetime: article['published_datetime_utc'],
+                          source: article['source_name'],
                         ),
+                        isExpanded: _expandedIndex == index,
+                        onTap: () => _toggleExpanded(index),
                       );
-                    } else {
-                      return const Center(
-                          child: Text('No hay noticias disponibles'));
-                    }
-                  },
+                    },
+                  ),
                 ),
-        ),
+              )
+            : FutureBuilder<List<dynamic>>(
+                future: _newsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    newsState.news = snapshot.data!;
+
+                    return RefreshIndicator(
+                      onRefresh: _refreshNews,
+                      child: ScrollContainer(
+                        child: newsState.news.isEmpty
+                            ? SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'No hay noticias disponibles',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 24),
+                                    IconButton(
+                                      onPressed: _refreshNews,
+                                      icon: const Icon(Icons.refresh),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: newsState.news.length,
+                                itemBuilder: (context, index) {
+                                  final article = newsState.news[index];
+                                  return ArticleCard(
+                                    article: Article(
+                                      title: article['title'],
+                                      snippet: article['snippet'],
+                                      link: article['link'],
+                                      imgUrl: article['photo_url'],
+                                      datetime:
+                                          article['published_datetime_utc'],
+                                      source: article['source_name'],
+                                    ),
+                                    isExpanded: _expandedIndex == index,
+                                    onTap: () => _toggleExpanded(index),
+                                  );
+                                },
+                              ),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                        child: Text('No hay noticias disponibles'));
+                  }
+                },
+              ),
       ),
     );
   }

@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/post.dart';
-import 'package:flutter_application_1/classes/posts_notifier.dart';
-import 'package:flutter_application_1/classes/user_posts_state.dart';
+import 'package:flutter_application_1/models/post.dart';
+import 'package:flutter_application_1/models/posts_notifier.dart';
+import 'package:flutter_application_1/models/user_posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
-import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/auth_service.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/utilities/req_service.dart';
+import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:http/http.dart' as http;
@@ -146,6 +147,7 @@ class ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: LeadingButton(),
         title: const Text('Mi Perfil'),
       ),
       body: !_isUserDataLoaded

@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/enums/topic.dart';
-import 'package:flutter_application_1/utilities/post_service.dart';
-import 'package:flutter_application_1/widgets/article_card.dart';
-import 'package:flutter_application_1/widgets/article_preview.dart';
+import 'package:flutter_application_1/services/post_service.dart';
+import 'package:flutter_application_1/widgets/fixed_article.dart';
+import 'package:flutter_application_1/widgets/leading_button.dart';
 
 class CreatePostScreen extends StatefulWidget {
   final Article? article;
@@ -39,7 +39,8 @@ class CreatePostScreenState extends State<CreatePostScreen> {
         ),
       ).then((_) {
         // Navega a la pantalla de inicio después de crear el post
-        Navigator.pushNamed(context, AppRoutes.postsScrollScreen);
+        Navigator.pushNamedAndRemoveUntil(context, AppRoutes.postsScrollScreen,
+            (Route<dynamic> route) => false);
       });
     }
   }
@@ -50,84 +51,94 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nueva Publicación'),
+        leading: LeadingButton(),
+        title: Text('Nueva Publicación',
+            style: TextStyle(
+              fontSize: 25,
+            )),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            if (article != null)
-              articleCard(
-                child: Column(children: [
-                  ArticlePreview(
-                    title: article.title,
-                    source: article.source,
-                    datetime: article.datetime,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      article.snippet!,
-                      style: const TextStyle(
-                        fontFamily: 'Georgia',
-                        fontSize: 16,
-                        height: 1.5,
-                      ),
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Título'),
+                          controller: _titleController,
+                          maxLength: 100,
+                          minLines: 1,
+                          maxLines: 2,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingresa un título';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Contenido'),
+                          controller: _contentController,
+                          maxLength: 1000,
+                          minLines: 3,
+                          maxLines: 19,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingresa el contenido';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        DropdownButtonFormField<Topic>(
+                          decoration: InputDecoration(labelText: 'Tema'),
+                          items: Topic.values.map((Topic topic) {
+                            return DropdownMenuItem<Topic>(
+                              value: topic,
+                              child: Text(topic.name),
+                            );
+                          }).toList(),
+                          onChanged: (Topic? newValue) {
+                            setState(() {
+                              _topic = newValue!;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: IntrinsicWidth(
+                            child: ElevatedButton.icon(
+                              onPressed: () => _createPost(article: article),
+                              label: Text('Publicar'),
+                              icon: Icon(Icons.send),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ]),
-              ),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Título'),
-                    controller: _titleController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor ingresa un título';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Contenido'),
-                    controller: _contentController,
-                    maxLines: 5,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor ingresa el contenido';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  DropdownButtonFormField<Topic>(
-                    decoration: InputDecoration(labelText: 'Tema'),
-                    items: Topic.values.map((Topic topic) {
-                      return DropdownMenuItem<Topic>(
-                        value: topic,
-                        child: Text(topic.name),
-                      );
-                    }).toList(),
-                    onChanged: (Topic? newValue) {
-                      setState(() {
-                        _topic = newValue!;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => _createPost(article: article),
-                    child: Text('Publicar'),
-                  ),
-                ],
+                ),
               ),
             ),
-          ],
+            SizedBox(
+              height: 16,
+            ),
+            if (article != null)
+              FixedArticle(article),
+          ]),
         ),
       ),
     );

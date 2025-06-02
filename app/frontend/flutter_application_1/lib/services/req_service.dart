@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/auth_service.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
+import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 const String politicsCode =
@@ -80,7 +80,8 @@ List<dynamic> _fetchFakeNews() {
     fakenews.add({
       'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       'snippet':
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ',
+          //Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       'link': 'https://matchlyric.com/kanye-west-hh-traduccion-al-espanol',
       'photo_url':
           'https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/5760/production/_109286322_gettyimages-120445555.jpg.webp',

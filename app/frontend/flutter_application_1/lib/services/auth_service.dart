@@ -3,8 +3,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
-import 'package:flutter_application_1/data/user_data.dart';
-import 'package:flutter_application_1/utilities/load_routes.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
+import 'package:flutter_application_1/services/load_routes.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> agreeTerms(BuildContext context) async {
@@ -40,27 +40,39 @@ Future<void> agreeTerms(BuildContext context) async {
   }
 }
 
+// Inicia la sesión de un usuario
 Future<bool> loginUser({
+  // Contexto de la pantalla que llama a la función
+  // Necesario para mostrar mensajes de éxito o error
   required BuildContext context,
+  // Email de la cuenta
   required String email,
+  // Contraseña de la cuenta
   required String password,
 }) async {
+  // Ruta de la raiz del backend
   final String loginUrl = '${AppData.backendUrl}/users/login';
-
+  
   try {
+    // Solicitud http para enviar al backend
     final response = await http.post(
       Uri.parse(loginUrl),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
 
+    // Devuelve verdadero si el código devuelto por el backend es 
+    // de éxito o falso y un mensaje de error de lo contrario
     return handleResponse(
       context: context,
+      // Respuesta de la solicitud del http.post
       response: response,
+      // Acción que realiza ante respuesta de exito
       onSuccess: (responseData) async {
-        // Guardar datos del usuario
+        // Guardar datos del usuario que devuelve el backend en el 
+        // almacenamiento interno del dispositivo
         await saveUserData(responseData);
-        // Mensaje de éxito
+        // Mensaje de éxito, saliente desde el borde inferior
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text('Bienvenido, ${responseData['user']['username']}')),
@@ -68,10 +80,12 @@ Future<bool> loginUser({
       },
     );
   } catch (e) {
-    // Manejar errores de conexión
+    // En caso de error de conexión con el backend
+    // Mensaje de error
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error de conexión: $e')),
     );
+    // Devuelve falso
     return false;
   }
 }
@@ -146,7 +160,9 @@ bool handleResponse(
     // Si la respuesta es 403, se asume que el token no es válido o ha expirado
     logout(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Ha expirado la sesión, por favor inicie sesión de nuevo')),
+      SnackBar(
+          content:
+              Text('Ha expirado la sesión, por favor inicie sesión de nuevo')),
     );
     return false;
   } else {

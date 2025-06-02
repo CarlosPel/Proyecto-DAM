@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/news_state.dart';
-import 'package:flutter_application_1/classes/posts_state.dart';
-import 'package:flutter_application_1/classes/user_posts_state.dart';
+import 'package:flutter_application_1/models/news_state.dart';
+import 'package:flutter_application_1/models/posts_state.dart';
+import 'package:flutter_application_1/models/user_posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

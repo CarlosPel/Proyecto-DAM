@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/classes/article.dart';
-import 'package:flutter_application_1/classes/post.dart';
+import 'package:flutter_application_1/models/article.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/screens/create_post_screen.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/screens/loading_screen.dart';
@@ -51,8 +51,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => NewsScrollScreen());
 
       case createPostScreen:
-        final args = settings.arguments as Map<String, dynamic>;
-        final Article? article = args['article'];
+        final args = settings.arguments as Map<String, dynamic>?;
+        final Article? article = args?['article'];
 
         return MaterialPageRoute(
             builder: (_) => CreatePostScreen(article: article));
@@ -60,10 +60,9 @@ class AppRoutes {
       case postScreen:
         final args = settings.arguments as Map<String, dynamic>;
         final Post post = args['post'];
-        final Article? article = args['article'];
 
         return MaterialPageRoute(
-            builder: (_) => PostScreen(post: post, article: article));
+            builder: (_) => PostScreen(post: post));
 
       case loadingScreen:
         final args = settings.arguments as Map<String, dynamic>;
