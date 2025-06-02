@@ -150,221 +150,253 @@ class ProfileScreenState extends State<ProfileScreen> {
         leading: LeadingButton(),
         title: const Text('Mi Perfil'),
       ),
-      body: !_isUserDataLoaded
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _refreshProfile,
-              child: Stack(children: [
-                SingleChildScrollView(
-                  child: Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.92,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      margin: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.1),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 50,
-                                    child: Icon(Icons.person, size: 50),
-                                  ),
-                                  const SizedBox(height: 16.0),
-                                  // Nombre de usuario
-                                  !editing
-                                      ? Text(
-                                          _nameController.text,
-                                          style: theme.textTheme.headlineSmall,
-                                        )
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(Icons.person_outline,
-                                                size: 30),
-                                            const SizedBox(width: 16.0),
-                                            SizedBox(
-                                              width:
-                                                  fieldsWdth, // O el ancho que tú quieras
-                                              child: TextFormField(
-                                                controller: _nameController,
-                                                textAlign: TextAlign
-                                                    .center, // Centra el texto dentro del campo
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 4),
-                                                ),
-                                                validator: (value) {
-                                                  if (value == null ||
-                                                      value.isEmpty) {
-                                                    return 'El nombre no puede quedar vacío';
-                                                  }
-                                                  return null;
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                  const SizedBox(height: 16.0),
-                                  // Correo electrónico
-                                  !editing
-                                      ? Text(
-                                          _emailController.text,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall,
-                                        )
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.email, size: 30),
-                                            const SizedBox(width: 16.0),
-                                            SizedBox(
-                                              width: fieldsWdth,
-                                              child: TextFormField(
-                                                controller: _emailController,
-                                                textAlign: TextAlign.center,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 4),
-                                                ),
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                validator: (value) {
-                                                  if (value == null ||
-                                                      value.isEmpty) {
-                                                    return 'El correo no puede estar vacío';
-                                                  }
-                                                  return null;
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                  // Campos contraseñas
-                                  if (editing) ...[
-                                    const SizedBox(height: 16.0),
-                                    // Campo cambiar contraseña
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.lock_outline, size: 30),
-                                        const SizedBox(width: 16.0),
-                                        SizedBox(
-                                          width: fieldsWdth,
-                                          child: TextFormField(
-                                            controller: _passwordController,
-                                            obscureText: true,
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headlineSmall,
-                                            decoration: const InputDecoration(
-                                              isDense: true,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 4),
-                                            ),
-                                            validator: (value) {
-                                              if (value != null &&
-                                                  value.isNotEmpty &&
-                                                  value.length < 6) {
-                                                return 'La contraseña debe tener al menos 6 caracteres';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                        ),
-                                      ],
+      body: DefaultTabController(
+        length: 2,
+        child: !_isUserDataLoaded
+            ? const Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: _refreshProfile,
+                child: Stack(children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.92,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.height * 0.1),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    const CircleAvatar(
+                                      radius: 50,
+                                      child: Icon(Icons.person, size: 65),
                                     ),
                                     const SizedBox(height: 16.0),
-                                    // Campo repetir contraseña
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.lock_reset_outlined,
-                                            size: 30),
-                                        const SizedBox(width: 16.0),
-                                        SizedBox(
-                                          width: fieldsWdth,
-                                          child: TextFormField(
-                                            obscureText: true,
-                                            textAlign: TextAlign.center,
+                                    // Nombre de usuario
+                                    !editing
+                                        ? Text(
+                                            _nameController.text,
+                                            style:
+                                                theme.textTheme.headlineLarge,
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(Icons.person_outline,
+                                                  size: 30),
+                                              const SizedBox(width: 16.0),
+                                              SizedBox(
+                                                width:
+                                                    fieldsWdth, // O el ancho que tú quieras
+                                                child: TextFormField(
+                                                  controller: _nameController,
+                                                  textAlign: TextAlign
+                                                      .center, // Centra el texto dentro del campo
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineSmall,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4),
+                                                  ),
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      return 'El nombre no puede quedar vacío';
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    const SizedBox(height: 16.0),
+                                    // Correo electrónico
+                                    !editing
+                                        ? Text(
+                                            _emailController.text,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineSmall,
-                                            decoration: const InputDecoration(
-                                              isDense: true,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 4),
-                                            ),
-                                            validator: (value) {
-                                              if (value !=
-                                                  _passwordController.text) {
-                                                return 'Las contraseñas no coinciden';
-                                              }
-                                              return null;
-                                            },
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.email, size: 30),
+                                              const SizedBox(width: 16.0),
+                                              SizedBox(
+                                                width: fieldsWdth,
+                                                child: TextFormField(
+                                                  controller: _emailController,
+                                                  textAlign: TextAlign.center,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineSmall,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4),
+                                                  ),
+                                                  keyboardType: TextInputType
+                                                      .emailAddress,
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      return 'El correo no puede estar vacío';
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                    // Campos contraseñas
+                                    if (editing) ...[
+                                      const SizedBox(height: 16.0),
+                                      // Campo cambiar contraseña
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.lock_outline, size: 30),
+                                          const SizedBox(width: 16.0),
+                                          SizedBox(
+                                            width: fieldsWdth,
+                                            child: TextFormField(
+                                              controller: _passwordController,
+                                              obscureText: true,
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall,
+                                              decoration: const InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                              ),
+                                              validator: (value) {
+                                                if (value != null &&
+                                                    value.isNotEmpty &&
+                                                    value.length < 6) {
+                                                  return 'La contraseña debe tener al menos 6 caracteres';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16.0),
+                                      // Campo repetir contraseña
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.lock_reset_outlined,
+                                              size: 30),
+                                          const SizedBox(width: 16.0),
+                                          SizedBox(
+                                            width: fieldsWdth,
+                                            child: TextFormField(
+                                              obscureText: true,
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall,
+                                              decoration: const InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 4),
+                                              ),
+                                              validator: (value) {
+                                                if (value !=
+                                                    _passwordController.text) {
+                                                  return 'Las contraseñas no coinciden';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                    const SizedBox(height: 16.0),
+                                    CountryCodePicker(
+                                      enabled: editing,
+                                      onChanged: (code) {
+                                        _countryCodeController = code.code!;
+                                      },
+                                      initialSelection: _countryCodeController,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 6),
+                                      comparator: (a, b) =>
+                                          b.name!.compareTo(a.name!),
+                                      onInit: (code) {
+                                        code!.name = code.code == 'ES'
+                                            ? 'España'
+                                            : code.name;
+                                      },
+                                      showCountryOnly: true,
+                                      showOnlyCountryWhenClosed: true,
+                                      textStyle: theme.textTheme.headlineSmall,
                                     ),
                                   ],
-                                  const SizedBox(height: 16.0),
-                                  CountryCodePicker(
-                                    enabled: editing,
-                                    onChanged: (code) {
-                                      _countryCodeController = code.code!;
-                                    },
-                                    initialSelection: _countryCodeController,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 6),
-                                    comparator: (a, b) =>
-                                        b.name!.compareTo(a.name!),
-                                    onInit: (code) {
-                                      code!.name = code.code == 'ES'
-                                          ? 'España'
-                                          : code.name;
-                                    },
-                                    showCountryOnly: true,
-                                    showOnlyCountryWhenClosed: true,
-                                    textStyle: theme.textTheme.headlineSmall,
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                            Expanded(child: _buildPostList()),
-                          ],
+                              const TabBar(tabs: [
+                                Tab(
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                      Icon(Icons.article),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text('Publicaciones'),
+                                    ])),
+                                Tab(
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                      Icon(Icons.comment),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text('Comentarios'),
+                                    ])),
+                              ]),
+                              Expanded(
+                                  child: TabBarView(children: [
+                                _buildPostList(),
+                                _buildCommentList(),
+                              ])),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                _buildButtonsRow(),
-              ]),
-            ),
+                  _buildButtonsRow(),
+                ]),
+              ),
+      ),
     );
   }
 
@@ -404,6 +436,20 @@ class ProfileScreenState extends State<ProfileScreen> {
               child: const Text('Cerrar Sesión'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCommentList() {
+    // Reemplaza con tu lógica real de comentarios si tienes datos
+    return ScrollContainer(
+      child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) => ListTile(
+          leading: const Icon(Icons.comment),
+          title: Text('Comentario ${index + 1}'),
+          subtitle: const Text('Este es un comentario de ejemplo.'),
         ),
       ),
     );
