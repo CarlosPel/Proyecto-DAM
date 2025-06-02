@@ -138,36 +138,36 @@ class LoginScreenState extends State<LoginScreen> {
                       child: Text('¿No tienes cuenta? Regístrate aquí'),
                     ),
                     // Dropdown para acceso rápido de usuarios de prueba
-                    // DropdownButton<String>(
-                    //   value: [
-                    //     'paco@prueba.com',
-                    //     'lenin@prueba.com',
-                    //     'hamilton@prueba.com'
-                    //   ].contains(_emailController.text)
-                    //       ? _emailController.text
-                    //       : null,
-                    //   hint: Text('Usuarios de prueba'),
-                    //   items: [
-                    //     DropdownMenuItem(
-                    //       value: 'paco@prueba.com',
-                    //       child: Text('Paco'),
-                    //     ),
-                    //     DropdownMenuItem(
-                    //       value: 'lenin@prueba.com',
-                    //       child: Text('Lenin'),
-                    //     ),
-                    //     DropdownMenuItem(
-                    //       value: 'hamilton@prueba.com',
-                    //       child: Text('Hamilton'),
-                    //     ),
-                    //   ],
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       _emailController.text = value ?? '';
-                    //       _passwordController.text = '123456';
-                    //     });
-                    //   },
-                    // ),
+                    DropdownButton<String>(
+                      value: [
+                        'paco@prueba.com',
+                        'lenin@prueba.com',
+                        'hamilton@prueba.com'
+                      ].contains(_emailController.text)
+                          ? _emailController.text
+                          : null,
+                      hint: Text('Usuarios de prueba'),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'paco@prueba.com',
+                          child: Text('Paco'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'lenin@prueba.com',
+                          child: Text('Lenin'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'hamilton@prueba.com',
+                          child: Text('Hamilton'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _emailController.text = value ?? '';
+                          _passwordController.text = '123456';
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),

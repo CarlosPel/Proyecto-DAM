@@ -194,7 +194,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
             snippet: postData['noticia_content'],
             datetime: postData['noticia_fecha'], 
             source: postData['noticia_source'],
-            link: postData['noticia_link'] ?? ,
+            link: postData['noticia_link'],
           ),
         );
         return PostCard(
