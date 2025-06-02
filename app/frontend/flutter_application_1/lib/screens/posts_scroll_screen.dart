@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/posts_notifier.dart';
 import 'package:flutter_application_1/models/posts_state.dart';
@@ -188,7 +189,13 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
           content: postData['content'],
           datetime: postData['post_date'],
           user: postData['user_name'],
-          article: postData[''],
+          article: Article(
+            title: postData['noticia_title'],
+            snippet: postData['noticia_content'],
+            datetime: postData['noticia_fecha'], 
+            source: postData['noticia_source'],
+            link: postData['noticia_link'] ?? ,
+          ),
         );
         return PostCard(
           post: post,
