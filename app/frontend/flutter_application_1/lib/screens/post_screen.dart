@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
-import 'package:flutter_application_1/services/post_service.dart';
+import 'package:flutter_application_1/services/create_post_service.dart';
 import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
