@@ -93,8 +93,16 @@ CREATE TABLE post_topic (
     id_post INT,
     topic_name VARCHAR(100),
     PRIMARY KEY (id_post, topic_name),
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_post) REFERENCES post(id_post) ON DELETE CASCADE,
     FOREIGN KEY (topic_name) REFERENCES topic(topic_name) ON DELETE CASCADE
+)
+
+CREATE TABLE saved_post (
+    id_user INT,
+    id_post INT,
+    PRIMARY KEY (id_user, id_post),
+    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_post) REFERENCES post(id_post) ON DELETE CASCADE
 )
 
 -- Insert de las naciones

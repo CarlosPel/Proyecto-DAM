@@ -288,4 +288,27 @@ const unfollow = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments, unfollow };
+const getSavedPosts = async (req, res) => {
+  const id_user = req.user.id_user
+
+  try{
+    const query = `SELECT * FROM POST JOIN SAVED_POST ON POST.id_post = SAVED_POST.id_post 
+        WHERE SAVED_POST.id_user = $1`
+    const result = await pool.query(query, [id_user])
+    if (result.rows.length === 0) {
+      return res.status(200).json({
+        message: 'No hay posts guardados',
+        data: [],
+      });
+    }
+    res.status(200).json({
+      message: 'Posts extraídos correctamente',
+      data: result.rows,
+    });
+  }catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al obtener los post guardados' })
+  }
+}
+
+module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments, unfollow, getSavedPosts };
