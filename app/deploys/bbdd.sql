@@ -67,7 +67,7 @@ CREATE TABLE noticia (
     title VARCHAR(200),
     content TEXT,
     link TEXT,
-    fecha date 
+    fecha VARCHAR2(25) DEFAULT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') 
 );
 
 DROP TABLE IF EXISTS post CASCADE;
