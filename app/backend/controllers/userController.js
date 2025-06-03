@@ -272,4 +272,20 @@ const getFollowed = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments };
+const unfollow = async (req, res) => {
+  const id_user = req.user.id_user;
+  const other_user_id = req.body.other_user_id
+
+  try{
+    const query = `DELETE FROM following WHERE id_follower = $1 AND id_followed = $2`
+    const result = await pool.query(query, [id_user, other_user_id]);
+    res.status(200).json({
+      message: 'Ahora ya no sigues a este usuario.'
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al dejar de seguir a este usuario' })
+  }
+}
+
+module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments, unfollow };

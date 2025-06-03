@@ -69,7 +69,7 @@ const getPost = async (req, res) => {
             NOTICIA.title AS noticia_title, 
             NOTICIA.content AS noticia_content, 
             NOTICIA.source_name AS noticia_source,
-            NOTICIA.date AS noticia_fecha,
+            NOTICIA.fecha AS noticia_fecha,
             NOTICIA.link AS noticia_link
         FROM POST
         INNER JOIN USERS ON POST.id_user = USERS.id_user
