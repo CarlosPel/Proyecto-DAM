@@ -77,7 +77,7 @@ CREATE TABLE post (
     id_user INT NOT NULL,
     title VARCHAR(100),
     nation VARCHAR(2) NOT NULL,
-    topic VARCHAR(100),
+    -- topic VARCHAR(100),
     noticia INT,
     content TEXT NOT NULL,
     post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,6 +89,13 @@ CREATE TABLE post (
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
+CREATE TABLE post_topic (
+    id_post INT,
+    topic_name VARCHAR(100),
+    PRIMARY KEY (id_post, topic_name),
+    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (topic_name) REFERENCES topic(topic_name) ON DELETE CASCADE
+)
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 

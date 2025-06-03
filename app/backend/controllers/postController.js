@@ -5,56 +5,76 @@ const loginUser = require ('../controllers/userController')
 
 // Función para crear un postq
 const createPost = async (req, res) => {
-    let { title, content, topic, parent_post, noticia_title, noticia_content, noticia_url, noticia_datetime, noticia_source } = req.body; // Datos del post desde el cliente
-    const id_user = req.user.id_user; // Extraído del token JWT
+    let {
+        title,
+        content,
+        topics, // 👈 ahora esperamos un array
+        parent_post,
+        noticia_title,
+        noticia_content,
+        noticia_url,
+        noticia_datetime,
+        noticia_source
+    } = req.body;
+
+    const id_user = req.user.id_user;
     const nation_user = req.user.nation;
-    console.log(req.user);
+
     try {
-        // Validar campos vacíos y asignar null si están vacíos
-        if (!title || title.trim() === "") {
-            title = null;
-        }
-        if (!topic || topic.trim() === "") {
-            topic = null;
-        }
-        if (!parent_post || parent_post.toString().trim() === "") {
-            parent_post = null;
-        }
-        if (!noticia_title || noticia_title.trim() === "") {
-            noticia = null;
-        } else {
-            const comprobacionNoticia = await pool.query(`SELECT * FROM noticia WHERE source_name = $1 AND title = $2`,
+        // Validar campos vacíos
+        if (!title || title.trim() === "") title = null;
+        if (!parent_post || parent_post.toString().trim() === "") parent_post = null;
+
+        let noticia = null;
+
+        if (noticia_title && noticia_title.trim() !== "") {
+            const comprobacionNoticia = await pool.query(
+                `SELECT * FROM noticia WHERE source_name = $1 AND title = $2`,
                 [noticia_source, noticia_title]
             );
 
             if (comprobacionNoticia.rows.length === 0) {
-                const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link, fecha)
-                VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+                const newNoticia = await pool.query(
+                    `INSERT INTO noticia (source_name, title, content, link, fecha)
+                     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
                     [noticia_source, noticia_title, noticia_content, noticia_url, noticia_datetime]
                 );
-                console.log("Noticia creada.")
                 noticia = newNoticia.rows[0].id_noticia;
             } else {
                 noticia = comprobacionNoticia.rows[0].id_noticia;
             }
-
-
         }
 
-        const post_date = new Date(); // Fecha actual
+        const post_date = new Date();
 
+        // Insertar el post principal
         const newPost = await pool.query(
-            `INSERT INTO post (id_user, title, nation, topic, noticia, content, post_date, parent_post)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-            [id_user, title, nation_user, topic, noticia, content, post_date, parent_post]
+            `INSERT INTO post (id_user, title, nation, content, post_date, parent_post, noticia)
+             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [id_user, title, nation_user, content, post_date, parent_post, noticia]
         );
 
+        const id_post = newPost.rows[0].id_post;
+
+        // Insertar temas en la tabla post_topic
+        if (Array.isArray(topics) && topics.length > 0) {
+            const insertTopicQueries = topics.map(topic => {
+                return pool.query(
+                    `INSERT INTO post_topic (id_post, topic_name) VALUES ($1, $2)`,
+                    [id_post, topic]
+                );
+            });
+            await Promise.all(insertTopicQueries); // Ejecutar en paralelo
+        }
+
         res.status(201).json({ message: 'Post creado exitosamente', post: newPost.rows[0] });
+
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Error al crear el post' });
     }
 };
+
 
 
 const getPost = async (req, res) => {
