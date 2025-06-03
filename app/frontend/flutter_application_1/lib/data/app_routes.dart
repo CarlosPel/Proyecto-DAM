@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
+import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/screens/create_post_screen.dart';
 import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/screens/loading_screen.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/screens/post_screen.dart';
 import 'package:flutter_application_1/screens/profile_screen.dart';
+import 'package:flutter_application_1/screens/user_profile_screen.dart';
 import 'package:flutter_application_1/screens/singup_screen.dart';
 import 'package:flutter_application_1/screens/terms_screen.dart';
 
@@ -20,7 +22,7 @@ class AppRoutes {
   // Ruta de la pantalla de registro
   static const String singUpScreen = '/singup';
   // Ruta de la pantalla de perfil
-  static const String profileScreen = '/profile';
+  static const String userProfileScreen = '/userProfile';
   // Ruta de la pantalla de noticias
   static const String newsScrollScreen = '/news';
   // Ruta de la pantalla de creación de publicaciones
@@ -31,6 +33,8 @@ class AppRoutes {
   static const String loadingScreen = '/loading';
   // Ruta pantalla de términos y condiciones
   static const String termsScreen = '/terms';
+  // Ruta pantalla de perfil de un usuario
+  static const String profileScreen = '/profile';
 
   // Devuelve un mapa con las rutas de la aplicación
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -44,8 +48,8 @@ class AppRoutes {
       case singUpScreen:
         return MaterialPageRoute(builder: (_) => SingUpScreen());
 
-      case profileScreen:
-        return MaterialPageRoute(builder: (_) => ProfileScreen());
+      case userProfileScreen:
+        return MaterialPageRoute(builder: (_) => UserProfileScreen());
 
       case newsScrollScreen:
         return MaterialPageRoute(builder: (_) => NewsScrollScreen());
@@ -61,8 +65,7 @@ class AppRoutes {
         final args = settings.arguments as Map<String, dynamic>;
         final Post post = args['post'];
 
-        return MaterialPageRoute(
-            builder: (_) => PostScreen(post: post));
+        return MaterialPageRoute(builder: (_) => PostScreen(post: post));
 
       case loadingScreen:
         final args = settings.arguments as Map<String, dynamic>;
@@ -76,6 +79,11 @@ class AppRoutes {
       case termsScreen:
         return MaterialPageRoute(builder: (_) => TermsScreen());
 
+      case profileScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        final User user = args['post'];
+
+        return MaterialPageRoute(builder: (_) => ProfileScreen(user));
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

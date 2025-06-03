@@ -54,7 +54,7 @@ class CommentCardState extends State<CommentCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(comment.user ?? ''),
+                title: Text(comment.author ?? ''),
                 subtitle: Text(comment.content),
                 trailing: IconButton(
                   icon: const Icon(Icons.comment),
@@ -77,7 +77,7 @@ class CommentCardState extends State<CommentCard> {
                             comment: Post(
                               id: sub['id_post'],
                               content: sub['content'],
-                              user: sub['user_name'],
+                              author: sub['user_name'],
                               parentPostId: sub['parent_post'],
                             ),
                             onPressedIcon: widget.onPressedIcon,

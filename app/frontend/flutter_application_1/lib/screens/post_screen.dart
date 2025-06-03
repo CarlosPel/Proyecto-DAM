@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/services/create_post_service.dart';
 import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/article_container.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
@@ -28,10 +30,17 @@ class PostScreenState extends State<PostScreen> {
   // Guarda las keys de los comentarios raíz
   final Map<int, GlobalKey<CommentCardState>> _commentKeys = {};
 
+  late Future<bool> _isUsersPost;
+
   @override
   void initState() {
     super.initState();
     _loadComments();
+  }
+
+  void isUserPost() async {
+    String? username = (await getUserData())['name'];
+    _isUsersPost = (username == widget.post.author) as Future<bool>;
   }
 
   Future<void> _loadComments() async {
@@ -104,7 +113,29 @@ class PostScreenState extends State<PostScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: LeadingButton(),
-        title: Text(post.user!),
+        title: Row(
+          children: [
+            Text(post.author!),
+            FutureBuilder(
+                future: _isUsersPost,
+                builder: (context, snap) {
+                  return IconButton(
+                    onPressed: () {
+                      if (snap.hasData) {
+                        if (snap.data!) {
+                          Navigator.pushNamed(
+                              context, AppRoutes.userProfileScreen);
+                        } else {
+                          Navigator.pushNamed(context, AppRoutes.profileScreen,
+                              arguments: {'user': getUserByName(context, post.author!)});
+                        }
+                      }
+                    },
+                    icon: Icon(Icons.person, size: 15),
+                  );
+                }),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -164,7 +195,7 @@ class PostScreenState extends State<PostScreen> {
                                     comment: Post(
                                       id: comment['id_post'],
                                       content: comment['content'],
-                                      user: comment['user_name'],
+                                      author: comment['user_name'],
                                       parentPostId: comment['parent_post'],
                                     ),
                                     onPressedIcon: (Post selectedComment) {
@@ -172,7 +203,7 @@ class PostScreenState extends State<PostScreen> {
                                         _referencedComment = {
                                           'id_post': selectedComment.id,
                                           'content': selectedComment.content,
-                                          'user_name': selectedComment.user,
+                                          'user_name': selectedComment.author,
                                         };
                                       });
                                     },

@@ -12,7 +12,7 @@ class Post {
   // Fecha y hora exactas de publicación
   String? datetime;
   // Nombre de usuario del autor
-  String? user;
+  String? author;
   // Noticia referenciada. Los comentarios no tienen
   Article? article;
   // Tema con el que se identifica. Los comentarios no tienen
@@ -28,7 +28,7 @@ class Post {
     this.title,
     required this.content,
     this.datetime,
-    this.user,
+    this.author,
     this.article,
     this.topic,
     this.parentPostId,

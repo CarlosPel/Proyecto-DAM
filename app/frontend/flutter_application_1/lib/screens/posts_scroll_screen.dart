@@ -94,7 +94,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                 right: 0,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.profileScreen);
+                    Navigator.pushNamed(context, AppRoutes.userProfileScreen);
                   },
                   icon: Icon(Icons.person, size: 30),
                 ),
@@ -190,7 +190,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
           title: postData['title'],
           content: postData['content'],
           datetime: postData['post_date'],
-          user: postData['user_name'],
+          author: postData['user_name'],
           article: postData['noticia_title'] != null
               ? Article(
                   title: postData['noticia_title'],

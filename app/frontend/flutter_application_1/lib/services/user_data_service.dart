@@ -50,13 +50,13 @@ Future<Map<String, String>> getUserData() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   // Se obtienen los datos del usuario
-  String? nombre = prefs.getString('nombre');
+  String? name = prefs.getString('nombre');
   String? email = prefs.getString('email');
   String? countryCode = prefs.getString('countryCode');
   String? token = prefs.getString('token');
 
   return {
-    'nombre': nombre ?? '',
+    'nombre': name ?? '',
     'email': email ?? '',
     'countryCode': countryCode ?? '',
     'token': token ?? '',

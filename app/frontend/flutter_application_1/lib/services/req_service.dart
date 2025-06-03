@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
+import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +9,38 @@ import 'package:http/http.dart' as http;
 const String politicsCode =
     'CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ';
 const String backendUrl = AppData.backendUrl;
+
+Future<User> getUserByName(BuildContext context, String name) async {
+  final String getUserUrl = '$backendUrl/user/get';
+  try {
+    final String? token = await getToken();
+
+    final response = await http.post(
+      Uri.parse(getUserUrl),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+    if (handleResponse(
+      context: context,
+      response: response,
+      onSuccess: (responseData) async {
+        return true;
+      },
+    )) {
+      return jsonDecode(response.body)['data'];
+    } else {
+      return User(id: 0, name: '', country: '', posts: [], comments: []);
+    }
+  } catch (e) {
+    // Manejar errores de conexión
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error de conexión: $e')),
+    );
+    return User(id: 0, name: '', country: '', posts: [], comments: []);
+  }
+}
 
 // Noticias más relevantes de política del país del usuario ordenadas por ultima hora
 Future<List<dynamic>> fetchTopHeadlines(String? country) async {
@@ -81,7 +114,7 @@ List<dynamic> _fetchFakeNews() {
       'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       'snippet':
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ',
-          //Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      //Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       'link': 'https://matchlyric.com/kanye-west-hh-traduccion-al-espanol',
       'photo_url':
           'https://mbblancabelzunce.com/wp-content/uploads/2024/05/360_F_419176802_9s4AoYMfzxDt3kaSYV55whCkTB76NsHN.jpg',
