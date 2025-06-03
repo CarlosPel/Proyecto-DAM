@@ -149,6 +149,37 @@ const getPost = async (req, res) => {
     }
 };
 
+const getFollowedPosts = async (req, res) => {
+  const id_user = req.user.id_user;
+
+  try {
+    // Obtener IDs de usuarios seguidos
+    const followersResult = await pool.query(
+      `SELECT id_followed FROM following WHERE id_follower = $1`, 
+      [id_user]
+    );
+
+    const followedIds = followersResult.rows.map(row => row.id_followed);
+
+    if (followedIds.length === 0) {
+      // No sigue a nadie, devolver array vacío
+      return res.json({ posts: [] });
+    }
+
+    // Consulta usando ANY para array
+    const postsResult = await pool.query(
+      `SELECT * FROM post WHERE id_user = ANY($1::int[]) ORDER BY post_date DESC`, 
+      [followedIds]
+    );
+
+    res.json({ posts: postsResult.rows });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener posts' });
+  }
+}
+
 const getComments = async (req, res) => {
     const id_post = req.body.id_post;
 
@@ -169,5 +200,5 @@ const getComments = async (req, res) => {
 
 
 
-module.exports = { createPost, getPost, getComments };
+module.exports = { createPost, getPost, getComments, getFollowedPosts };
 

@@ -251,9 +251,9 @@ const getFollowed = async (req, res) => {
   const other_user_id = req.body.other_user_id
   let sigues = false
   try{
-    const query = `SELECT * FROM following WHERE id_follower = $1 AND id_followed = $2 RETURNING *`
+    const query = `SELECT * FROM following WHERE id_follower = $1 AND id_followed = $2`
     const result = await pool.query(query, [id_user, other_user_id]);
-    if (result.rows.length === 0) {
+    if (result.rows.length > 0) {
       sigues = true
       res.status(200).json({
         data: sigues,
