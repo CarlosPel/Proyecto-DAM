@@ -5,7 +5,7 @@ import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/enums/topic.dart';
-import 'package:flutter_application_1/services/post_service.dart';
+import 'package:flutter_application_1/services/create_post_service.dart';
 import 'package:flutter_application_1/widgets/fixed_article.dart';
 import 'package:flutter_application_1/widgets/leading_button.dart';
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
-import 'package:flutter_application_1/services/post_service.dart';
+import 'package:flutter_application_1/services/create_post_service.dart';
 import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/widgets/article_card.dart';
+import 'package:flutter_application_1/widgets/article_container.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
-import 'package:flutter_application_1/widgets/fixed_article.dart';
 import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
@@ -22,6 +23,7 @@ class PostScreenState extends State<PostScreen> {
   //final Map<int, GlobalKey> _commentKeys = {};
   Map<String, dynamic>? _referencedComment;
   List<dynamic>? _comments;
+  bool _expandedIndex = false;
 
   // Guarda las keys de los comentarios raíz
   final Map<int, GlobalKey<CommentCardState>> _commentKeys = {};
@@ -106,8 +108,23 @@ class PostScreenState extends State<PostScreen> {
       ),
       body: Column(
         children: [
-          if(post.article != null) FixedArticle(post.article!),
-          PostCard(post: post, onTap: () {}, isPreview: false,),
+          if (post.article != null)
+            ArticleContainer(
+              ArticleCard(
+                article: post.article!,
+                isExpanded: _expandedIndex,
+                onTap: () {
+                  setState(() {
+                    _expandedIndex = !_expandedIndex;
+                  });
+                },
+              ),
+            ),
+          PostCard(
+            post: post,
+            onTap: () {},
+            isPreview: false,
+          ),
           Expanded(
             child: RefreshIndicator(
               onRefresh: _refreshComments,
@@ -138,8 +155,9 @@ class PostScreenState extends State<PostScreen> {
                                 itemCount: _comments!.length,
                                 itemBuilder: (context, index) {
                                   final comment = _comments![index];
-                                  final key = _commentKeys[comment['id_post']] ??
-                                      GlobalKey<CommentCardState>();
+                                  final key =
+                                      _commentKeys[comment['id_post']] ??
+                                          GlobalKey<CommentCardState>();
                                   _commentKeys[comment['id_post']] = key;
                                   return CommentCard(
                                     key: key,

@@ -58,7 +58,7 @@ const createPost = async (req, res) => {
 
 
 const getPost = async (req, res) => {
-    const id_user = req.user.id_user; // Si necesitas este ID para algo específico
+    const id_user = req.user.id_user;
     const nation_user = req.user.nation;
     const { nation, topic, post_dateIN, post_dateFI } = req.body;
 
@@ -69,7 +69,8 @@ const getPost = async (req, res) => {
             NOTICIA.title AS noticia_title, 
             NOTICIA.content AS noticia_content, 
             NOTICIA.source_name AS noticia_source,
-            NOTICIA.date AS noticia_fecha
+            NOTICIA.date AS noticia_fecha,
+            NOTICIA.link AS noticia_link
         FROM POST
         INNER JOIN USERS ON POST.id_user = USERS.id_user
         LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
@@ -118,7 +119,7 @@ const getPost = async (req, res) => {
         const result = await pool.query(query, values);
         res.status(200).json({
             message: 'Post extraídos correctamente',
-            data: result.rows, // Incluye tanto los datos del post como el nombre del usuario
+            data: result.rows,
             token
         });
 

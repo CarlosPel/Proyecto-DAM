@@ -61,14 +61,6 @@ class PostCard extends StatelessWidget {
               // Autor y tiempo
               Row(
                 children: [
-                  // Text(
-                  //   post.user ?? 'Autor desconocido',
-                  //   style: TextStyle(
-                  //     fontSize: 13,
-                  //     fontStyle: FontStyle.italic,
-                  //     color: Colors.grey[700],
-                  //   ),
-                  // ),
                   const Spacer(),
                   Text(
                     relativeTime,
