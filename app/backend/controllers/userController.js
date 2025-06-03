@@ -231,9 +231,10 @@ const userConditions = async (req, res) => {
 const followUser = async (req, res) => {
   const id_user = req.user.id_user;
   const other_user_id = req.body.other_user_id
+  const follow_date = new Date();
   try{
-    const query = 'INSERT into following (id_follower, id_followed) VALUES ($1, $2)'
-    const result = await pool.query(query, [id_user, other_user_id]);
+    const query = 'INSERT into following (id_follower, id_followed, fecha_seguimiento) VALUES ($1, $2, $3)'
+    const result = await pool.query(query, [id_user, other_user_id, follow_date]);
     res.status(200).json({
       message: 'Ahora sigues a este usuario.'
     });
