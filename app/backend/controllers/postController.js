@@ -28,9 +28,9 @@ const createPost = async (req, res) => {
             );
 
             if (comprobacionNoticia.rows.length === 0) {
-                const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link)
-                VALUES ($1, $2, $3, $4) RETURNING *`,
-                    [noticia_source, noticia_title, noticia_content, noticia_url]
+                const newNoticia = await pool.query(`INSERT INTO noticia (source_name, title, content, link, fecha)
+                VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+                    [noticia_source, noticia_title, noticia_content, noticia_url, noticia_datetime]
                 );
                 console.log("Noticia creada.")
                 noticia = newNoticia.rows[0].id_noticia;

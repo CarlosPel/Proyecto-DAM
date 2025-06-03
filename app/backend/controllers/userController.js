@@ -192,6 +192,28 @@ const userPosts = async (req, res) => {
   }
 }
 
+const userComments = async (req, res) => {
+  const id_user = req.user.id_user;
+  const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is not null ORDER BY post_date DESC;`;
+  try {
+    const resultado = await pool.query(query, [id_user]);
+    //console.log(resultado.rows[0].idPost)
+    if (resultado.rows.length === 0) {
+      return res.status(200).json({
+        message: 'No hay comentarios para este usuario',
+        data: [],
+      });
+    }
+    res.status(200).json({
+      message: 'Posts extraídos correctamente',
+      data: resultado.rows,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al obtener los comentarios de este usuario' })
+  }
+}
+
 const userConditions = async (req, res) => {
   const id_user = req.user.id_user;
   const query = 'UPDATE users SET has_agreed = TRUE WHERE id_user = $1;';
@@ -206,4 +228,47 @@ const userConditions = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions };
+const followUser = async (req, res) => {
+  const id_user = req.user.id_user;
+  const other_user_id = req.body.other_user_id
+  try{
+    const query = 'INSERT into following (id_follower, id_followed) VALUES ($1, $2)'
+    const result = await pool.query(query, [id_user, other_user_id]);
+    res.status(200).json({
+      message: 'Ahora sigues a este usuario.'
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al seguir a este usuario' })
+  
+  }
+}
+
+
+const getFollowed = async (req, res) => {
+  const id_user = req.user.id_user;
+  const other_user_id = req.body.other_user_id
+  let sigues = false
+  try{
+    const query = `SELECT * FROM following WHERE id_follower = $1 AND id_followed = $2 RETURNING *`
+    const result = await pool.query(query, [id_user, other_user_id]);
+    if (result.rows.length === 0) {
+      sigues = true
+      res.status(200).json({
+        data: sigues,
+      message: 'Ya sigues a este usuario.'
+      });
+    }else {
+      sigues = false
+      res.status(200).json({
+        data: sigues
+        });
+    }
+  }catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'No se encontró al usuario.' })
+  
+  }
+}
+
+module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments };
