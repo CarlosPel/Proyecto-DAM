@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS noticia CASCADE;
 CREATE TABLE noticia (
     id_noticia SERIAL PRIMARY KEY,
     source_name VARCHAR(100),
-    title VARCHAR(200),
+    title VARCHAR(200) NOT NULL,
     content TEXT,
     link TEXT,
     fecha VARCHAR2(25) DEFAULT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') 
