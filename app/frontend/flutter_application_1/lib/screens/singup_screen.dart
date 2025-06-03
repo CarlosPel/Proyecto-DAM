@@ -153,7 +153,7 @@ class SingUpScreenState extends State<SingUpScreen> {
                           );
                         }
                       },
-                      icon: Icon(Icons.person_add_alt_1),
+                      icon: Icon(Icons.assignment),
                       label: const Text('Registrarse'),
                     ),
                     const SizedBox(height: 16),

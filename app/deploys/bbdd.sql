@@ -10,6 +10,17 @@ LC_CTYPE='es_ES.UTF-8'
 TEMPLATE template0;
 \c agora_9mli; 
 */
+CREATE OR REPLACE FUNCTION formatted_now() RETURNS VARCHAR AS $$
+BEGIN
+    RETURN TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS');
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TABLE IF EXISTS topic CASCADE;
+-- Creación de la tabla topic
+CREATE TABLE topic (
+    topic_name VARCHAR(100) UNIQUE NOT NULL PRIMARY KEY
+);
 
 DROP TABLE IF EXISTS nation CASCADE;
 -- Creación de la tabla nation
@@ -42,12 +53,6 @@ CREATE TABLE following (
     FOREIGN KEY (id_followed) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS topic CASCADE;
--- Creación de la tabla topic
-CREATE TABLE topic (
-    topic_name VARCHAR(100) UNIQUE NOT NULL PRIMARY KEY
-);
-
 DROP TABLE IF EXISTS user_topic CASCADE;
 -- Creación de la tabla user_topic
 CREATE TABLE user_topic (
@@ -67,7 +72,7 @@ CREATE TABLE noticia (
     title VARCHAR(200) NOT NULL,
     content TEXT,
     link TEXT,
-    fecha VARCHAR2(25) DEFAULT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+    fecha VARCHAR(25) DEFAULT formatted_now()
 );
 
 DROP TABLE IF EXISTS post CASCADE;
@@ -89,13 +94,17 @@ CREATE TABLE post (
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );
 
+DROP TABLE IF EXISTS post_topic CASCADE;
+
 CREATE TABLE post_topic (
     id_post INT,
     topic_name VARCHAR(100),
     PRIMARY KEY (id_post, topic_name),
     FOREIGN KEY (id_post) REFERENCES post(id_post) ON DELETE CASCADE,
     FOREIGN KEY (topic_name) REFERENCES topic(topic_name) ON DELETE CASCADE
-)
+);
+
+DROP TABLE IF EXISTS saved_post CASCADE;
 
 CREATE TABLE saved_post (
     id_user INT,
@@ -103,7 +112,7 @@ CREATE TABLE saved_post (
     PRIMARY KEY (id_user, id_post),
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (id_post) REFERENCES post(id_post) ON DELETE CASCADE
-)
+);
 
 -- Insert de las naciones
 INSERT INTO nation (code, nation_name) VALUES 

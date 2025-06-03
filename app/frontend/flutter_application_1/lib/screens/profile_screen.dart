@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/services/users_service.dart';
 import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
@@ -17,6 +18,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
+  late bool _following;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfFollowing();
+  }
+
+  checkIfFollowing() {}
+
   @override
   Widget build(BuildContext context) {
     final User user = widget.user;
@@ -36,34 +47,46 @@ class ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Column(
-                  children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.person, size: 65),
-                    ),
-                    const SizedBox(height: 16.0),
-                    // Nombre de usuario
-                    Text(
-                      user.name,
-                      style: theme.textTheme.headlineLarge,
-                    ),
-                    const SizedBox(height: 16.0),
-                    // Campos contraseñas
-                    const SizedBox(height: 16.0),
-                    CountryCodePicker(
-                      enabled: false,
-                      initialSelection: user.country,
-                      margin: const EdgeInsets.symmetric(horizontal: 6),
-                      comparator: (a, b) => b.name!.compareTo(a.name!),
-                      onInit: (code) {
-                        code!.name = code.code == 'ES' ? 'España' : code.name;
-                      },
-                      showCountryOnly: true,
-                      showOnlyCountryWhenClosed: true,
-                      textStyle: theme.textTheme.headlineSmall,
-                    ),
-                  ],
+                const CircleAvatar(
+                  radius: 50,
+                  child: Icon(Icons.person, size: 65),
+                ),
+                const SizedBox(height: 16.0),
+                // Nombre de usuario
+                Text(
+                  user.name,
+                  style: theme.textTheme.headlineLarge,
+                ),
+                const SizedBox(height: 16.0),
+                // Campos contraseñas
+                const SizedBox(height: 16.0),
+                CountryCodePicker(
+                  enabled: false,
+                  initialSelection: user.country,
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  comparator: (a, b) => b.name!.compareTo(a.name!),
+                  onInit: (code) {
+                    code!.name = code.code == 'ES' ? 'España' : code.name;
+                  },
+                  showCountryOnly: true,
+                  showOnlyCountryWhenClosed: true,
+                  textStyle: theme.textTheme.headlineSmall,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    manageFollow(
+                        context: context,
+                        userId: user.id,
+                        onSuccess: (response) {
+                          setState(() {
+                            _following = !_following;
+                          });
+                        },
+                        follow: !_following);
+                  },
+                  label: Text(_following ? 'Dejar de seguir' : 'Seguir'),
+                  icon:
+                      Icon(_following ? Icons.person_remove : Icons.person_add),
                 ),
                 const TabBar(tabs: [
                   Tab(
