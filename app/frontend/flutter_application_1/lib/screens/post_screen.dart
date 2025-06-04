@@ -131,7 +131,7 @@ class PostScreenState extends State<PostScreen> {
                           Navigator.pushNamed(
                               context, AppRoutes.userProfileScreen);
                         } else {
-                          loadProfile(context, post.author!);
+                          loadProfile(context, post.author!, post);
                         }
                       },
                       icon: Icon(Icons.person, size: 20),

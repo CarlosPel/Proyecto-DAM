@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/services/auth_service.dart';
 
-loadProfile(BuildContext context, String name) {
+loadProfile(BuildContext context, String name, Post userPost) {
   Navigator.pushNamed(
     context,
     AppRoutes.loadingScreen,
@@ -15,7 +16,7 @@ loadProfile(BuildContext context, String name) {
       'action': () async {
         User user = await getUserByName(context, name);
         Navigator.pushNamed(context, AppRoutes.profileScreen,
-            arguments: {'user': user});
+            arguments: {'user': user, 'userPost': userPost});
       },
     },
   );

@@ -11,17 +11,12 @@ const String politicsCode =
 const String backendUrl = AppData.backendUrl;
 
 Future<User> getUserByName(BuildContext context, String name) async {
-  final String getUserUrl = '$backendUrl/user/otheruser';
+  final String getUserUrl = '$backendUrl/users/otheruser';
+
   try {
-    final response = await http.post(
-      Uri.parse(getUserUrl),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode({
-        'username' : name
-      })
-    );
+    final response = await http.post(Uri.parse(getUserUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'username': name}));
 
     if (handleResponse(
       context: context,
@@ -30,7 +25,16 @@ Future<User> getUserByName(BuildContext context, String name) async {
         return true;
       },
     )) {
-      return jsonDecode(response.body)['data'];
+      final userData = jsonDecode(response.body)['data'];
+      final userPosts = jsonDecode(response.body)['posts'];
+      final userComments = jsonDecode(response.body)['comments'];
+
+      return User(
+          id: userData['id_user'],
+          name: userData['username'],
+          country: userData['nation'],
+          posts: userPosts,
+          comments: userComments);
     } else {
       return User(id: 0, name: '', country: '', posts: [], comments: []);
     }

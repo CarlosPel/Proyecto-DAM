@@ -82,8 +82,9 @@ class AppRoutes {
       case profileScreen:
         final args = settings.arguments as Map<String, dynamic>;
         final User user = args['user'];
+        final Post userPost = args['userPost'];
 
-        return MaterialPageRoute(builder: (_) => ProfileScreen(user));
+        return MaterialPageRoute(builder: (_) => ProfileScreen(user, userPost));
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
