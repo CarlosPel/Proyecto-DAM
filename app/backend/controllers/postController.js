@@ -213,7 +213,7 @@ const getParentPost = async (req, res) => {
     }
     const queryPost = `SELECT * FROM POST WHERE id_post = $1`;
     const resultPost = await pool.query(queryPost, [parent_post])
-    console.log(parent_post);
+    console.log(resultPost.rows[0].id_post);
     res.status(200).json({
                 message: 'Post padre obtenido correctamente',
                 data: resultPost.rows[0],
