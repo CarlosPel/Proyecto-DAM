@@ -370,7 +370,7 @@ const otherUserComments = async (req, res) => {
         data: [],
       });
     }
-    console.log('contenido: ' & parent_post.content);
+    console.log('contenido: ' + parent_post.content);
     res.status(200).json({
       message: 'Posts extraídos correctamente',
       data: resultado.rows,
