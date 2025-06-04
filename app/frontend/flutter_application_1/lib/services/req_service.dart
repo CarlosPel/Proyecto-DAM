@@ -71,11 +71,8 @@ Future<Post> getOlderPost(BuildContext context, int id) async {
         return true;
       },
     )) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content:
-            Text('titulo: ${(jsonDecode(response.body)['data']['content'])}'),
-      ));
-      return parsePost(jsonDecode(response.body)['data']);
+      return parsePost(jsonDecode(response.body)['data'],
+          username: jsonDecode(response.body)['user']);
     }
     return Post(content: '');
   } catch (e) {
