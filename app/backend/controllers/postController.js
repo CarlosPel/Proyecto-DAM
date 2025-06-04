@@ -201,22 +201,25 @@ const getComments = async (req, res) => {
 const getParentPost = async (req, res) => {
     let id_child = req.body.id_post;
     let queryParentPost = `SELECT parent_post FROM POST WHERE id_post = $1`;
-    let parent_post = null;
+    //let parent_post = null;
     while(true){
             const result = await pool.query(queryParentPost, [id_child]);
             if(result.rows[0].parent_post == null){
-                parent_post = result.rows[0].parent_post;
+                // parent_post = result.rows[0].parent_post;
                 break
             }else{
                 id_child = result.rows[0].parent_post;
             }
     }
     const queryPost = `SELECT * FROM POST WHERE id_post = $1`;
-    const resultPost = await pool.query(queryPost, [parent_post])
-    console.log(parent_post);
+    const resultPost = await pool.query(queryPost, [id_child])
+    const queryUser = 'SELECT username FROM users WHERE id_user = $1';
+    const resultUser = await pool.query(queryUser, [resultPost.rows[0].id_user])
+    console.log(resultPost.rows[0].id_post);
     res.status(200).json({
                 message: 'Post padre obtenido correctamente',
                 data: resultPost.rows[0],
+                user: resultUser.rows[0].username
     })
 }
 
