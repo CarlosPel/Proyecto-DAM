@@ -72,7 +72,7 @@ CREATE TABLE noticia (
     title VARCHAR(200) NOT NULL,
     content TEXT,
     link TEXT,
-    fecha VARCHAR(25) DEFAULT formatted_now()
+    fecha VARCHAR(30) -- DEFAULT formatted_now()
 );
 
 DROP TABLE IF EXISTS post CASCADE;
