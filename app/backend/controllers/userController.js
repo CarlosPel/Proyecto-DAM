@@ -114,15 +114,15 @@ const editProfileUser = async (req, res) => {
       values.push(nation);
     }
 
-    
+
     // console.error("CONTRASEÑA: ", password)
     if (password.length < 6 && password.length > 0) {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
-    }else{
-      if (password.length > 0){
-      const hashedPassword = await bcrypt.hash(password, 10);
-      conditions.push(`password_hash = $${index++}`);
-      values.push(hashedPassword)
+    } else {
+      if (password.length > 0) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        conditions.push(`password_hash = $${index++}`);
+        values.push(hashedPassword)
       }
     }
 
@@ -232,7 +232,7 @@ const followUser = async (req, res) => {
   const id_user = req.user.id_user;
   const other_user_id = req.body.other_user_id
   const follow_date = new Date();
-  try{
+  try {
     const query = 'INSERT into following (id_follower, id_followed, fecha_seguimiento) VALUES ($1, $2, $3)'
     const result = await pool.query(query, [id_user, other_user_id, follow_date]);
     res.status(200).json({
@@ -241,7 +241,7 @@ const followUser = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: 'Error al seguir a este usuario' })
-  
+
   }
 }
 
@@ -250,25 +250,25 @@ const getFollowed = async (req, res) => {
   const id_user = req.user.id_user;
   const other_user_id = req.body.other_user_id
   let sigues = false
-  try{
+  try {
     const query = `SELECT * FROM following WHERE id_follower = $1 AND id_followed = $2`
     const result = await pool.query(query, [id_user, other_user_id]);
     if (result.rows.length > 0) {
       sigues = true
       res.status(200).json({
         data: sigues,
-      message: 'Ya sigues a este usuario.'
+        message: 'Ya sigues a este usuario.'
       });
-    }else {
+    } else {
       sigues = false
       res.status(200).json({
         data: sigues
-        });
+      });
     }
-  }catch (error) {
+  } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: 'No se encontró al usuario.' })
-  
+
   }
 }
 
@@ -276,7 +276,7 @@ const unfollow = async (req, res) => {
   const id_user = req.user.id_user;
   const other_user_id = req.body.other_user_id
 
-  try{
+  try {
     const query = `DELETE FROM following WHERE id_follower = $1 AND id_followed = $2`
     const result = await pool.query(query, [id_user, other_user_id]);
     res.status(200).json({
@@ -291,7 +291,7 @@ const unfollow = async (req, res) => {
 const getSavedPosts = async (req, res) => {
   const id_user = req.user.id_user
 
-  try{
+  try {
     const query = `SELECT * FROM POST JOIN SAVED_POST ON POST.id_post = SAVED_POST.id_post 
         WHERE SAVED_POST.id_user = $1`
     const result = await pool.query(query, [id_user])
@@ -305,10 +305,41 @@ const getSavedPosts = async (req, res) => {
       message: 'Posts extraídos correctamente',
       data: result.rows,
     });
-  }catch (error) {
+  } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: 'Error al obtener los post guardados' })
   }
 }
 
-module.exports = { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments, unfollow, getSavedPosts };
+const getOtherUser = async (req, res) => {
+  const user_name = req.body.username;
+  try {
+    const query = 'SELECT * FROM users WHERE username = $1';
+    const result = await pool.query(query, [user_name]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    } else {
+      return res.status(200).json({
+        message: 'Usuario encontrado',
+        data: result.rows[0]
+      });
+    }
+  } catch (error) {
+    console.error('Detalle del error:', error);
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+}
+
+module.exports = {
+  registerUser,
+  loginUser,
+  editProfileUser,
+  userPosts,
+  userConditions,
+  getFollowed, 
+  userComments, 
+  followUser,
+  unfollow, 
+  getSavedPosts, 
+  getOtherUser
+};

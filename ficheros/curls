@@ -82,3 +82,19 @@ curl -X POST http://localhost:5000/news/get \
 -d '{
     "urlFi": "/topic-headlines?topic=CAAqIQgKIhtDQkFTRGdvSUwyMHZNRFZ4ZERBU0FtVnpLQUFQAQ&limit=1&country=ES&lang=es"
 }'
+
+#CURL de seguir usuario:
+curl -X POST http://localhost:5000/users/follow \
+-H "Authorization: Bearer " \ 
+-H "Content-Type: application/json" \
+-d '{
+  "id_other_user": "2",
+}'
+
+#Curl de obtener post de seguidos:
+curl -X POST http://localhost:5000/posts/getfollowed \
+-H "Authorization: Bearer " \ 
+-H "Content-Type: application/json" \
+-d '{
+  
+}'
