@@ -89,7 +89,7 @@ CREATE TABLE post (
     parent_post INT NULL,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (nation) REFERENCES nation(code) ON DELETE SET NULL,
-    FOREIGN KEY (topic) REFERENCES topic(topic_name) ON DELETE SET NULL,
+    --FOREIGN KEY (topic) REFERENCES topic(topic_name) ON DELETE SET NULL,
     FOREIGN KEY (parent_post) REFERENCES post(id_post) ON DELETE SET NULL,
     FOREIGN KEY (noticia) REFERENCES noticia(id_noticia) ON DELETE SET NULL
 );

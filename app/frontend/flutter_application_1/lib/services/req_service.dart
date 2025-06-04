@@ -11,17 +11,18 @@ const String politicsCode =
 const String backendUrl = AppData.backendUrl;
 
 Future<User> getUserByName(BuildContext context, String name) async {
-  final String getUserUrl = '$backendUrl/user/get';
+  final String getUserUrl = '$backendUrl/user/otheruser';
   try {
-    final String? token = await getToken();
-
     final response = await http.post(
       Uri.parse(getUserUrl),
       headers: {
-        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json'
       },
+      body: jsonEncode({
+        'username' : name
+      })
     );
+
     if (handleResponse(
       context: context,
       response: response,
