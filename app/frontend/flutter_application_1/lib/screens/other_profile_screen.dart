@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/screens/user_profile_screen.dart';
 import 'package:flutter_application_1/services/users_service.dart';
-import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -136,8 +136,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                   ]),
                   Expanded(
                       child: TabBarView(children: [
-                    _buildList(user.posts),
-                    _buildList(user.comments),
+                    _buildPostsList(),
+                    _buildCommentList(),
                   ])),
                 ],
               ),
@@ -148,33 +148,50 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildList(List<dynamic> posts) {
-    return posts.isNotEmpty
-        ? ScrollContainer(
-            child: ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (c, i) {
-                final postData = posts[i];
-                final post = Post(
-                  id: postData['id_post'],
-                  title: postData['title'],
-                  content: postData['content'],
-                  datetime: postData['post_date'],
-                  author: postData['user_name'],
-                );
-                return PostCard(
-                  post: post,
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    AppRoutes.postScreen,
-                    arguments: {'post': post},
+//_commentsFuture
+  Widget _buildCommentList() {
+    final comments = widget.user.comments;
+
+    return ScrollContainer(
+      child: comments.isEmpty
+          ? SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'No has comentado nada...',
+                    textAlign: TextAlign.center,
                   ),
-                );
-              },
-            ),
-          )
-        : Center(
-            child: Text('No tiene publicaciones'),
-          );
+                  const SizedBox(height: 24),
+                  const Icon(Icons.refresh),
+                ],
+              ),
+            )
+          : postsList(context, comments, areComments: true),
+    );
+  }
+
+  Widget _buildPostsList() {
+    final posts = widget.user.posts;
+
+    return ScrollContainer(
+      child: posts.isEmpty
+          ? SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'No has publicado nada...',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  const Icon(Icons.refresh),
+                ],
+              ),
+            )
+          : postsList(context, posts),
+    );
   }
 }

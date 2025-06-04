@@ -452,7 +452,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                       ],
                     ),
                   )
-                : _postsList(posts, areComments: true),
+                : postsList(context, posts, areComments: true),
           );
         } else {
           return const Center(child: Text('No hay publicaciones'));
@@ -488,7 +488,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                       ],
                     ),
                   )
-                : _postsList(posts),
+                : postsList(context, posts),
           );
         } else {
           return const Center(child: Text('No hay publicaciones'));
@@ -496,30 +496,32 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       },
     );
   }
+}
 
-  Widget _postsList(List<dynamic> posts, {bool areComments = false}) {
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (c, i) {
-        final postData = posts[i];
-        final Post post = parsePost(postData);
+Widget postsList(BuildContext context, List<dynamic> posts,
+    {bool areComments = false}) {
+  return ListView.builder(
+    itemCount: posts.length,
+    itemBuilder: (c, i) {
+      final postData = posts[i];
+      final Post post = parsePost(postData);
 
-        return !areComments
-            ? PostCard(
-                post: post,
-                //isExpanded: false,
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  AppRoutes.postScreen,
-                  arguments: {'post': post},
-                ),
-              )
-            : CommentCard(
-                comment: post,
-                canBeAnswered: false,
-                onPressedIcon: (post) {},
-                onTap: () => loadPostScreen(context, post.parentPostId!),);
-      },
-    );
-  }
+      return !areComments
+          ? PostCard(
+              post: post,
+              //isExpanded: false,
+              onTap: () => Navigator.pushNamed(
+                context,
+                AppRoutes.postScreen,
+                arguments: {'post': post},
+              ),
+            )
+          : CommentCard(
+              comment: post,
+              canBeAnswered: false,
+              onPressedIcon: (post) {},
+              onTap: () => loadPostScreen(context, post.parentPostId!),
+            );
+    },
+  );
 }
