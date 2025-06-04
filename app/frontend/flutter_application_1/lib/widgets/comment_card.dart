@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/widgets/post_card.dart';
 
 class CommentCard extends StatefulWidget {
   final Post comment;
+  final bool canBeAnswered;
   final void Function(Post) onPressedIcon;
+  final VoidCallback? onTap;
 
   const CommentCard({
     super.key,
     required this.comment,
     required this.onPressedIcon,
+    this.canBeAnswered = true,
+    this.onTap,
   });
 
   @override
@@ -47,20 +52,23 @@ class CommentCardState extends State<CommentCard> {
 
     return Card(
       child: InkWell(
-        onTap: _toggleExpanded,
+        onTap: widget.onTap ?? _toggleExpanded,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(comment.author ?? ''),
+                title: comment.author != null ? Text(comment.author!) : null,
                 subtitle: Text(comment.content),
-                trailing: IconButton(
-                  icon: const Icon(Icons.comment),
-                  onPressed: () => widget.onPressedIcon(comment),
-                ),
+                trailing: widget.canBeAnswered
+                    ? IconButton(
+                        icon: const Icon(Icons.comment),
+                        onPressed: () => widget.onPressedIcon(comment),
+                      )
+                    : null,
               ),
+              relativeTimeNote(comment.datetime),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 500),
                 firstChild: const SizedBox.shrink(),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/news_state.dart';
 import 'package:flutter_application_1/models/posts_state.dart';
-import 'package:flutter_application_1/models/user_posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,7 +94,6 @@ Future<void> logout(BuildContext context) async {
 clearStatesLists() {
   newsState.news.clear();
   postsState.posts.clear();
-  userPostsState.posts.clear();
 }
 
 Future<bool?> hasAgreed() async {

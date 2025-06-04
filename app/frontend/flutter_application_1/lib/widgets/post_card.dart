@@ -18,11 +18,6 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postDate = DateTime.tryParse(post.datetime ?? '');
-    final relativeTime = postDate != null
-        ? timeago.format(postDate, locale: 'es')
-        : 'Fecha desconocida';
-
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -58,23 +53,31 @@ class PostCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              // Autor y tiempo
-              Row(
-                children: [
-                  const Spacer(),
-                  Text(
-                    relativeTime,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              )
+              relativeTimeNote(post.datetime)
             ],
           ),
         ),
       ),
     );
   }
+}
+
+Widget relativeTimeNote(String? datetime) {
+  final postDate = DateTime.tryParse(datetime ?? '');
+  final relativeTime = postDate != null
+      ? timeago.format(postDate, locale: 'es')
+      : 'No se sabe de cuando';
+
+  return Row(
+    children: [
+      const Spacer(),
+      Text(
+        relativeTime,
+        style: TextStyle(
+          fontSize: 12,
+          color: Colors.grey[600],
+        ),
+      ),
+    ],
+  );
 }

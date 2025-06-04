@@ -3,18 +3,16 @@ import 'dart:convert';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
-import 'package:flutter_application_1/models/posts_notifier.dart';
-import 'package:flutter_application_1/models/user_posts_state.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/services/handle_respones.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/widgets/comment_card.dart';
 import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -32,6 +30,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   bool editing = false;
   bool _isUserDataLoaded = false;
   late Future<List<dynamic>> _postsFuture;
+  late Future<List<dynamic>> _commentsFuture;
   late String beName;
   late String beEmail;
   late String beCountry;
@@ -41,18 +40,9 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     super.initState();
     _refreshProfile();
 
-    // Escucha los cambios en PostsNotifier
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final postsNotifier = Provider.of<PostsNotifier>(context, listen: false);
-
-      if (postsNotifier.shouldRefresh) {
-        _refreshPosts();
-        postsNotifier.reset();
-      }
-    });
-
     // Siempre inicializa _postsFuture para evitar LateInitializationError
     _postsFuture = _loadPosts();
+    _commentsFuture = _loadComments();
   }
 
   bool _shouldEdit() {
@@ -71,22 +61,13 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   Future<List<dynamic>> _loadPosts() async {
     final posts = await fetchUserPosts(context);
 
-    userPostsState.posts = posts;
     return posts;
   }
 
-  Future<void> _refreshPosts() async {
-    try {
-      final newPosts = await _loadPosts();
+  Future<List<dynamic>> _loadComments() async {
+    final posts = await fetchUserComments(context);
 
-      setState(() {
-        userPostsState.posts = newPosts;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bienvenido de nuevo')),
-      );
-    }
+    return posts;
   }
 
   Future<void> _refreshProfile() async {
@@ -441,106 +422,107 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
+//_commentsFuture
   Widget _buildCommentList() {
-    // Reemplaza con tu lógica real de comentarios si tienes datos
-    return ScrollContainer(
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) => ListTile(
-          leading: const Icon(Icons.comment),
-          title: Text('Comentario ${index + 1}'),
-          subtitle: const Text('Este es un comentario de ejemplo.'),
-        ),
-      ),
+    return FutureBuilder<List<dynamic>>(
+      future: _commentsFuture,
+      builder: (c, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snap.hasError) {
+          return Center(child: Text('Error: ${snap.error}'));
+        } else if (snap.hasData) {
+          final posts = snap.data!;
+
+          return ScrollContainer(
+            child: posts.isEmpty
+                ? SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'No has comentado nada...',
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        const Icon(Icons.refresh),
+                      ],
+                    ),
+                  )
+                : _postsList(posts, areComments: true),
+          );
+        } else {
+          return const Center(child: Text('No hay publicaciones'));
+        }
+      },
     );
   }
 
   Widget _buildPostList() {
-    return userPostsState.posts.isNotEmpty
-        ? RefreshIndicator(
-            onRefresh: _refreshPosts,
-            child: ScrollContainer(
-              child: ListView.builder(
-                itemCount: userPostsState.posts.length,
-                itemBuilder: (c, i) {
-                  final post = userPostsState.posts[i];
-                  return PostCard(
-                    post: Post(
-                      id: post['id_post'],
-                      title: post['title'],
-                      content: post['content'],
-                      datetime: post['post_date'],
-                      author: post['user_name'],
-                    ),
-                    //isExpanded: false,
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      AppRoutes.postScreen,
-                      arguments: {'post': post},
-                    ),
-                  );
-                },
-              ),
-            ),
-          )
-        : FutureBuilder<List<dynamic>>(
-            future: _postsFuture,
-            builder: (c, snap) {
-              if (snap.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snap.hasError) {
-                return Center(child: Text('Error: ${snap.error}'));
-              } else if (snap.hasData) {
-                userPostsState.posts = snap.data!;
+    return FutureBuilder<List<dynamic>>(
+      future: _postsFuture,
+      builder: (c, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snap.hasError) {
+          return Center(child: Text('Error: ${snap.error}'));
+        } else if (snap.hasData) {
+          final posts = snap.data!;
 
-                return RefreshIndicator(
-                  onRefresh: _refreshPosts,
-                  child: ScrollContainer(
-                    child: userPostsState.posts.isEmpty
-                        ? SizedBox(
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'No has publicado nada...',
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 24),
-                                ElevatedButton(
-                                  onPressed: _refreshPosts,
-                                  child: const Icon(Icons.refresh),
-                                ),
-                              ],
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: userPostsState.posts.length,
-                            itemBuilder: (c, i) {
-                              final post = userPostsState.posts[i];
-                              return PostCard(
-                                post: Post(
-                                  id: post['id_post'],
-                                  title: post['title'],
-                                  content: post['content'],
-                                  datetime: post['post_date'],
-                                  author: post['user_name'],
-                                ),
-                                //isExpanded: false,
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.postScreen,
-                                  arguments: {'post': post},
-                                ),
-                              );
-                            },
-                          ),
-                  ),
-                );
-              } else {
-                return const Center(child: Text('No hay publicaciones'));
-              }
-            },
+          return ScrollContainer(
+            child: posts.isEmpty
+                ? SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'No has publicado nada...',
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        const Icon(Icons.refresh),
+                      ],
+                    ),
+                  )
+                : _postsList(posts),
           );
+        } else {
+          return const Center(child: Text('No hay publicaciones'));
+        }
+      },
+    );
+  }
+
+  Widget _postsList(List<dynamic> posts, {bool areComments = false}) {
+    return ListView.builder(
+      itemCount: posts.length,
+      itemBuilder: (c, i) {
+        final postData = posts[i];
+        final Post post = Post(
+          id: postData['id_post'],
+          title: postData['title'],
+          content: postData['content'],
+          datetime: postData['post_date'],
+          author: postData['user_name'],
+        );
+
+        return !areComments
+            ? PostCard(
+                post: post,
+                //isExpanded: false,
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  AppRoutes.postScreen,
+                  arguments: {'post': post},
+                ),
+              )
+            : CommentCard(
+                comment: post,
+                canBeAnswered: false,
+                onPressedIcon: (post) {});
+      },
+    );
   }
 }

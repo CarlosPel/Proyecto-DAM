@@ -223,6 +223,7 @@ class PostScreenState extends State<PostScreen> {
                                       content: comment['content'],
                                       author: comment['user_name'],
                                       parentPostId: comment['parent_post'],
+                                      datetime: comment['post_date'],
                                     ),
                                     onPressedIcon: (Post selectedComment) {
                                       setState(() {
