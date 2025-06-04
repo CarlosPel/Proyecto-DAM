@@ -1,7 +1,7 @@
 import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
 
-Post parsePost(dynamic postData, {String? username}) {
+Post parsePost(dynamic postData, {String? username, List<dynamic>? article}) {
   return Post(
     id: postData['id_post'],
     title: postData['title'],
