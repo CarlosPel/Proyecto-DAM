@@ -73,7 +73,7 @@ Future<Post> getOlderPost(BuildContext context, int id) async {
     )) {
       return parsePost(jsonDecode(response.body)['data'],
           username: jsonDecode(response.body)['user'],
-          article: jsonDecode(response.body)['user']);
+          article: jsonDecode(response.body)['noticia']);
     }
     return Post(content: '');
   } catch (e) {
