@@ -211,7 +211,7 @@ const getParentPost = async (req, res) => {
                 id_child = result.rows[0].parent_post;
             }
     }
-    console.log(parent_post.rows[0].id_content);
+    console.log(parent_post.id_content);
     res.status(200).json({
                 message: 'Post padre obtenido correctamente',
                 data: parent_post,
