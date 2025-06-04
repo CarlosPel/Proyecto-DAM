@@ -8,6 +8,7 @@ Post parsePost(dynamic postData) {
     content: postData['content'],
     datetime: postData['post_date'],
     author: postData['user_name'],
+    parentPostId: postData['parent_post'],
     article: postData['noticia_title'] != null
         ? Article(
             title: postData['noticia_title'],
