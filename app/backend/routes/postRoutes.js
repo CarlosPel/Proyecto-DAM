@@ -1,4 +1,4 @@
-// Importar funciones y frameworks/librerías.
+//º Importar funciones y frameworks/librerías.
 const express = require('express');
 const { authenticateUser } = require('../middlewares/auth.js');
 const { createPost, getPost, getComments, getFollowedPosts, getParentPost } = require('../controllers/postController.js');

@@ -365,7 +365,7 @@ const otherUserComments = async (req, res) => {
     const resultado = await pool.query(query, [id_user]);
     //console.log(resultado.rows[0].idPost)
     if (resultado.rows.length === 0) {
-      return res.status(2134).json({
+      return res.status(200).json({
         message: 'No hay comentarios para este usuario',
         data: [],
       });

@@ -205,16 +205,18 @@ const getParentPost = async (req, res) => {
     while(true){
             const result = await pool.query(queryParentPost, [id_child]);
             if(result.rows[0].parent_post == null){
-                parent_post = result.rows[0];
+                parent_post = result.rows[0].parent_post;
                 break
             }else{
                 id_child = result.rows[0].parent_post;
             }
     }
+    const queryPost = `SELECT * FROM POST WHERE id_post = $1`;
+    const resultPost = await pool.query(queryPost, [parent_post])
     console.log(parent_post.id_content);
     res.status(200).json({
                 message: 'Post padre obtenido correctamente',
-                data: parent_post,
+                data: resultPost.rows[0],
     })
 }
 
