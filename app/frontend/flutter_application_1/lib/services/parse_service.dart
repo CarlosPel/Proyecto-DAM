@@ -7,7 +7,7 @@ Post parsePost(dynamic postData, {String? username, dynamic article}) {
     title: postData['title'],
     content: postData['content'],
     datetime: postData['post_date'],
-    author: username,
+  author: username ?? postData['user_name'],
     parentPostId: postData['parent_post'],
     article: article != null
         ? Article(
