@@ -314,7 +314,7 @@ const getSavedPosts = async (req, res) => {
 const getOtherUser = async (req, res) => {
   const user_name = req.body.username;
   try {
-    const query = 'SELECT id_user, username, email, nation FROM users WHERE username = $1';
+    const query = 'SELECT id_user, username, nation FROM users WHERE username = $1';
     const result = await pool.query(query, [user_name]);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
