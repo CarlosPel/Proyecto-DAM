@@ -19,6 +19,7 @@ router.post('/unfollow', authenticateUser, unfollow);
 router.post('/savedposts', authenticateUser, getSavedPosts);
 router.post('/otheruser', getOtherUser);
 router.post('/otheruserposts', otherUserPosts);
-router.post('/otherusercomments', otherUserComments);   
+router.post('/otherusercomments', otherUserComments);
+   
 // Exportamos el enrutador para ser utilizado en otros ficheros.
 module.exports = router;

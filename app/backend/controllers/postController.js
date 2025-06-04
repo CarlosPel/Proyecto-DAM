@@ -198,7 +198,26 @@ const getComments = async (req, res) => {
     }
 };
 
+const getParentPost = async (req, res) => {
+    let id_child = req.body.id_post;
+    let queryParentPost = `SELECT parent_post FROM POST WHERE id_post = $1`;
+    let parent_post = null;
+    while(true){
+            const result = await pool.query(queryParentPost, [id_child]);
+            if(result.rows[0].parent_post == null){
+                parent_post = result.rows[0];
+                break
+            }else{
+                id_child = result.rows[0].parent_post;
+            }
+    }
+    res.status(200).json({
+                message: 'Post padre obtenido correctamente',
+                data: parent_post,
+    })
+}
 
 
-module.exports = { createPost, getPost, getComments, getFollowedPosts };
+
+module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost };
 
