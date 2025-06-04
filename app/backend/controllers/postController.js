@@ -215,11 +215,17 @@ const getParentPost = async (req, res) => {
     const resultPost = await pool.query(queryPost, [id_child])
     const queryUser = 'SELECT username FROM users WHERE id_user = $1';
     const resultUser = await pool.query(queryUser, [resultPost.rows[0].id_user])
+    let resultNoticia = null;
+    if (resultPost.rows[0].noticia) {
+        const queryNoticia = `SELECT * FROM noticia WHERE id_noticia = $1`;
+        resultNoticia = await pool.query(queryNoticia, [resultPost.rows[0].noticia]);
+    }
     console.log(resultPost.rows[0].id_post);
     res.status(200).json({
                 message: 'Post padre obtenido correctamente',
                 data: resultPost.rows[0],
-                user: resultUser.rows[0].username
+                user: resultUser.rows[0].username,
+                noticia: (resultNoticia && resultNoticia.rows.length > 0) ? resultNoticia.rows[0] : null
     })
 }
 
