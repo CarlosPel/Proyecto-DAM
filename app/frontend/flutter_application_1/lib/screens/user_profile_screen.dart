@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/services/handle_respones.dart';
+import 'package:flutter_application_1/services/load_routes.dart';
+import 'package:flutter_application_1/services/parse_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/services/req_service.dart';
@@ -500,13 +502,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       itemCount: posts.length,
       itemBuilder: (c, i) {
         final postData = posts[i];
-        final Post post = Post(
-          id: postData['id_post'],
-          title: postData['title'],
-          content: postData['content'],
-          datetime: postData['post_date'],
-          author: postData['user_name'],
-        );
+        final Post post = parsePost(postData);
 
         return !areComments
             ? PostCard(
@@ -521,7 +517,8 @@ class UserProfileScreenState extends State<UserProfileScreen> {
             : CommentCard(
                 comment: post,
                 canBeAnswered: false,
-                onPressedIcon: (post) {});
+                onPressedIcon: (post) {},
+                onTap: () => loadPostScreen(context, post.parentPostId!),);
       },
     );
   }

@@ -32,7 +32,7 @@ class PostCard extends StatelessWidget {
             children: [
               // Título
               Text(
-                post.title ?? '',
+                post.title!,
                 style: const TextStyle(
                   fontFamily: 'Georgia',
                   fontSize: 20,

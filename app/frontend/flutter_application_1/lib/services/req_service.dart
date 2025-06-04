@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
+import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/services/handle_respones.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
@@ -52,6 +53,34 @@ Future<List<dynamic>> fetchTopHeadlines(String? country) async {
   final String url =
       '/topic-headlines?topic=$politicsCode&country=$country&lang=es';
   return await _fetchNews(url);
+}
+
+Future<Post> getOlderPost(BuildContext context, int id) async {
+  final String getUserUrl = '$backendUrl/posts/parentpost';
+
+  try {
+    final response = await http.post(Uri.parse(getUserUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'id_post': id}));
+
+    if (handleResponse(
+      context: context,
+      response: response,
+      onSuccess: (responseData) async {
+        return true;
+      },
+    )) {
+      return jsonDecode(response.body)['data'];
+    }
+
+    return Post(content: '');
+  } catch (e) {
+    // Manejar errores de conexión
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error de conexión: $e')),
+    );
+    return Post(content: '');
+  }
 }
 
 // Obtiene posts

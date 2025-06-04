@@ -6,6 +6,22 @@ import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/services/auth_service.dart';
 
+loadPostScreen(BuildContext context, int id) {
+  Navigator.pushNamed(
+    context,
+    AppRoutes.loadingScreen,
+    arguments: {
+      'loadCondition': () async =>
+          ((await getOlderPost(context, id)).id != 0),
+      'action': () async {
+        Post post = await getOlderPost(context, id);
+        Navigator.pushNamed(context, AppRoutes.postScreen,
+            arguments: {'post': post,});
+      },
+    },
+  );
+}
+
 loadProfile(BuildContext context, String name, Post userPost) {
   Navigator.pushNamed(
     context,

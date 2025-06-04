@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/article.dart';
-import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/posts_notifier.dart';
 import 'package:flutter_application_1/models/posts_state.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/services/parse_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/services/req_service.dart';
@@ -185,22 +184,8 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
       itemCount: posts.length,
       itemBuilder: (context, index) {
         final postData = posts[index];
-        final post = Post(
-          id: postData['id_post'],
-          title: postData['title'],
-          content: postData['content'],
-          datetime: postData['post_date'],
-          author: postData['user_name'],
-          article: postData['noticia_title'] != null
-              ? Article(
-                  title: postData['noticia_title'],
-                  snippet: postData['noticia_content'],
-                  datetime: postData['noticia_fecha'],
-                  source: postData['noticia_source'],
-                  link: postData['noticia_link'],
-                )
-              : null,
-        );
+        final post = parsePost(postData);
+
         return PostCard(
           post: post,
           onTap: () => Navigator.pushNamed(

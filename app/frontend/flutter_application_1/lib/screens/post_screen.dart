@@ -27,6 +27,7 @@ class PostScreenState extends State<PostScreen> {
   Map<String, dynamic>? _referencedComment;
   List<dynamic>? _comments;
   bool _expandedIndex = false;
+  late Future<bool> _isSaved;
 
   // Guarda las keys de los comentarios raíz
   final Map<int, GlobalKey<CommentCardState>> _commentKeys = {};
@@ -37,7 +38,12 @@ class PostScreenState extends State<PostScreen> {
   void initState() {
     super.initState();
     _loadComments();
-    _isUsersPost = isUserPost(); // <-- Asigna el Future aquí
+    _isUsersPost = isUserPost();
+    _isSaved = isPostSaved();
+  }
+
+  Future<bool> isPostSaved() async {
+    return false;
   }
 
   Future<bool> isUserPost() async {
@@ -160,6 +166,28 @@ class PostScreenState extends State<PostScreen> {
                     );
                   }
                 }),
+            Spacer(),
+            FutureBuilder(
+                future: _isSaved,
+                builder: (context, snap) {
+                  IconData iconData = Icons.bookmark_outline;
+
+                  if (snap.connectionState == ConnectionState.done &&
+                      snap.hasData) {
+                    iconData =
+                        snap.data! ? Icons.bookmark : Icons.bookmark_outline;
+                  }
+                  Icon icon = Icon(iconData, size: 40,);
+                  return IconButton(
+                    onPressed: () {},
+                    icon: icon,
+                    color: Theme.of(context).colorScheme.primary,
+                    style: ButtonStyle(
+                      backgroundColor:
+                          WidgetStateProperty.all(Colors.transparent),
+                    ),
+                  );
+                })
           ],
         ),
       ),
