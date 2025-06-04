@@ -370,6 +370,7 @@ const otherUserComments = async (req, res) => {
         data: [],
       });
     }
+    console.log('contenido: ' & parent_post.content);
     res.status(200).json({
       message: 'Posts extraídos correctamente',
       data: resultado.rows,
@@ -386,11 +387,11 @@ module.exports = {
   editProfileUser,
   userPosts,
   userConditions,
-  getFollowed, 
-  userComments, 
+  getFollowed,
+  userComments,
   followUser,
-  unfollow, 
-  getSavedPosts, 
+  unfollow,
+  getSavedPosts,
   getOtherUser,
   otherUserPosts,
   otherUserComments
