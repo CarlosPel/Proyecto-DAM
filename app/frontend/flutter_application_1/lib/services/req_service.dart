@@ -4,6 +4,7 @@ import 'package:flutter_application_1/data/app_data.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/services/handle_respones.dart';
+import 'package:flutter_application_1/services/parse_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -70,10 +71,11 @@ Future<Post> getOlderPost(BuildContext context, int id) async {
         return true;
       },
     )) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(jsonDecode(response.body)['data']['id'])),
-      );
-      return jsonDecode(response.body)['data'];
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content:
+            Text('titulo: ${(jsonDecode(response.body)['data']['content'])}'),
+      ));
+      return parsePost(jsonDecode(response.body)['data']);
     }
     return Post(content: '');
   } catch (e) {
