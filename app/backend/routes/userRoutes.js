@@ -1,6 +1,6 @@
 // Importar funciones y frameworks/librerías.
 const express = require('express');
-const { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments, unfollow, getSavedPosts, getOtherUser } = require('../controllers/userController');
+const { registerUser, loginUser, editProfileUser, userPosts, userConditions, followUser, getFollowed, userComments, unfollow, getSavedPosts, getOtherUser, otherUserPosts, otherUserComments } = require('../controllers/userController');
 const { authenticateUser } = require('../middlewares/auth.js');
 
 // Creamos un enrutador para manejar rutas de manera modular, fuera del fichero server.js
@@ -18,6 +18,7 @@ router.post('/usercomments', authenticateUser, userComments);
 router.post('/unfollow', authenticateUser, unfollow);
 router.post('/savedposts', authenticateUser, getSavedPosts);
 router.post('/otheruser', getOtherUser);
-
+router.post('/otheruserposts', otherUserPosts);
+router.post('/otherusercomments', otherUserComments);   
 // Exportamos el enrutador para ser utilizado en otros ficheros.
 module.exports = router;

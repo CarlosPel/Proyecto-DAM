@@ -314,19 +314,64 @@ const getSavedPosts = async (req, res) => {
 const getOtherUser = async (req, res) => {
   const user_name = req.body.username;
   try {
-    const query = 'SELECT * FROM users WHERE username = $1';
+    const query = 'SELECT id_user, username, email, nation FROM users WHERE username = $1';
     const result = await pool.query(query, [user_name]);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     } else {
       return res.status(200).json({
         message: 'Usuario encontrado',
-        data: result.rows[0]
+        data: result.rows[0],
+        posts: postsResult.rows
       });
     }
   } catch (error) {
     console.error('Detalle del error:', error);
     res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+}
+
+const otherUserPosts = async (req, res) => {
+  const id_user = req.body.id_user;
+  const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;`;
+  try {
+    const resultado = await pool.query(query, [id_user]);
+    //console.log(resultado.rows[0].idPost)
+    if (resultado.rows.length === 0) {
+      return res.status(200).json({
+        message: 'No hay posts para este usuario',
+        data: [],
+      });
+    }
+    res.status(200).json({
+      message: 'Posts extraídos correctamente',
+      data: resultado.rows,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al obtener los post de este usuario' })
+  }
+}
+
+const otherUserComments = async (req, res) => {
+  const id_user = req.body.id_user;
+  const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is not null ORDER BY post_date DESC;`;
+  try {
+    const resultado = await pool.query(query, [id_user]);
+    //console.log(resultado.rows[0].idPost)
+    if (resultado.rows.length === 0) {
+      return res.status(200).json({
+        message: 'No hay comentarios para este usuario',
+        data: [],
+      });
+    }
+    res.status(200).json({
+      message: 'Posts extraídos correctamente',
+      data: resultado.rows,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Error al obtener los comentarios de este usuario' })
   }
 }
 
@@ -341,5 +386,7 @@ module.exports = {
   followUser,
   unfollow, 
   getSavedPosts, 
-  getOtherUser
+  getOtherUser,
+  otherUserPosts,
+  otherUserComments
 };
