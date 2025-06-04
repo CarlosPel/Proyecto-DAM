@@ -36,6 +36,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   late String beName;
   late String beEmail;
   late String beCountry;
+  String? _userName;
 
   @override
   void initState() {
@@ -76,6 +77,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     setState(() {
       getUserData().then((userData) {
         _nameController.text = userData['nombre'] ?? '';
+        _userName = _nameController.text;
         _emailController.text = userData['email'] ?? '';
         _countryCodeController = userData['countryCode'] ?? 'ES';
         _passwordController.clear();
@@ -488,7 +490,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                       ],
                     ),
                   )
-                : postsList(context, posts),
+                : postsList(context, posts, username: _userName),
           );
         } else {
           return const Center(child: Text('No hay publicaciones'));
@@ -499,12 +501,12 @@ class UserProfileScreenState extends State<UserProfileScreen> {
 }
 
 Widget postsList(BuildContext context, List<dynamic> posts,
-    {bool areComments = false}) {
+    {bool areComments = false, String? username}) {
   return ListView.builder(
     itemCount: posts.length,
     itemBuilder: (c, i) {
       final postData = posts[i];
-      final Post post = parsePost(postData);
+      final Post post = parsePost(postData, username: username);
 
       return !areComments
           ? PostCard(
