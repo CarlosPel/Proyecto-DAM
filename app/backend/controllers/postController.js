@@ -8,7 +8,7 @@ const createPost = async (req, res) => {
     let {
         title,
         content,
-        topics, // 👈 ahora esperamos un array
+        topics, 
         parent_post,
         noticia_title,
         noticia_content,
@@ -29,8 +29,8 @@ const createPost = async (req, res) => {
 
         if (noticia_title && noticia_title.trim() !== "") {
             const comprobacionNoticia = await pool.query(
-                `SELECT * FROM noticia WHERE source_name = $1 AND title = $2`,
-                [noticia_source, noticia_title]
+                `SELECT * FROM noticia WHERE source_name = $1`,
+                [noticia_title]
             );
 
             if (comprobacionNoticia.rows.length === 0) {
