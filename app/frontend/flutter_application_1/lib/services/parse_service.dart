@@ -1,7 +1,7 @@
 import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
 
-Post parsePost(dynamic postData, {String? username, List<dynamic>? article}) {
+Post parsePost(dynamic postData, {String? username, dynamic article}) {
   return Post(
     id: postData['id_post'],
     title: postData['title'],
@@ -9,13 +9,13 @@ Post parsePost(dynamic postData, {String? username, List<dynamic>? article}) {
     datetime: postData['post_date'],
     author: username,
     parentPostId: postData['parent_post'],
-    article: postData['noticia_title'] != null
+    article: article != null
         ? Article(
-            title: postData['noticia_title'],
-            snippet: postData['noticia_content'],
-            datetime: postData['noticia_fecha'],
-            source: postData['noticia_source'],
-            link: postData['noticia_link'],
+            title: article['noticia_title'],
+            snippet: article['noticia_content'],
+            datetime: article['noticia_fecha'],
+            source: article['noticia_source'],
+            link: article['noticia_link'],
           )
         : null,
   );

@@ -8,7 +8,6 @@ import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/article_container.dart';
 import 'package:flutter_application_1/widgets/comment_card.dart';
-import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
 
@@ -119,211 +118,229 @@ class PostScreenState extends State<PostScreen> {
     final theme = Theme.of(context);
     final Post post = widget.post;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: LeadingButton(),
-        title: Row(
-          children: [
-            Text(
-              post.author!,
-              style: theme.textTheme.headlineMedium,
-            ),
-            SizedBox(
-              width: 16,
-            ),
-            FutureBuilder(
-                future: _isUsersPost,
-                builder: (context, snap) {
-                  if (snap.hasData) {
-                    return Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: theme.colorScheme.primary,
-                          width: 2,
-                        ),
-                      ),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        onPressed: () {
-                          if (snap.data!) {
-                            Navigator.pushNamed(
-                                context, AppRoutes.userProfileScreen);
-                          } else {
-                            loadProfile(context, post.author!, post);
-                          }
-                        },
-                        icon: Icon(Icons.person, size: 25),
-                      ),
-                    );
-                  } else {
-                    return Icon(
-                      Icons.person,
-                      size: 20,
-                    );
-                  }
-                }),
-            Spacer(),
-            FutureBuilder(
-                future: _isSaved,
-                builder: (context, snap) {
-                  IconData iconData = Icons.bookmark_outline;
+    return PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new, size: 28),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.postsScrollScreen,
+                    (Route<dynamic> route) => false),
+                style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(Colors.transparent),
+                    foregroundColor: WidgetStateProperty.all(Colors.black))),
+            title: Row(
+              children: [
+                Text(
+                  post.author!,
+                  style: theme.textTheme.headlineMedium,
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                FutureBuilder(
+                    future: _isUsersPost,
+                    builder: (context, snap) {
+                      if (snap.hasData) {
+                        return Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                          ),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: BoxConstraints(),
+                            onPressed: () {
+                              if (snap.data!) {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.userProfileScreen);
+                              } else {
+                                loadProfile(context, post.author!, post);
+                              }
+                            },
+                            icon: Icon(Icons.person, size: 25),
+                          ),
+                        );
+                      } else {
+                        return Icon(
+                          Icons.person,
+                          size: 20,
+                        );
+                      }
+                    }),
+                Spacer(),
+                FutureBuilder(
+                    future: _isSaved,
+                    builder: (context, snap) {
+                      IconData iconData = Icons.bookmark_outline;
 
-                  if (snap.connectionState == ConnectionState.done &&
-                      snap.hasData) {
-                    iconData =
-                        snap.data! ? Icons.bookmark : Icons.bookmark_outline;
-                  }
-                  Icon icon = Icon(iconData, size: 40,);
-                  return IconButton(
-                    onPressed: () {},
-                    icon: icon,
-                    color: Theme.of(context).colorScheme.primary,
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Colors.transparent),
-                    ),
-                  );
-                })
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          if (post.article != null)
-            ArticleContainer(
-              ArticleCard(
-                article: post.article!,
-                isExpanded: _expandedIndex,
-                onTap: () {
-                  setState(() {
-                    _expandedIndex = !_expandedIndex;
-                  });
-                },
-              ),
-            ),
-          PostCard(
-            post: post,
-            onTap: () {},
-            isPreview: false,
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: _refreshComments,
-              child: _comments == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : ScrollContainer(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _comments!.isEmpty
-                            ? SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'No hay comentarios disponibles',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 24),
-                                    IconButton(
-                                      onPressed: _refreshComments,
-                                      icon: const Icon(Icons.refresh),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: _comments!.length,
-                                itemBuilder: (context, index) {
-                                  final comment = _comments![index];
-                                  final key =
-                                      _commentKeys[comment['id_post']] ??
-                                          GlobalKey<CommentCardState>();
-                                  _commentKeys[comment['id_post']] = key;
-                                  return CommentCard(
-                                    key: key,
-                                    comment: Post(
-                                      id: comment['id_post'],
-                                      content: comment['content'],
-                                      author: comment['user_name'],
-                                      parentPostId: comment['parent_post'],
-                                      datetime: comment['post_date'],
-                                    ),
-                                    onPressedIcon: (Post selectedComment) {
-                                      setState(() {
-                                        _referencedComment = {
-                                          'id_post': selectedComment.id,
-                                          'content': selectedComment.content,
-                                          'user_name': selectedComment.author,
-                                        };
-                                      });
-                                    },
-                                  );
-                                },
-                              ),
-                      ),
-                    ),
+                      if (snap.connectionState == ConnectionState.done &&
+                          snap.hasData) {
+                        iconData = snap.data!
+                            ? Icons.bookmark
+                            : Icons.bookmark_outline;
+                      }
+                      Icon icon = Icon(
+                        iconData,
+                        size: 40,
+                      );
+                      return IconButton(
+                        onPressed: () {},
+                        icon: icon,
+                        color: Theme.of(context).colorScheme.primary,
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                        ),
+                      );
+                    })
+              ],
             ),
           ),
-          Column(
+          body: Column(
             children: [
-              if (_referencedComment != null)
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${_referencedComment!['user_name']}: ${_referencedComment!['content']}',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          setState(() {
-                            _referencedComment = null;
-                          });
-                        },
-                      ),
-                    ],
+              if (post.article != null)
+                ArticleContainer(
+                  ArticleCard(
+                    article: post.article!,
+                    isExpanded: _expandedIndex,
+                    onTap: () {
+                      setState(() {
+                        _expandedIndex = !_expandedIndex;
+                      });
+                    },
                   ),
                 ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 64.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _commentController,
-                        decoration: const InputDecoration(
-                          hintText: 'Escribe un comentario...',
+              PostCard(
+                post: post,
+                onTap: () {},
+                isPreview: false,
+              ),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _refreshComments,
+                  child: _comments == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : ScrollContainer(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _comments!.isEmpty
+                                ? SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'No hay comentarios disponibles',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 24),
+                                        IconButton(
+                                          onPressed: _refreshComments,
+                                          icon: const Icon(Icons.refresh),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: _comments!.length,
+                                    itemBuilder: (context, index) {
+                                      final comment = _comments![index];
+                                      final key =
+                                          _commentKeys[comment['id_post']] ??
+                                              GlobalKey<CommentCardState>();
+                                      _commentKeys[comment['id_post']] = key;
+                                      return CommentCard(
+                                        key: key,
+                                        comment: Post(
+                                          id: comment['id_post'],
+                                          content: comment['content'],
+                                          author: comment['user_name'],
+                                          parentPostId: comment['parent_post'],
+                                          datetime: comment['post_date'],
+                                        ),
+                                        onPressedIcon: (Post selectedComment) {
+                                          setState(() {
+                                            _referencedComment = {
+                                              'id_post': selectedComment.id,
+                                              'content':
+                                                  selectedComment.content,
+                                              'user_name':
+                                                  selectedComment.author,
+                                            };
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
+                          ),
                         ),
+                ),
+              ),
+              Column(
+                children: [
+                  if (_referencedComment != null)
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${_referencedComment!['user_name']}: ${_referencedComment!['content']}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              setState(() {
+                                _referencedComment = null;
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () => _commentPost(post),
-                      child: const Icon(Icons.send),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16.0, bottom: 64.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _commentController,
+                            decoration: const InputDecoration(
+                              hintText: 'Escribe un comentario...',
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => _commentPost(post),
+                          child: const Icon(Icons.send),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }

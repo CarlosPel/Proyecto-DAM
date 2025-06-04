@@ -43,7 +43,7 @@ Future<void> createPost(
         'noticia_source': article?.source,
       }),
     );
-
+    
     // Verifica si la respuesta es exitosa (código 200)
     if (response.statusCode == 201) {
       // Decodifica la respuesta JSON
