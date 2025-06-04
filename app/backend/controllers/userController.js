@@ -319,10 +319,15 @@ const getOtherUser = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     } else {
+      const queryPosts = 'SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;';
+      const postsResult = await pool.query(queryPosts, [result.rows[0].id_user]);
+      const queryComments = 'SELECT * FROM post WHERE id_user = $1 AND parent_post is not null ORDER BY post_date DESC;';
+      const commentsResult = await pool.query(queryComments, [result.rows[0].id_user]);
       return res.status(200).json({
         message: 'Usuario encontrado',
         data: result.rows[0],
-        posts: postsResult.rows
+        posts: postsResult.rows,
+        comments: commentsResult.rows
       });
     }
   } catch (error) {
