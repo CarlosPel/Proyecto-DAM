@@ -277,7 +277,7 @@ class _TermsScreenState extends State<TermsScreen> {
                 style: TextStyle(fontSize: 16),
               ),
               const Text(
-                'Nuestra app permite subir contenido (textos, imágenes, comentarios, etc.). Eres responsable del contenido que publiques y declaras que tienes los derechos sobre él. \nNos reservas el derecho no exclusivo, transferible y sublicenciable para usar, reproducir, modificar y distribuir dicho contenido solo con fines operativos dentro de la plataforma. \nPodremos eliminar contenido que infrinja estos términos sin previo aviso.',
+                'Nuestra app permite subir contenido (textos, comentarios, etc.). Eres responsable del contenido que publiques y declaras que tienes los derechos sobre él. \nNos reservas el derecho no exclusivo, transferible y sublicenciable para usar, reproducir, modificar y distribuir dicho contenido solo con fines operativos dentro de la plataforma. \nPodremos eliminar contenido que infrinja estos términos sin previo aviso.',
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 8),

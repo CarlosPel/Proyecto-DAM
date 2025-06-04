@@ -110,6 +110,7 @@ class PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final Post post = widget.post;
 
     return Scaffold(
@@ -117,24 +118,40 @@ class PostScreenState extends State<PostScreen> {
         leading: LeadingButton(),
         title: Row(
           children: [
-            Text(post.author!),
+            Text(
+              post.author!,
+              style: theme.textTheme.headlineMedium,
+            ),
             SizedBox(
-              width: 8,
+              width: 16,
             ),
             FutureBuilder(
                 future: _isUsersPost,
                 builder: (context, snap) {
                   if (snap.hasData) {
-                    return IconButton(
-                      onPressed: () {
-                        if (snap.data!) {
-                          Navigator.pushNamed(
-                              context, AppRoutes.userProfileScreen);
-                        } else {
-                          loadProfile(context, post.author!, post);
-                        }
-                      },
-                      icon: Icon(Icons.person, size: 20),
+                    return Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: theme.colorScheme.primary,
+                          width: 2,
+                        ),
+                      ),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        onPressed: () {
+                          if (snap.data!) {
+                            Navigator.pushNamed(
+                                context, AppRoutes.userProfileScreen);
+                          } else {
+                            loadProfile(context, post.author!, post);
+                          }
+                        },
+                        icon: Icon(Icons.person, size: 25),
+                      ),
                     );
                   } else {
                     return Icon(

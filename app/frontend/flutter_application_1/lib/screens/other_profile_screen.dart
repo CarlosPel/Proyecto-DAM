@@ -40,17 +40,13 @@ class ProfileScreenState extends State<ProfileScreen> {
     final theme = Theme.of(context);
 
     return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (a, e) {
-        
-      },
+      canPop: false,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
               icon: Icon(Icons.arrow_back_ios_new, size: 28),
-              onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                  context, AppRoutes.postScreen, (Route<dynamic> route) => false,
-                  arguments: {'post': widget.userPost}),
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(context,
+                  AppRoutes.postsScrollScreen, (Route<dynamic> route) => false),
               style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(Colors.transparent),
                   foregroundColor: WidgetStateProperty.all(Colors.black))),
@@ -105,7 +101,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                                   },
                                   follow: !following);
                             },
-                            label: Text(following ? 'Dejar de seguir' : 'Seguir'),
+                            label:
+                                Text(following ? 'Dejar de seguir' : 'Seguir'),
                             icon: Icon(following
                                 ? Icons.person_remove
                                 : Icons.person_add),

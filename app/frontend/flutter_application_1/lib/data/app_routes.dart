@@ -8,7 +8,7 @@ import 'package:flutter_application_1/screens/loading_screen.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/screens/post_screen.dart';
-import 'package:flutter_application_1/screens/profile_screen.dart';
+import 'package:flutter_application_1/screens/other_profile_screen.dart';
 import 'package:flutter_application_1/screens/user_profile_screen.dart';
 import 'package:flutter_application_1/screens/singup_screen.dart';
 import 'package:flutter_application_1/screens/terms_screen.dart';
