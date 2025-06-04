@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
+import 'package:flutter_application_1/models/user.dart';
+import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/services/auth_service.dart';
+
+loadProfile(BuildContext context, String name) {
+  Navigator.pushNamed(
+    context,
+    AppRoutes.loadingScreen,
+    arguments: {
+      'loadCondition': () async =>
+          ((await getUserByName(context, name)).id != 0),
+      'action': () async {
+        User user = await getUserByName(context, name);
+        Navigator.pushNamed(context, AppRoutes.profileScreen,
+            arguments: {'user': user});
+      },
+    },
+  );
+}
 
 loadLogin(
     {required BuildContext context,
@@ -66,14 +84,13 @@ goHomeIfAgreed(BuildContext context) {
         Navigator.pushNamed(context, AppRoutes.loadingScreen, arguments: {
           'loadCondition': () => isDataSaved(getToken()),
           'action': () async {
-            Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.postsScrollScreen, (Route<dynamic> route) => false);
+            Navigator.pushNamedAndRemoveUntil(context,
+                AppRoutes.postsScrollScreen, (Route<dynamic> route) => false);
           }
         });
       } else {
         Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.termsScreen, (Route<dynamic> route) => false);
-          
+            context, AppRoutes.termsScreen, (Route<dynamic> route) => false);
       }
     }
   });
