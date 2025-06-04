@@ -70,9 +70,11 @@ Future<Post> getOlderPost(BuildContext context, int id) async {
         return true;
       },
     )) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(jsonDecode(response.body)['data']['id'])),
+      );
       return jsonDecode(response.body)['data'];
     }
-
     return Post(content: '');
   } catch (e) {
     // Manejar errores de conexión

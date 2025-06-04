@@ -12,7 +12,7 @@ loadPostScreen(BuildContext context, int id) {
     AppRoutes.loadingScreen,
     arguments: {
       'loadCondition': () async =>
-          ((await getOlderPost(context, id)).id != 0),
+          ((await getOlderPost(context, id)).id != null),
       'action': () async {
         Post post = await getOlderPost(context, id);
         Navigator.pushNamed(context, AppRoutes.postScreen,
