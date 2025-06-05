@@ -40,8 +40,10 @@ const createPost = async (req, res) => {
                     [noticia_source, noticia_title, noticia_content, noticia_url, noticia_datetime]
                 );
                 noticia = newNoticia.rows[0].id_noticia;
+                //console.log("Título de noticia insertado:", newNoticia.rows[0].title);
             } else {
                 noticia = comprobacionNoticia.rows[0].id_noticia;
+                //console.log("Título de noticia ya existe:", comprobacionNoticia.rows[0].title);
             }
         }
 
@@ -211,21 +213,23 @@ const getParentPost = async (req, res) => {
             id_child = result.rows[0].parent_post;
         }
     }
-    const queryPost = `SELECT * FROM POST WHERE id_post = $1`;
+    const queryPost = `SELECT 
+            POST.*,
+            USERS.username AS user_name,
+            NOTICIA.title AS noticia_title, 
+            NOTICIA.content AS noticia_content, 
+            NOTICIA.source_name AS noticia_source,
+            NOTICIA.fecha AS noticia_fecha,
+            NOTICIA.link AS noticia_link
+        FROM POST
+        INNER JOIN USERS ON POST.id_user = USERS.id_user
+        LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
+        WHERE POST.id_post = $1`;
     const resultPost = await pool.query(queryPost, [id_child])
-    const queryUser = 'SELECT username FROM users WHERE id_user = $1';
-    const resultUser = await pool.query(queryUser, [resultPost.rows[0].id_user])
-    let resultNoticia = null;
-    if (resultPost.rows[0].noticia) {
-        const queryNoticia = `SELECT * FROM noticia WHERE id_noticia = $1`;
-        resultNoticia = await pool.query(queryNoticia, [resultPost.rows[0].noticia]);
-    }
     console.log(resultPost.rows[0].id_post);
     res.status(200).json({
         message: 'Post padre obtenido correctamente',
         data: resultPost.rows[0],
-        user: resultUser.rows[0].username,
-        noticia: (resultNoticia && resultNoticia.rows.length > 0) ? resultNoticia.rows[0] : null
     })
 }
 

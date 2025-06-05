@@ -172,7 +172,17 @@ const editProfileUser = async (req, res) => {
 
 const userPosts = async (req, res) => {
   const id_user = req.user.id_user;
-  const query = `SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;`;
+  const query = `SELECT 
+            POST.*,
+            NOTICIA.title AS noticia_title, 
+            NOTICIA.content AS noticia_content, 
+            NOTICIA.source_name AS noticia_source,
+            NOTICIA.fecha AS noticia_fecha,
+            NOTICIA.link AS noticia_link
+        FROM POST
+        LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
+        WHERE POST.parent_post is null AND POST.id_user = $1 
+        ORDER BY POST.post_date DESC;`;
   try {
     const resultado = await pool.query(query, [id_user]);
     //console.log(resultado.rows[0].idPost)
@@ -292,8 +302,18 @@ const getSavedPosts = async (req, res) => {
   const id_user = req.user.id_user
 
   try {
-    const query = `SELECT * FROM POST JOIN SAVED_POST ON POST.id_post = SAVED_POST.id_post 
-        WHERE SAVED_POST.id_user = $1`
+    const query = `SELECT POST.*,
+          USERS.username AS user_name,
+            NOTICIA.title AS noticia_title, 
+            NOTICIA.content AS noticia_content, 
+            NOTICIA.source_name AS noticia_source,
+            NOTICIA.fecha AS noticia_fecha,
+            NOTICIA.link AS noticia_link 
+            FROM POST JOIN SAVED_POST ON POST.id_post = SAVED_POST.id_post 
+            INNER JOIN USERS ON POST.id_user = USERS.id_user
+            LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
+            WHERE SAVED_POST.id_user = $1`
+            
     const result = await pool.query(query, [id_user])
     if (result.rows.length === 0) {
       return res.status(200).json({
@@ -319,7 +339,15 @@ const getOtherUser = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     } else {
-      const queryPosts = 'SELECT * FROM post WHERE id_user = $1 AND parent_post is null ORDER BY post_date DESC;';
+      const queryPosts = `SELECT POST.*,
+                            NOTICIA.title AS noticia_title, 
+                            NOTICIA.content AS noticia_content, 
+                            NOTICIA.source_name AS noticia_source,
+                            NOTICIA.fecha AS noticia_fecha,
+                            NOTICIA.link AS noticia_link
+                            FROM POST LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia 
+                            WHERE POST.id_user = $1 AND POST.parent_post is null 
+                            ORDER BY post_date DESC;`;
       const postsResult = await pool.query(queryPosts, [result.rows[0].id_user]);
       const queryComments = 'SELECT * FROM post WHERE id_user = $1 AND parent_post is not null ORDER BY post_date DESC;';
       const commentsResult = await pool.query(queryComments, [result.rows[0].id_user]);
