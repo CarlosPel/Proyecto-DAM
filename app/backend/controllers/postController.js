@@ -1,14 +1,14 @@
 const pool = require('../config/db');
 const authenticateUser = require('../middlewares/auth'); // Middleware de autenticación
-const {generateToken} = require('../middlewares/auth'); 
-const loginUser = require ('../controllers/userController')
+const { generateToken } = require('../middlewares/auth');
+const loginUser = require('../controllers/userController')
 
 // Función para crear un postq
 const createPost = async (req, res) => {
     let {
         title,
         content,
-        topics, 
+        topics,
         parent_post,
         noticia_title,
         noticia_content,
@@ -105,11 +105,11 @@ const getPost = async (req, res) => {
     if (nation && nation.trim() !== "") {
         conditions.push(`POST.nation = $${index++}`);
         values.push(nation);
-   }
-/*  else{
-        conditions.push(`POST.nation = $${index++}`);
-        values.push(nation_user);
-    }*/
+    }
+    /*  else{
+            conditions.push(`POST.nation = $${index++}`);
+            values.push(nation_user);
+        }*/
     if (topic && topic.trim() !== "") {
         conditions.push(`POST.topic = $${index++}`);
         values.push(topic);
@@ -150,34 +150,34 @@ const getPost = async (req, res) => {
 };
 
 const getFollowedPosts = async (req, res) => {
-  const id_user = req.user.id_user;
+    const id_user = req.user.id_user;
 
-  try {
-    // Obtener IDs de usuarios seguidos
-    const followersResult = await pool.query(
-      `SELECT id_followed FROM following WHERE id_follower = $1`, 
-      [id_user]
-    );
+    try {
+        // Obtener IDs de usuarios seguidos
+        const followersResult = await pool.query(
+            `SELECT id_followed FROM following WHERE id_follower = $1`,
+            [id_user]
+        );
 
-    const followedIds = followersResult.rows.map(row => row.id_followed);
+        const followedIds = followersResult.rows.map(row => row.id_followed);
 
-    if (followedIds.length === 0) {
-      // No sigue a nadie, devolver array vacío
-      return res.json({ posts: [] });
+        if (followedIds.length === 0) {
+            // No sigue a nadie, devolver array vacío
+            return res.json({ posts: [] });
+        }
+
+        // Consulta usando ANY para array
+        const postsResult = await pool.query(
+            `SELECT * FROM post WHERE id_user = ANY($1::int[]) ORDER BY post_date DESC`,
+            [followedIds]
+        );
+
+        res.json({ posts: postsResult.rows });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener posts' });
     }
-
-    // Consulta usando ANY para array
-    const postsResult = await pool.query(
-      `SELECT * FROM post WHERE id_user = ANY($1::int[]) ORDER BY post_date DESC`, 
-      [followedIds]
-    );
-
-    res.json({ posts: postsResult.rows });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener posts' });
-  }
 }
 
 const getComments = async (req, res) => {
@@ -194,7 +194,7 @@ const getComments = async (req, res) => {
         });
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({message: 'Error al obtener los comentarios de este post'})
+        res.status(500).json({ message: 'Error al obtener los comentarios de este post' })
     }
 };
 
@@ -202,14 +202,14 @@ const getParentPost = async (req, res) => {
     let id_child = req.body.id_post;
     let queryParentPost = `SELECT parent_post FROM POST WHERE id_post = $1`;
     //let parent_post = null;
-    while(true){
-            const result = await pool.query(queryParentPost, [id_child]);
-            if(result.rows[0].parent_post == null){
-                // parent_post = result.rows[0].parent_post;
-                break
-            }else{
-                id_child = result.rows[0].parent_post;
-            }
+    while (true) {
+        const result = await pool.query(queryParentPost, [id_child]);
+        if (result.rows[0].parent_post == null) {
+            // parent_post = result.rows[0].parent_post;
+            break
+        } else {
+            id_child = result.rows[0].parent_post;
+        }
     }
     const queryPost = `SELECT * FROM POST WHERE id_post = $1`;
     const resultPost = await pool.query(queryPost, [id_child])
@@ -222,10 +222,10 @@ const getParentPost = async (req, res) => {
     }
     console.log(resultPost.rows[0].id_post);
     res.status(200).json({
-                message: 'Post padre obtenido correctamente',
-                data: resultPost.rows[0],
-                user: resultUser.rows[0].username,
-                noticia: (resultNoticia && resultNoticia.rows.length > 0) ? resultNoticia.rows[0] : null
+        message: 'Post padre obtenido correctamente',
+        data: resultPost.rows[0],
+        user: resultUser.rows[0].username,
+        noticia: (resultNoticia && resultNoticia.rows.length > 0) ? resultNoticia.rows[0] : null
     })
 }
 
@@ -242,11 +242,11 @@ const savePost = async (req, res) => {
 
         if (checkPost.rows.length > 0) {
             return res.status(200).json({ message: 'El post ya está guardado' });
-        }else{
+        } else {
             await pool.query(
-            `INSERT INTO saved_post (id_user, id_post) VALUES ($1, $2)`,
-            [id_user, id_post]
-        );
+                `INSERT INTO saved_post (id_user, id_post) VALUES ($1, $2)`,
+                [id_user, id_post]
+            );
         }
         res.status(201).json({ message: 'Post guardado exitosamente' });
 
@@ -261,6 +261,7 @@ const checkSaved = async (req, res) => {
     const id_user = req.user.id_user;
     let saved = false
     try {
+        console.log(id_post.toString());
         // Verificar si el post está guardado
         const checkPost = await pool.query(
             `SELECT * FROM saved_post WHERE id_user = $1 AND id_post = $2`,
@@ -268,17 +269,17 @@ const checkSaved = async (req, res) => {
         );
 
         if (checkPost.rows.length != 0) {
-            console.log("El post está guardado");
             saved = true;
-            return res.status(200).json({ message: 'El post está guardado',
+            return res.status(200).json({
+                message: 'El post está guardado',
                 saved: saved
-             });
-            
+            });
+
         } else {
-            console.log("El post no está guardado");
-            return res.status(200).json({ message: 'El post no está guardado',
+            return res.status(200).json({
+                message: 'El post no está guardado',
                 saved: saved
-             });
+            });
         }
 
     } catch (error) {
