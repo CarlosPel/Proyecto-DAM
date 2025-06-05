@@ -128,6 +128,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                               _postsFuture =
                                   _loadPosts();
                             });
+                            _refreshPosts();
                           },
                         ),
                       );
