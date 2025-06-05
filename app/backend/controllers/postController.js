@@ -137,7 +137,6 @@ const getPost = async (req, res) => {
     try {
         const token = generateToken(user)
         const result = await pool.query(query, values);
-        console.log(result.rows[0].toString);
         res.status(200).json({
             message: 'Post extraídos correctamente',
             data: result.rows,
