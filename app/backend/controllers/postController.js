@@ -40,10 +40,10 @@ const createPost = async (req, res) => {
                     [noticia_source, noticia_title, noticia_content, noticia_url, noticia_datetime]
                 );
                 noticia = newNoticia.rows[0].id_noticia;
-                console.log("Título de noticia insertado:", newNoticia.rows[0].title);
+                //console.log("Título de noticia insertado:", newNoticia.rows[0].title);
             } else {
                 noticia = comprobacionNoticia.rows[0].id_noticia;
-                console.log("Título de noticia ya existe:", comprobacionNoticia.rows[0].title);
+                //console.log("Título de noticia ya existe:", comprobacionNoticia.rows[0].title);
             }
         }
 

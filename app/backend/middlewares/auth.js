@@ -10,7 +10,7 @@ const authenticateUser = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token.split(' ')[1], secretKey); // Validar el token (formato 'Bearer token')
-        console.log('Datos decodificados del token:', decoded);
+        //console.log('Datos decodificados del token:', decoded);
         req.user = decoded; // Información del usuario extraída del token
         next();
     } catch (error) {
