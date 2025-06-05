@@ -51,10 +51,10 @@ Future<User> getUserByName(BuildContext context, String name) async {
 }
 
 // Noticias más relevantes de política del país del usuario ordenadas por ultima hora
-Future<List<dynamic>> fetchTopHeadlines(String? country) async {
+Future<List<dynamic>> fetchTopHeadlines(BuildContext context, String? country) async {
   final String url =
       '/topic-headlines?topic=$politicsCode&country=$country&lang=es';
-  return await _getNews(url);
+  return await _getNews(context, url);
 }
 
 Future<Post> getOlderPost(BuildContext context, int id) async {
@@ -103,7 +103,7 @@ Future<List<dynamic>> getFollowingPosts(BuildContext context) async {
 
 Future<List<dynamic>> getTopicsPosts(
     BuildContext context, List<Topic> topics) async {
-  final String routeUrl = '$backendUrl/posts/getfollowed';
+  final String routeUrl = '$backendUrl/posts/getpostsbytopic';
   final String userToken = (await getToken())!;
 
   return await _fetchFromReq(
@@ -114,7 +114,7 @@ Future<List<dynamic>> getTopicsPosts(
           'Authorization': 'Bearer $userToken',
           'Content-Type': 'application/json'
         },
-        body: {'topics': topics.map((t) => t.name).toList()},
+        body: jsonEncode({'topics': topics.map((t) => t.name).toList()}),
       ));
 }
 
@@ -194,35 +194,35 @@ Future<List<dynamic>> getComments(BuildContext context, int postId) async {
 }
 
 // Obtiene las noticias de la url proporcionada
-Future<List<dynamic>> _getNews(String url) async {
-  // final String routeUrl = '$backendUrl/news/get';
-  return _fetchFakeNews();
-  /*return await _fetchFromReq(http.post(
+Future<List<dynamic>> _getNews(BuildContext context, String url) async {
+  final String routeUrl = '$backendUrl/news/get';
+  // return _fetchFakeNews();
+  return await _fetchFromReq(context, http.post(
     Uri.parse(routeUrl),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({'urlFi': url}),
-  ));*/
+  ));
 }
 
 // Devuelve noticias de ejemplo para no consumir la API
 // Borrar para versión de producción
-List<dynamic> _fetchFakeNews() {
-  final List<dynamic> fakenews = [];
-  for (int i = 0; i < 100; i++) {
-    fakenews.add({
-      'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'snippet':
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ',
-      //Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'link': 'https://matchlyric.com/kanye-west-hh-traduccion-al-espanol',
-      'photo_url':
-          'https://mbblancabelzunce.com/wp-content/uploads/2024/05/360_F_419176802_9s4AoYMfzxDt3kaSYV55whCkTB76NsHN.jpg',
-      'published_datetime_utc': DateTime.now().toUtc().toString(),
-      'source_name': 'Fuente de ejemplo $i',
-    });
-  }
-  return fakenews;
-}
+// List<dynamic> _fetchFakeNews() {
+//   final List<dynamic> fakenews = [];
+//   for (int i = 0; i < 100; i++) {
+//     fakenews.add({
+//       'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+//       'snippet':
+//           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ',
+//       //Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+//       'link': 'https://matchlyric.com/kanye-west-hh-traduccion-al-espanol',
+//       'photo_url':
+//           'https://mbblancabelzunce.com/wp-content/uploads/2024/05/360_F_419176802_9s4AoYMfzxDt3kaSYV55whCkTB76NsHN.jpg',
+//       'published_datetime_utc': DateTime.now().toUtc().toString(),
+//       'source_name': 'Fuente de ejemplo $i',
+//     });
+//   }
+//   return fakenews;
+// }
 
 // Obtiene las noticias de la url proporcionada
 Future<List<dynamic>> _fetchFromReq(

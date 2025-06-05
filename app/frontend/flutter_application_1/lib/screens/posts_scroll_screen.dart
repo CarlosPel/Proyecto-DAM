@@ -81,6 +81,8 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
         postsState.posts = newPosts;
         _postsFuture = Future.value(newPosts);
       });
+
+      _selectedTopics.clear();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bienvenido de nuevo')),
@@ -145,40 +147,50 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                                     title: Text('Elegir temas'),
                                     content: SizedBox(
                                       height: 200,
-                                      child: SingleChildScrollView(
-                                        child: Wrap(
-                                          spacing: 8.0,
-                                          runSpacing: 4.0,
-                                          children: Topic.values.map((topic) {
-                                            final isSelected =
-                                                _selectedTopics.contains(topic);
-                                            return FilterChip(
-                                              label: Text(topic.name),
-                                              selected: isSelected,
-                                              onSelected: (bool selected) {
-                                                setState(() {
-                                                  if (selected) {
-                                                    _selectedTopics.add(topic);
-                                                  } else {
+                                      child: StatefulBuilder(
+                                        builder: (BuildContext context,
+                                            StateSetter setModalState) {
+                                          return SingleChildScrollView(
+                                            child: Wrap(
+                                              spacing: 8.0,
+                                              runSpacing: 4.0,
+                                              children:
+                                                  Topic.values.map((topic) {
+                                                final isSelected =
                                                     _selectedTopics
-                                                        .remove(topic);
-                                                  }
-                                                });
-                                              },
-                                              selectedColor:
-                                                  AppTheme.accentGold,
-                                              checkmarkColor: Colors.white,
-                                              shape: StadiumBorder(
-                                                side: BorderSide(
-                                                  color: isSelected
-                                                      ? AppTheme.accentGold
-                                                      : Colors.grey,
-                                                  width: 1.2,
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                        ),
+                                                        .contains(topic);
+                                                return FilterChip(
+                                                  label: Text(topic.name),
+                                                  selected: isSelected,
+                                                  onSelected: (bool selected) {
+                                                    setModalState(() {
+                                                      setState(() {
+                                                        if (selected) {
+                                                          _selectedTopics
+                                                              .add(topic);
+                                                        } else {
+                                                          _selectedTopics
+                                                              .remove(topic);
+                                                        }
+                                                      });
+                                                    });
+                                                  },
+                                                  selectedColor:
+                                                      AppTheme.accentGold,
+                                                  checkmarkColor: Colors.white,
+                                                  shape: StadiumBorder(
+                                                    side: BorderSide(
+                                                      color: isSelected
+                                                          ? AppTheme.accentGold
+                                                          : Colors.grey,
+                                                      width: 1.2,
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                     actions: [
@@ -190,10 +202,20 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
-                                          setState(() {
-                                            _selectedTopics.clear();
-                                            _postsSource = _getTopicsPosts;
-                                          });
+                                          if (_selectedTopics.isNotEmpty) {
+                                            setState(() {
+                                              _postsSource = _getTopicsPosts;
+                                              _refreshPosts();
+                                            });
+                                            Navigator.of(context).pop();
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      'Selecciona al menos un tema')),
+                                            );
+                                          }
                                         },
                                         child: Text('Aceptar'),
                                       ),

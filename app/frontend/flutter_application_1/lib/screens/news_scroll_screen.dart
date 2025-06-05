@@ -41,7 +41,7 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
   Future<List<dynamic>> _loadNews() async {
     final userData = await getUserData();
     final countryCode = userData['countryCode'];
-    final articles = await fetchTopHeadlines(countryCode);
+    final articles = await fetchTopHeadlines(context, countryCode);
     newsState.news = articles;
     return articles;
   }
