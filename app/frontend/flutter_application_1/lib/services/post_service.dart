@@ -35,7 +35,7 @@ Future<bool> checkIfSaved(BuildContext context, int id) async {
 manageSavedPost(BuildContext context, int id, bool isSaved,
     {required Future<Null> Function(dynamic) onSuccess}) async {
   final String url =
-      '${AppData.backendUrl}/post/${isSaved ? 'removeSaved' : 'save'}';
+      '${AppData.backendUrl}/post/${isSaved ? 'unsave' : 'save'}';
 
   try {
     final String? token = await getToken();
