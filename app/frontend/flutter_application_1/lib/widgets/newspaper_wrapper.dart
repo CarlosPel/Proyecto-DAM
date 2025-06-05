@@ -52,7 +52,7 @@ class NewspaperWrapper extends StatelessWidget {
             right: 0,
             child: CustomPaint(
               size: Size(foldSize, foldSize),
-              painter: FoldPainter(),
+              painter: FoldPainter(Color(0xffd1d1c6)),
             ),
           ),
 
