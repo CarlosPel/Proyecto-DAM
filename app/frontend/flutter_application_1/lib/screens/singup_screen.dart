@@ -138,6 +138,9 @@ class SingUpScreenState extends State<SingUpScreen> {
                       },
                       showCountryOnly: true,
                       showOnlyCountryWhenClosed: true,
+                      textStyle: TextStyle(fontSize: 18,
+                      color: Colors.black87,
+                      fontStyle: FontStyle.normal),
                     ),
                     const SizedBox(height: 24),
                     // Botón de registro

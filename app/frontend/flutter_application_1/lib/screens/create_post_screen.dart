@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/models/article.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
@@ -57,106 +58,111 @@ class CreatePostScreenState extends State<CreatePostScreen> {
               fontSize: 25,
             )),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Título'),
-                          controller: _titleController,
-                          maxLength: 100,
-                          minLines: 1,
-                          maxLines: 2,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingresa un título';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 16),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Contenido'),
-                          controller: _contentController,
-                          maxLength: 1000,
-                          minLines: 3,
-                          maxLines: 19,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingresa el contenido';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 16),
-                        SizedBox(
-                          height: 200,
-                          child: SingleChildScrollView(
-                            child: Wrap(
-                              spacing: 8.0,
-                              runSpacing: 4.0,
-                              children: Topic.values.map((topic) {
-                                final isSelected =
-                                    _selectedTopics.contains(topic);
-                                return FilterChip(
-                                  label: Text(topic.name),
-                                  selected: isSelected,
-                                  onSelected: (bool selected) {
-                                    setState(() {
-                                      if (selected) {
-                                        _selectedTopics.add(topic);
-                                      } else {
-                                        _selectedTopics.remove(topic);
-                                      }
-                                    });
-                                  },
-                                  selectedColor: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withValues(alpha: 51),
-                                  checkmarkColor:
-                                      Theme.of(context).colorScheme.primary,
-                                );
-                              }).toList(),
-                            ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(labelText: 'Título'),
+                        controller: _titleController,
+                        maxLength: 100,
+                        minLines: 1,
+                        maxLines: 2,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor ingresa un título';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      TextFormField(
+                        decoration: InputDecoration(labelText: 'Contenido'),
+                        controller: _contentController,
+                        maxLength: 1000,
+                        minLines: 3,
+                        maxLines: 19,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor ingresa el contenido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      SizedBox(
+                        height: 200,
+                        child: SingleChildScrollView(
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 4.0,
+                            children: Topic.values.map((topic) {
+                              final isSelected =
+                                  _selectedTopics.contains(topic);
+                              return FilterChip(
+                                label: Text(topic.name),
+                                selected: isSelected,
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    if (selected) {
+                                      _selectedTopics.add(topic);
+                                    } else {
+                                      _selectedTopics.remove(topic);
+                                    }
+                                  });
+                                },
+                                selectedColor: AppTheme.accentGold,
+                                checkmarkColor: Colors.white,
+                                shape: StadiumBorder(
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? AppTheme.accentGold
+                                        : Colors.grey,
+                                    width: 1.2,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
-                        SizedBox(height: 16),
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: IntrinsicWidth(
-                            child: ElevatedButton.icon(
-                              onPressed: () => _createPost(article: article),
-                              label: Text('Publicar'),
-                              icon: Icon(Icons.send),
-                            ),
+                      ),
+                      SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: IntrinsicWidth(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _createPost(article: article),
+                            label: Text('Publicar'),
+                            icon: Icon(Icons.send),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-            SizedBox(
-              height: 16,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          if (article != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FixedArticle(article),
             ),
-            if (article != null) FixedArticle(article),
-          ]),
-        ),
+        ]),
       ),
     );
   }

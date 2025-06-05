@@ -83,6 +83,8 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color pnyxColor = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -96,10 +98,10 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                 child: Text(
                   AppData.appName,
                   style: TextStyle(
-                    fontFamily: 'Chomsky',
                     fontSize: 50,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w900,
                     letterSpacing: 3,
+                    color: pnyxColor,
                   ),
                   textAlign: TextAlign.center,
                 ),

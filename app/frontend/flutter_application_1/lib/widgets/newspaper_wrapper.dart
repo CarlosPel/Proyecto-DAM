@@ -8,6 +8,7 @@ class NewspaperWrapper extends StatelessWidget {
   final StatefulWidget screen;
   final BuildContext previusScreen;
   final TurnDirection turnDirection;
+  final Color? backcolor;
 
   const NewspaperWrapper({
     super.key,
@@ -15,6 +16,7 @@ class NewspaperWrapper extends StatelessWidget {
     required this.screen,
     required this.previusScreen,
     this.turnDirection = TurnDirection.rightToLeft,
+    this.backcolor,
   });
 
   void pageTurnNavigate() {
@@ -34,12 +36,14 @@ class NewspaperWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foldSize = AppData.foldSize;
+    Color backgroundColor = Theme.of(context).colorScheme.secondary;
+    if (backcolor != null) backgroundColor = backcolor!;
 
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
       ),
-      color: const Color.fromARGB(255, 255, 255, 255),
+      color: backgroundColor,
       elevation: 4,
       child: Stack(
         children: [
@@ -52,7 +56,7 @@ class NewspaperWrapper extends StatelessWidget {
             right: 0,
             child: CustomPaint(
               size: Size(foldSize, foldSize),
-              painter: FoldPainter(Color(0xffd1d1c6)),
+              painter: FoldPainter(backgroundColor),
             ),
           ),
 

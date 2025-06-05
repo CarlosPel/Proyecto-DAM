@@ -45,13 +45,6 @@ Future<void> createPost(
 
     // Verifica si la respuesta es exitosa (código 200)
     if (response.statusCode == 201) {
-      // Decodifica la respuesta JSON
-      final responseData = jsonDecode(response.body);
-
-      // Mensaje de éxito
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(responseData['message'])),
-      );
 
       // Notifica a los listeners que se ha creado un nuevo post
       Provider.of<PostsNotifier>(context, listen: false).markForRefresh();

@@ -1,54 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static Color newsPaperBackgroundColor = Color.fromARGB(130, 230, 219, 116);
-  static Color postBackgroundColor = Color.fromARGB(255, 255, 255, 255);
-  static Color articleBackgroundColor = Color.fromARGB(130, 230, 219, 116);
-  static Color primary = Color(0xff6f5335);
+  static const Color postBackgroundColor = Color.fromARGB(255, 255, 255, 255);
+  static const Color articleBackgroundColor =
+      Color(0xFFF5EAD6);
+  static const Color darkBrown = Color(0xff6f5335);
+  static const Color lightBrown = Color(0xFFE5D8C3);
+  static const Color lightMarbel = Color(0xFFF5F5F5);
+  static const Color softGray = Color(0xFFCCCCCC);
+  static const Color accentGold = Color(0xFFCDA34F);
+  static const Color lightBlack = Color.fromRGBO(81, 81, 81, 1);
 
   static ThemeData get lightTheme {
     return ThemeData(
-      useMaterial3: true, // Activamos Material 3
-      scaffoldBackgroundColor: const Color(0xffd1d1c6), // fondo tipo piedra
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.indigo.shade700,
-        primary: primary,
-        secondary: Colors.indigo.shade200,
-        surface: const Color(0xFFF7F5EF),
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: lightBrown, // fondo tipo piedra
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        primary: darkBrown,
+        secondary: lightBrown,
+        surface: lightMarbel,
       ),
-      textTheme: const TextTheme(
-        headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        bodyMedium: TextStyle(fontSize: 16),
+      textTheme: GoogleFonts.ptSerifTextTheme().copyWith(
+        bodyLarge: TextStyle(color: lightBlack, fontSize: 20),
+        bodyMedium: TextStyle(color: lightBlack),
+        titleLarge: TextStyle(
+          color: lightBlack,
+          fontWeight: FontWeight.bold,
+          fontSize: 22,
+        ),
+        headlineLarge: TextStyle(
+          color: darkBrown,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: lightMarbel,
+        foregroundColor: lightBlack,
+        elevation: 4,
+        titleTextStyle: GoogleFonts.ptSerif(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: lightBlack,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: lightMarbel,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        shadowColor: Colors.black26,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.white,
-        prefixIconColor: primary,
+        prefixIconColor: lightBlack,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: softGray),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: accentGold),
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: primary,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
-          iconColor: Colors.white,
-        ),
+            backgroundColor: darkBrown,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            iconColor: Colors.white,
+            textStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
       ),
       iconButtonTheme: IconButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(primary), 
-          foregroundColor: WidgetStateProperty.all(Colors.white)
+          backgroundColor: WidgetStateProperty.all(darkBrown),
+          foregroundColor: WidgetStateProperty.all(Colors.white),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.blue,
-        )
-      ),
+          style: TextButton.styleFrom(
+        foregroundColor: Colors.blue,
+        textStyle: TextStyle(fontStyle: FontStyle.italic),
+      )),
     );
   }
 }
