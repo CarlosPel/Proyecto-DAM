@@ -6,7 +6,7 @@ class AppData {
   // URL de conexión con el backend
   static const String backendUrl = 'https://agora-backend-um0h.onrender.com';
   // Fecha de última actualización de los términos y condiciones
-  static const String termsLastUpdateDate = '2025-05-25';
+  static const String termsLastUpdateDate = '2025-06-04';
   // Nombre de la empresa autora de Pnyx
   static const String companyName = 'GrupoPnyx S.A';
   // Correo electrónico de la empresa
