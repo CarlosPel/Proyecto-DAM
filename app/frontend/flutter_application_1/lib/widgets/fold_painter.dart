@@ -11,7 +11,7 @@ class FoldPainter extends CustomPainter {
     const foldSize = AppData.foldSize;
 
     // Hoja de atras
-    final paint2 = Paint()..color = const Color.fromARGB(255, 119, 110, 110);
+    final paint2 = Paint()..color = const Color.fromARGB(255, 132, 106, 106);
     final path2 = Path()
       ..moveTo(size.width - foldSize, size.height)
       ..lineTo(size.width - foldSize * 0.45, size.height - foldSize * 0.45)

@@ -18,13 +18,16 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color backgroundColor = Theme.of(context).colorScheme.surface;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Card(
         elevation: 2,
+        color: backgroundColor,
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: const Color(0xFFFDF6ED), // tono editorial
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -33,11 +36,7 @@ class PostCard extends StatelessWidget {
               // Título
               Text(
                 post.title!,
-                style: const TextStyle(
-                  fontFamily: 'Georgia',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               // Extracto del contenido
@@ -45,12 +44,7 @@ class PostCard extends StatelessWidget {
                 (post.content).length > 160 && isPreview
                     ? '${post.content.substring(0, 160)}...'
                     : post.content,
-                style: const TextStyle(
-                  fontFamily: 'Georgia',
-                  fontSize: 15,
-                  height: 1.5,
-                  color: Colors.black87,
-                ),
+                style: textTheme.bodyLarge,
               ),
               const SizedBox(height: 12),
               relativeTimeNote(post.datetime)

@@ -42,7 +42,7 @@ class IconDropdownButtonState extends State<IconDropdownButton> {
         return options.keys.map((String option) {
           return PopupMenuItem<String>(
             value: option,
-            child: Text(option),
+            child: Text(option, style: TextStyle(fontSize: 20),),
           );
         }).toList();
       },

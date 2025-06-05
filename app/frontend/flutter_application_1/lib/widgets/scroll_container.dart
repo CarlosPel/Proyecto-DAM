@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/app_theme.dart';
 
 class ScrollContainer extends StatelessWidget {
   final Widget child;
@@ -7,8 +6,10 @@ class ScrollContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color backgroundColor = Theme.of(context).colorScheme.secondary;
+
     return Container(
-      color: AppTheme.newsPaperBackgroundColor,
+      color: backgroundColor,
       child: child,
     );
   }

@@ -6,7 +6,6 @@ import 'package:flutter_application_1/screens/posts_scroll_screen.dart';
 import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
-import 'package:flutter_application_1/widgets/scroll_container.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
@@ -66,8 +65,8 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
               child: Text(
             'NOTICIAS',
             style: const TextStyle(
-              fontFamily: 'Times New Roman', // Usa tu fuente personalizada
-              fontSize: 35,
+              fontFamily: 'Chomsky', // Usa tu fuente personalizada
+              fontSize: 50,
               fontWeight: FontWeight.w700,
               letterSpacing: 3,
             ),
@@ -77,31 +76,30 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
         automaticallyImplyLeading: false,
       ),
       body: NewspaperWrapper(
+        backcolor: Colors.white,
         screen: const PostsScrollScreen(),
         previusScreen: context,
         turnDirection: TurnDirection.leftToRight,
         child: newsState.news.isNotEmpty
             ? RefreshIndicator(
                 onRefresh: _refreshNews,
-                child: ScrollContainer(
-                  child: ListView.builder(
-                    itemCount: newsState.news.length,
-                    itemBuilder: (context, index) {
-                      final article = newsState.news[index];
-                      return ArticleCard(
-                        article: Article(
-                          title: article['title'],
-                          snippet: article['snippet'],
-                          link: article['link'],
-                          imgUrl: article['photo_url'],
-                          datetime: article['published_datetime_utc'],
-                          source: article['source_name'],
-                        ),
-                        isExpanded: _expandedIndex == index,
-                        onTap: () => _toggleExpanded(index),
-                      );
-                    },
-                  ),
+                child: ListView.builder(
+                  itemCount: newsState.news.length,
+                  itemBuilder: (context, index) {
+                    final article = newsState.news[index];
+                    return ArticleCard(
+                      article: Article(
+                        title: article['title'],
+                        snippet: article['snippet'],
+                        link: article['link'],
+                        imgUrl: article['photo_url'],
+                        datetime: article['published_datetime_utc'],
+                        source: article['source_name'],
+                      ),
+                      isExpanded: _expandedIndex == index,
+                      onTap: () => _toggleExpanded(index),
+                    );
+                  },
                 ),
               )
             : FutureBuilder<List<dynamic>>(
@@ -116,45 +114,42 @@ class NewsScrollScreenState extends State<NewsScrollScreen> {
 
                     return RefreshIndicator(
                       onRefresh: _refreshNews,
-                      child: ScrollContainer(
-                        child: newsState.news.isEmpty
-                            ? SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'No hay noticias disponibles',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 24),
-                                    IconButton(
-                                      onPressed: _refreshNews,
-                                      icon: const Icon(Icons.refresh),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: newsState.news.length,
-                                itemBuilder: (context, index) {
-                                  final article = newsState.news[index];
-                                  return ArticleCard(
-                                    article: Article(
-                                      title: article['title'],
-                                      snippet: article['snippet'],
-                                      link: article['link'],
-                                      imgUrl: article['photo_url'],
-                                      datetime:
-                                          article['published_datetime_utc'],
-                                      source: article['source_name'],
-                                    ),
-                                    isExpanded: _expandedIndex == index,
-                                    onTap: () => _toggleExpanded(index),
-                                  );
-                                },
+                      child: newsState.news.isEmpty
+                          ? SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'No hay noticias disponibles',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 24),
+                                  IconButton(
+                                    onPressed: _refreshNews,
+                                    icon: const Icon(Icons.refresh),
+                                  ),
+                                ],
                               ),
-                      ),
+                            )
+                          : ListView.builder(
+                              itemCount: newsState.news.length,
+                              itemBuilder: (context, index) {
+                                final article = newsState.news[index];
+                                return ArticleCard(
+                                  article: Article(
+                                    title: article['title'],
+                                    snippet: article['snippet'],
+                                    link: article['link'],
+                                    imgUrl: article['photo_url'],
+                                    datetime: article['published_datetime_utc'],
+                                    source: article['source_name'],
+                                  ),
+                                  isExpanded: _expandedIndex == index,
+                                  onTap: () => _toggleExpanded(index),
+                                );
+                              },
+                            ),
                     );
                   } else {
                     return const Center(

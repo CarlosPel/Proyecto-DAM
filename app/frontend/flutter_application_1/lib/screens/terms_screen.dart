@@ -27,7 +27,7 @@ class _TermsScreenState extends State<TermsScreen> {
         builder: (context, scrollController) {
           return Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color: Colors.white,
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(16)),
             ),
@@ -224,7 +224,8 @@ class _TermsScreenState extends State<TermsScreen> {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white,
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
