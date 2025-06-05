@@ -29,7 +29,7 @@ const createPost = async (req, res) => {
 
         if (noticia_title && noticia_title.trim() !== "") {
             const comprobacionNoticia = await pool.query(
-                `SELECT * FROM noticia WHERE source_name = $1`,
+                `SELECT * FROM noticia WHERE title = $1`,
                 [noticia_title]
             );
 
