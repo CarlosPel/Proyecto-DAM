@@ -16,7 +16,7 @@ const createPost = async (req, res) => {
         noticia_datetime,
         noticia_source
     } = req.body;
-
+    console.log(topics.toString())
     const id_user = req.user.id_user;
     const nation_user = req.user.nation;
 
@@ -57,17 +57,32 @@ const createPost = async (req, res) => {
         );
 
         const id_post = newPost.rows[0].id_post;
-
-        // Insertar temas en la tabla post_topic
-        if (Array.isArray(topics) && topics.length > 0) {
-            const insertTopicQueries = topics.map(topic => {
-                return pool.query(
-                    `INSERT INTO post_topic (id_post, topic_name) VALUES ($1, $2)`,
-                    [id_post, topic]
-                );
-            });
-            await Promise.all(insertTopicQueries); // Ejecutar en paralelo
+        if (typeof topics === 'string') {
+            topics = topics.split(',').map(t => t.trim()).filter(Boolean);
         }
+        // Insertar temas en la tabla post_topic
+    if (Array.isArray(topics) && topics.length > 0) {
+        topics = topics.map(t => t.trim());
+        const insertTopicQueries = topics.map(async topic => {
+            // Verifica si el tema existe en la tabla topic
+        const exists = await pool.query(
+            `SELECT 1 FROM topic WHERE topic_name = $1`,
+            [topic]
+        );
+        console.log(`Verificando tema: ${exists.rows.length > 0 ? topic : 'No existe'}`);
+        if (exists.rows.length > 0) {
+            console.log(`Tema insertado: ${topic}`);
+            return pool.query(
+                `INSERT INTO post_topic (id_post, topic_name) VALUES ($1, $2)`,
+                [id_post, topic]
+            );
+        } else {
+            console.warn(`El tema "${topic}" no existe en la tabla topic. No se insertó.`);
+            return null;
+        }
+    });
+    await Promise.all(insertTopicQueries);
+}
 
         res.status(201).json({ message: 'Post creado exitosamente', post: newPost.rows[0] });
 
