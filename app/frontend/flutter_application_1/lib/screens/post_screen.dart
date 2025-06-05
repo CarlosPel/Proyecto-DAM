@@ -196,13 +196,15 @@ class PostScreenState extends State<PostScreen> {
                       return IconButton(
                         onPressed: () async {
                           manageSavedPost(
-                                  context,
-                                  post.id!, await _isSaved,
-                                  onSuccess: (response) async {
-                                    setState(() {
-                                      _checkIfSaved();
-                                    });
-                                  },);
+                            context,
+                            post.id!,
+                            await _isSaved,
+                            onSuccess: (response) async {
+                              setState(() {
+                                _checkIfSaved();
+                              });
+                            },
+                          );
                         },
                         icon: icon,
                         color: Theme.of(context).colorScheme.primary,
