@@ -5,9 +5,12 @@ import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/services/load_routes.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 // Método de ejecución de la aplicación
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('es_ES');
   runApp(
     ChangeNotifierProvider(
       create: (_) => PostsNotifier(),

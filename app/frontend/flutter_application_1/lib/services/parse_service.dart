@@ -17,6 +17,12 @@ Post parsePost(dynamic postData, {String? username, dynamic article}) {
             source: article['noticia_source'],
             link: article['noticia_link'],
           )
-        : null,
+        : Article(
+            title: postData['noticia_title'] ?? '',
+            snippet: postData['noticia_content'],
+            datetime: postData['noticia_fecha'],
+            source: postData['noticia_source'],
+            link: postData['noticia_link'],
+          ),
   );
 }
