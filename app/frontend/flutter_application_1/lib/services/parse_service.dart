@@ -7,7 +7,7 @@ Post parsePost(dynamic postData, {String? username, dynamic article}) {
     title: postData['title'],
     content: postData['content'],
     datetime: postData['post_date'],
-  author: username ?? postData['user_name'],
+    author: username ?? postData['user_name'],
     parentPostId: postData['parent_post'],
     article: article != null
         ? Article(
@@ -17,12 +17,14 @@ Post parsePost(dynamic postData, {String? username, dynamic article}) {
             source: article['noticia_source'],
             link: article['noticia_link'],
           )
-        : Article(
-            title: postData['noticia_title'] ?? '',
-            snippet: postData['noticia_content'],
-            datetime: postData['noticia_fecha'],
-            source: postData['noticia_source'],
-            link: postData['noticia_link'],
-          ),
+        : postData['noticia_title'] != null
+            ? Article(
+                title: postData['noticia_title'],
+                snippet: postData['noticia_content'],
+                datetime: postData['noticia_fecha'],
+                source: postData['noticia_source'],
+                link: postData['noticia_link'],
+              )
+            : null,
   );
 }
