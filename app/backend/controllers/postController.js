@@ -258,7 +258,33 @@ const savePost = async (req, res) => {
     }
 }
 
+const checkSaved = async (req, res) => {
+    const { id_post } = req.body.id_post;
+    const id_user = req.user.id_user;
+    let saved = false
+    try {
+        // Verificar si el post está guardado
+        const checkPost = await pool.query(
+            `SELECT * FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            [id_user, id_post]
+        );
+
+        if (checkPost.rows.length > 0) {
+            saved = true;
+            return res.status(200).json({ message: 'El post está guardado',
+                saved: saved
+             });
+            
+        } else {
+            return res.status(404).json({ message: 'El post no está guardado' });
+        }
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al verificar el estado del post guardado' });
+    }
+}
 
 
-module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost };
+module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost, checkSaved };
 
