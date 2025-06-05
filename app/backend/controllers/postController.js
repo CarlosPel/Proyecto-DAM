@@ -276,7 +276,9 @@ const checkSaved = async (req, res) => {
              });
             
         } else {
-            return res.status(404).json({ message: 'El post no está guardado' });
+            return res.status(200).json({ message: 'El post no está guardado',
+                saved: saved
+             });
         }
 
     } catch (error) {
@@ -285,6 +287,35 @@ const checkSaved = async (req, res) => {
     }
 }
 
+const unSavePost = async (req, res) => {
+    const { id_post } = req.body;
+    const id_user = req.user.id_user;
 
-module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost, checkSaved };
+    try {
+        // Verificar si el post está guardado
+        const checkPost = await pool.query(
+            `SELECT * FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            [id_user, id_post]
+        );
+
+        if (checkPost.rows.length === 0) {
+            return res.status(200).json({ message: 'El post no está guardado' });
+        }
+
+        // Eliminar el post guardado
+        await pool.query(
+            `DELETE FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            [id_user, id_post]
+        );
+
+        res.status(200).json({ message: 'Post eliminado de los guardados exitosamente' });
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al eliminar el post de los guardados' });
+    }
+}
+
+
+module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost, checkSaved, unSavePost };
 
