@@ -302,8 +302,18 @@ const getSavedPosts = async (req, res) => {
   const id_user = req.user.id_user
 
   try {
-    const query = `SELECT * FROM POST JOIN SAVED_POST ON POST.id_post = SAVED_POST.id_post 
-        WHERE SAVED_POST.id_user = $1`
+    const query = `SELECT POST.*,
+          USERS.username AS user_name,
+            NOTICIA.title AS noticia_title, 
+            NOTICIA.content AS noticia_content, 
+            NOTICIA.source_name AS noticia_source,
+            NOTICIA.fecha AS noticia_fecha,
+            NOTICIA.link AS noticia_link 
+            FROM POST JOIN SAVED_POST ON POST.id_post = SAVED_POST.id_post 
+            INNER JOIN USERS ON POST.id_user = USERS.id_user
+            LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
+            WHERE SAVED_POST.id_user = $1`
+            
     const result = await pool.query(query, [id_user])
     if (result.rows.length === 0) {
       return res.status(200).json({
