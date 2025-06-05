@@ -19,8 +19,11 @@ Future<bool> checkIfSaved(BuildContext context, int id) async {
       body: jsonEncode({'id_post': id}),
     );
     if (handleResponse(
-        context: context, response: response, onSuccess: (response) {})) {
-      return jsonDecode(response.body)['data'];
+        context: context,
+        response: response,
+        onSuccess: (response) {},
+        showMessage: true)) {
+      return jsonDecode(response.body)['saved'];
     }
     return false;
   } catch (e) {
@@ -35,7 +38,7 @@ Future<bool> checkIfSaved(BuildContext context, int id) async {
 manageSavedPost(BuildContext context, int id, bool isSaved,
     {required Future<Null> Function(dynamic) onSuccess}) async {
   final String url =
-      '${AppData.backendUrl}/post/${isSaved ? 'unsave' : 'save'}';
+      '${AppData.backendUrl}/posts/${isSaved ? 'unsave' : 'save'}';
 
   try {
     final String? token = await getToken();
