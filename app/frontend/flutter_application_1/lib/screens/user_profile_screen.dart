@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/services/handle_respones.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_application_1/widgets/comment_card.dart';
 import 'package:flutter_application_1/widgets/leading_button.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class UserProfileScreen extends StatefulWidget {
@@ -166,17 +168,25 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                                 key: _formKey,
                                 child: Column(
                                   children: [
-                                    const CircleAvatar(
-                                      radius: 50,
-                                      child: Icon(Icons.person, size: 65),
+                                    CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      radius: 45,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 65,
+                                      ),
                                     ),
                                     const SizedBox(height: 16.0),
                                     // Nombre de usuario
                                     !editing
                                         ? Text(
                                             _nameController.text,
-                                            style:
-                                                theme.textTheme.headlineLarge,
+                                            style: GoogleFonts.ptSerif(
+                                              fontSize: 27,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppTheme.lightBlack,
+                                            ),
                                           )
                                         : Row(
                                             mainAxisAlignment:

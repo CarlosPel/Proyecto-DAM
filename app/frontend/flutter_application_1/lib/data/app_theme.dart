@@ -44,7 +44,7 @@ class AppTheme {
         foregroundColor: lightBlack,
         elevation: 4,
         titleTextStyle: GoogleFonts.ptSerif(
-          fontSize: 20,
+          fontSize: 25,
           fontWeight: FontWeight.bold,
           color: lightBlack,
         ),

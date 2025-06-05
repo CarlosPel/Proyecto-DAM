@@ -1,11 +1,13 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_theme.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/screens/user_profile_screen.dart';
 import 'package:flutter_application_1/services/users_service.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Post userPost;
@@ -59,15 +61,23 @@ class ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    child: Icon(Icons.person, size: 65),
+                  CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    radius: 45,
+                    child: Icon(
+                      Icons.person,
+                      size: 65,
+                    ),
                   ),
                   const SizedBox(height: 16.0),
                   // Nombre de usuario
                   Text(
                     user.name,
-                    style: theme.textTheme.headlineLarge,
+                    style: GoogleFonts.ptSerif(
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.lightBlack,
+                    ),
                   ),
                   // Campos contraseñas
                   const SizedBox(height: 8.0),
