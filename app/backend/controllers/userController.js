@@ -181,7 +181,8 @@ const userPosts = async (req, res) => {
             NOTICIA.link AS noticia_link
         FROM POST
         LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
-        WHERE POST.parent_post is null`;
+        WHERE POST.parent_post is null AND POST.id_user = $1 
+        ORDER BY POST.post_date DESC;`;
   try {
     const resultado = await pool.query(query, [id_user]);
     //console.log(resultado.rows[0].idPost)
