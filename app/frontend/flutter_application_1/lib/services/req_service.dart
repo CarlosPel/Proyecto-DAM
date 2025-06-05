@@ -117,6 +117,21 @@ Future<List<dynamic>> getUserComments(BuildContext context) async {
       ));
 }
 
+Future<List<dynamic>> getUserSavedPosts(BuildContext context) async {
+  final String routeUrl = '$backendUrl/users/savedposts';
+  final String userToken = (await getToken())!;
+
+  return await _fetchFromReq(
+      context,
+      http.post(
+        Uri.parse(routeUrl),
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Content-Type': 'application/json'
+        },
+      ));
+}
+
 Future<List<dynamic>> getUserPosts(BuildContext context) async {
   final String routeUrl = '$backendUrl/users/userposts';
   final String userToken = (await getToken())!;
