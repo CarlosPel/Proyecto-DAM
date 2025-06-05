@@ -170,7 +170,15 @@ const getFollowedPosts = async (req, res) => {
 
         // Consulta usando ANY para array
         const postsResult = await pool.query(
-            `SELECT * FROM post WHERE id_user = ANY($1::int[]) ORDER BY post_date DESC`,
+            `SELECT POST.*, USERS.username AS user_name,
+            NOTICIA.title AS noticia_title, 
+            NOTICIA.content AS noticia_content, 
+            NOTICIA.source_name AS noticia_source,
+            NOTICIA.fecha AS noticia_fecha,
+            NOTICIA.link AS noticia_link
+            FROM POST INNER JOIN USERS ON POST.id_user = USERS.id_user
+            LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia 
+            WHERE id_user = ANY($1::int[]) ORDER BY post_date DESC`,
             [followedIds]
         );
 
