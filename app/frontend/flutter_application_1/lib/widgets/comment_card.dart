@@ -27,7 +27,7 @@ class CommentCardState extends State<CommentCard> {
 
   // Método público para refrescar subcomentarios
   Future<void> refreshSubComments() async {
-    final fetched = await fetchComments(context, widget.comment.id!);
+    final fetched = await getComments(context, widget.comment.id!);
     if (mounted) {
       setState(() {
         _subComments = fetched;

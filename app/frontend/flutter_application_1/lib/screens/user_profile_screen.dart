@@ -62,13 +62,13 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<List<dynamic>> _loadPosts() async {
-    final posts = await fetchUserPosts(context);
+    final posts = await getUserPosts(context);
 
     return posts;
   }
 
   Future<List<dynamic>> _loadComments() async {
-    final posts = await fetchUserComments(context);
+    final posts = await getUserComments(context);
 
     return posts;
   }

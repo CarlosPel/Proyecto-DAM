@@ -44,7 +44,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
   Future<List<dynamic>> _loadPosts() async {
     final userData = await getUserData();
     final countryCode = userData['countryCode'];
-    final posts = await fetchPosts(context, countryCode);
+    final posts = await getPosts(context, countryCode);
     postsState.posts = posts;
     return posts;
   }

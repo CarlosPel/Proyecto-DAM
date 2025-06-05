@@ -168,7 +168,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             )
-          : postsList(context, comments, areComments: true),
+          : postsList(context, comments, areComments: true, username: widget.user.name),
     );
   }
 
@@ -191,7 +191,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             )
-          : postsList(context, posts),
+          : postsList(context, posts, username: widget.user.name),
     );
   }
 }

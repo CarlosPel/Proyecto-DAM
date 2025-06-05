@@ -30,7 +30,7 @@ Future<User> getUserByName(BuildContext context, String name) async {
       final userData = jsonDecode(response.body)['data'];
       final userPosts = jsonDecode(response.body)['posts'];
       final userComments = jsonDecode(response.body)['comments'];
-
+      
       return User(
           id: userData['id_user'],
           name: userData['username'],
@@ -53,7 +53,7 @@ Future<User> getUserByName(BuildContext context, String name) async {
 Future<List<dynamic>> fetchTopHeadlines(String? country) async {
   final String url =
       '/topic-headlines?topic=$politicsCode&country=$country&lang=es';
-  return await _fetchNews(url);
+  return await _getNews(url);
 }
 
 Future<Post> getOlderPost(BuildContext context, int id) async {
@@ -86,7 +86,7 @@ Future<Post> getOlderPost(BuildContext context, int id) async {
 }
 
 // Obtiene posts
-Future<List<dynamic>> fetchPosts(BuildContext context, String? country) async {
+Future<List<dynamic>> getPosts(BuildContext context, String? country) async {
   final String routeUrl = '$backendUrl/posts/get';
   final String userToken = (await getToken())!;
 
@@ -102,7 +102,7 @@ Future<List<dynamic>> fetchPosts(BuildContext context, String? country) async {
       ));
 }
 
-Future<List<dynamic>> fetchUserComments(BuildContext context) async {
+Future<List<dynamic>> getUserComments(BuildContext context) async {
   final String routeUrl = '$backendUrl/users/usercomments';
   final String userToken = (await getToken())!;
 
@@ -117,7 +117,7 @@ Future<List<dynamic>> fetchUserComments(BuildContext context) async {
       ));
 }
 
-Future<List<dynamic>> fetchUserPosts(BuildContext context) async {
+Future<List<dynamic>> getUserPosts(BuildContext context) async {
   final String routeUrl = '$backendUrl/users/userposts';
   final String userToken = (await getToken())!;
 
@@ -133,7 +133,7 @@ Future<List<dynamic>> fetchUserPosts(BuildContext context) async {
 }
 
 // Obtiene los comentarios de un post
-Future<List<dynamic>> fetchComments(BuildContext context, int postId) async {
+Future<List<dynamic>> getComments(BuildContext context, int postId) async {
   final String routeUrl = '$backendUrl/posts/comments';
 
   return await _fetchFromReq(
@@ -146,7 +146,7 @@ Future<List<dynamic>> fetchComments(BuildContext context, int postId) async {
 }
 
 // Obtiene las noticias de la url proporcionada
-Future<List<dynamic>> _fetchNews(String url) async {
+Future<List<dynamic>> _getNews(String url) async {
   // final String routeUrl = '$backendUrl/news/get';
   return _fetchFakeNews();
   /*return await _fetchFromReq(http.post(

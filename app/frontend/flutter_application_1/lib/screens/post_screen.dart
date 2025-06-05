@@ -3,6 +3,7 @@ import 'package:flutter_application_1/data/app_routes.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/services/create_post_service.dart';
 import 'package:flutter_application_1/services/load_routes.dart';
+import 'package:flutter_application_1/services/post_service.dart';
 import 'package:flutter_application_1/services/req_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/widgets/article_card.dart';
@@ -38,11 +39,7 @@ class PostScreenState extends State<PostScreen> {
     super.initState();
     _loadComments();
     _isUsersPost = isUserPost();
-    _isSaved = isPostSaved();
-  }
-
-  Future<bool> isPostSaved() async {
-    return false;
+    _checkIfSaved();
   }
 
   Future<bool> isUserPost() async {
@@ -51,7 +48,7 @@ class PostScreenState extends State<PostScreen> {
   }
 
   Future<void> _loadComments() async {
-    final data = await fetchComments(context, widget.post.id!);
+    final data = await getComments(context, widget.post.id!);
     setState(() {
       _comments = data;
       _saveCommentKeys();
@@ -60,7 +57,7 @@ class PostScreenState extends State<PostScreen> {
 
   // Recarga los comentarios de la publicación
   Future<void> _refreshComments() async {
-    final data = await fetchComments(context, widget.post.id!);
+    final data = await getComments(context, widget.post.id!);
     setState(() {
       _comments = data;
       _referencedComment = null;
@@ -111,6 +108,10 @@ class PostScreenState extends State<PostScreen> {
     } else {
       _refreshComments();
     }
+  }
+
+  _checkIfSaved() async {
+    _isSaved = checkIfSaved(context, widget.post.id!);
   }
 
   @override
@@ -193,7 +194,16 @@ class PostScreenState extends State<PostScreen> {
                         size: 40,
                       );
                       return IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          manageSavedPost(
+                                  context,
+                                  post.id!, await _isSaved,
+                                  onSuccess: (response) async {
+                                    setState(() {
+                                      _checkIfSaved();
+                                    });
+                                  },);
+                        },
                         icon: icon,
                         color: Theme.of(context).colorScheme.primary,
                         style: ButtonStyle(
