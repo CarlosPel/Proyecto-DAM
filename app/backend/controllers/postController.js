@@ -267,7 +267,7 @@ const checkSaved = async (req, res) => {
             [id_user, id_post]
         );
 
-        if (checkPost.rows.length > 0) {
+        if (checkPost.rows.length != 0) {
             console.log("El post está guardado");
             saved = true;
             return res.status(200).json({ message: 'El post está guardado',
