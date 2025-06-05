@@ -30,7 +30,7 @@ Future<User> getUserByName(BuildContext context, String name) async {
       final userData = jsonDecode(response.body)['data'];
       final userPosts = jsonDecode(response.body)['posts'];
       final userComments = jsonDecode(response.body)['comments'];
-      
+
       return User(
           id: userData['id_user'],
           name: userData['username'],
@@ -85,8 +85,23 @@ Future<Post> getOlderPost(BuildContext context, int id) async {
   }
 }
 
+Future<List<dynamic>> getFollowingPosts(BuildContext context) async {
+  final String routeUrl = '$backendUrl/posts/getfollowed';
+  final String userToken = (await getToken())!;
+
+  return await _fetchFromReq(
+      context,
+      http.post(
+        Uri.parse(routeUrl),
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Content-Type': 'application/json'
+        },
+      ));
+}
+
 // Obtiene posts
-Future<List<dynamic>> getPosts(BuildContext context, String? country) async {
+Future<List<dynamic>> getPosts(BuildContext context, {String? country}) async {
   final String routeUrl = '$backendUrl/posts/get';
   final String userToken = (await getToken())!;
 

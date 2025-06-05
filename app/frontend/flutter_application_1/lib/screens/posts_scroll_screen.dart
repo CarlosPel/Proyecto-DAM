@@ -7,6 +7,7 @@ import 'package:flutter_application_1/services/parse_service.dart';
 import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:flutter_application_1/screens/news_scroll_screen.dart';
 import 'package:flutter_application_1/services/req_service.dart';
+import 'package:flutter_application_1/widgets/icon_dropdown_button.dart';
 import 'package:flutter_application_1/widgets/newspaper_wrapper.dart';
 import 'package:flutter_application_1/widgets/post_card.dart';
 import 'package:flutter_application_1/widgets/scroll_container.dart';
@@ -22,6 +23,7 @@ class PostsScrollScreen extends StatefulWidget {
 class PostsScrollScreenState extends State<PostsScrollScreen> {
   late Future<List<dynamic>> _postsFuture;
   bool isOpen = false;
+  late Future<List<dynamic>> Function() _postsSource;
 
   @override
   void initState() {
@@ -35,17 +37,31 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
         postsNotifier.reset();
       }
     });
-
+    _postsSource = _getLocalPosts;
     // Inicializa el Future para evitar errores de inicialización tardía
     _postsFuture = _loadPosts();
   }
 
-  // Carga publicaciones desde la API según el país del usuario
-  Future<List<dynamic>> _loadPosts() async {
+  Future<List<dynamic>> _getLocalPosts() async {
     final userData = await getUserData();
     final countryCode = userData['countryCode'];
-    final posts = await getPosts(context, countryCode);
+
+    return getPosts(context, country: countryCode);
+  }
+
+  Future<List<dynamic>> _getFollowingPosts() async {
+    return getFollowingPosts(context);
+  }
+
+  Future<List<dynamic>> _getGlobalPosts() async {
+    return getPosts(context);
+  }
+
+  // Carga publicaciones desde la API según el país del usuario
+  Future<List<dynamic>> _loadPosts() async {
+    final posts = await _postsSource();
     postsState.posts = posts;
+
     return posts;
   }
 
@@ -88,6 +104,42 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
+              // Botón de filtros
+              FutureBuilder(
+                  future: _postsSource(),
+                  builder: (context, snap) {
+                    if (snap.hasData) {
+                      return Positioned(
+                        left: 0,
+                        child: IconDropdownButton(
+                          onSelected: (String selectedOption) {
+                            setState(() {
+                              switch (selectedOption) {
+                                case IconDropdownButtonState.yourEnv:
+                                  _postsSource = _getLocalPosts;
+                                  break;
+                                case IconDropdownButtonState.following:
+                                  _postsSource = _getFollowingPosts;
+                                  break;
+                                case IconDropdownButtonState.explore:
+                                  _postsSource = _getGlobalPosts;
+                                  break;
+                              }
+                              _postsFuture =
+                                  _loadPosts();
+                            });
+                          },
+                        ),
+                      );
+                    }
+                    return Positioned(
+                      left: 0,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.place, size: 30),
+                      ),
+                    );
+                  }),
               // Botón de perfil en la esquina superior derecha
               Positioned(
                 right: 0,
