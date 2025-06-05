@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -34,7 +33,7 @@ Future<void> createPost(
         'title': post.title,
         'content': post.content,
         'nation': userData['countryCode'],
-        'topic': post.topic?.name,
+        'topics': post.topics,
         'parent_post': post.parentPostId,
         'noticia_title': article?.title,
         'noticia_content': article?.snippet,

@@ -20,7 +20,7 @@ class CreatePostScreen extends StatefulWidget {
 
 class CreatePostScreenState extends State<CreatePostScreen> {
   final _formKey = GlobalKey<FormState>();
-  late Topic _topic;
+  final List<Topic> _selectedTopics = [];
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
@@ -34,7 +34,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
         post: Post(
           title: title,
           content: content,
-          topic: _topic,
+          topics: _selectedTopics,
           article: article,
         ),
       ).then((_) {
@@ -102,19 +102,37 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                           },
                         ),
                         SizedBox(height: 16),
-                        DropdownButtonFormField<Topic>(
-                          decoration: InputDecoration(labelText: 'Tema'),
-                          items: Topic.values.map((Topic topic) {
-                            return DropdownMenuItem<Topic>(
-                              value: topic,
-                              child: Text(topic.name),
-                            );
-                          }).toList(),
-                          onChanged: (Topic? newValue) {
-                            setState(() {
-                              _topic = newValue!;
-                            });
-                          },
+                        SizedBox(
+                          height: 200,
+                          child: SingleChildScrollView(
+                            child: Wrap(
+                              spacing: 8.0,
+                              runSpacing: 4.0,
+                              children: Topic.values.map((topic) {
+                                final isSelected =
+                                    _selectedTopics.contains(topic);
+                                return FilterChip(
+                                  label: Text(topic.name),
+                                  selected: isSelected,
+                                  onSelected: (bool selected) {
+                                    setState(() {
+                                      if (selected) {
+                                        _selectedTopics.add(topic);
+                                      } else {
+                                        _selectedTopics.remove(topic);
+                                      }
+                                    });
+                                  },
+                                  selectedColor: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withValues(alpha: 51),
+                                  checkmarkColor:
+                                      Theme.of(context).colorScheme.primary,
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
                         SizedBox(height: 16),
                         Align(
@@ -136,8 +154,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
             SizedBox(
               height: 16,
             ),
-            if (article != null)
-              FixedArticle(article),
+            if (article != null) FixedArticle(article),
           ]),
         ),
       ),

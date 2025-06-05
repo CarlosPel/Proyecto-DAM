@@ -7,7 +7,7 @@ import 'package:flutter_application_1/services/user_data_service.dart';
 import 'package:http/http.dart' as http;
 
 Future<bool> checkIfSaved(BuildContext context, int id) async {
-  final String url = '${AppData.backendUrl}/posts/savedCheck';
+  final String url = '${AppData.backendUrl}/posts/checksaved';
   try {
     final String? token = await getToken();
     final response = await http.post(
