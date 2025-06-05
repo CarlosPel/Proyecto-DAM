@@ -165,7 +165,7 @@ const getFollowedPosts = async (req, res) => {
 
         if (followedIds.length === 0) {
             // No sigue a nadie, devolver array vacío
-            res.status(200).json({ posts: [] });
+            return res.status(666).json({ posts: [] });
         }
 
         // Consulta usando ANY para array
@@ -178,7 +178,7 @@ const getFollowedPosts = async (req, res) => {
             NOTICIA.link AS noticia_link
             FROM POST INNER JOIN USERS ON POST.id_user = USERS.id_user
             LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia 
-            WHERE id_user = ANY($1::int[]) ORDER BY post_date DESC`,
+            WHERE USERS.id_user = ANY($1::int[]) ORDER BY POST.post_date DESC`,
             [followedIds]
         );
 
