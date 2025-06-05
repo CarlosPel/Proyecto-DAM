@@ -236,7 +236,7 @@ const savePost = async (req, res) => {
     try {
         // Verificar si el post ya está guardado
         const checkPost = await pool.query(
-            `SELECT * FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            `SELECT * FROM saved_post WHERE id_user = $1 AND id_post = $2`,
             [id_user, id_post]
         );
 
@@ -246,7 +246,7 @@ const savePost = async (req, res) => {
 
         // Guardar el post
         await pool.query(
-            `INSERT INTO saved_posts (id_user, id_post) VALUES ($1, $2)`,
+            `INSERT INTO saved_post (id_user, id_post) VALUES ($1, $2)`,
             [id_user, id_post]
         );
 
@@ -265,7 +265,7 @@ const checkSaved = async (req, res) => {
     try {
         // Verificar si el post está guardado
         const checkPost = await pool.query(
-            `SELECT * FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            `SELECT * FROM saved_post WHERE id_user = $1 AND id_post = $2`,
             [id_user, id_post]
         );
 
@@ -294,7 +294,7 @@ const unSavePost = async (req, res) => {
     try {
         // Verificar si el post está guardado
         const checkPost = await pool.query(
-            `SELECT * FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            `SELECT * FROM saved_post WHERE id_user = $1 AND id_post = $2`,
             [id_user, id_post]
         );
 
@@ -304,7 +304,7 @@ const unSavePost = async (req, res) => {
 
         // Eliminar el post guardado
         await pool.query(
-            `DELETE FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            `DELETE FROM saved_post WHERE id_user = $1 AND id_post = $2`,
             [id_user, id_post]
         );
 
