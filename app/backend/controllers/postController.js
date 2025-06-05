@@ -383,5 +383,5 @@ const getPostsByTopic = async (req, res) => {
 }
 
 
-module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost, checkSaved, unSavePost };
+module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost, checkSaved, unSavePost, getPostsByTopic };
 
