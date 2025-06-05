@@ -165,7 +165,7 @@ const getFollowedPosts = async (req, res) => {
 
         if (followedIds.length === 0) {
             // No sigue a nadie, devolver array vacío
-            return res.json({ posts: [] });
+            res.status(200).json({ posts: [] });
         }
 
         // Consulta usando ANY para array
@@ -182,7 +182,7 @@ const getFollowedPosts = async (req, res) => {
             [followedIds]
         );
 
-        res.json({ posts: postsResult.rows });
+        res.status(200).json({ posts: postsResult.rows });
 
     } catch (error) {
         console.error(error);
