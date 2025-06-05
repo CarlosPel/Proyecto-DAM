@@ -63,10 +63,13 @@ const createPost = async (req, res) => {
         // Insertar temas en la tabla post_topic
         if (Array.isArray(topics) && topics.length > 0) {
             const insertTopicQueries = topics.map(topic => {
+                console.log(`Tema insertado: ${topic}`);
+                console.log(`Tema insertado: ${topic.toString()}`);
                 return pool.query(
                     `INSERT INTO post_topic (id_post, topic_name) VALUES ($1, $2)`,
-                    [id_post, topic]
+                    [id_post, topic.toString]
                 );
+                
             });
             await Promise.all(insertTopicQueries); // Ejecutar en paralelo
         }
