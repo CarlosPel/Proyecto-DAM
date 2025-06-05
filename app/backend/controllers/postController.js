@@ -229,7 +229,36 @@ const getParentPost = async (req, res) => {
     })
 }
 
+const savePost = async (req, res) => {
+    const { id_post } = req.body;
+    const id_user = req.user.id_user;
+
+    try {
+        // Verificar si el post ya está guardado
+        const checkPost = await pool.query(
+            `SELECT * FROM saved_posts WHERE id_user = $1 AND id_post = $2`,
+            [id_user, id_post]
+        );
+
+        if (checkPost.rows.length > 0) {
+            return res.status(200).json({ message: 'El post ya está guardado' });
+        }
+
+        // Guardar el post
+        await pool.query(
+            `INSERT INTO saved_posts (id_user, id_post) VALUES ($1, $2)`,
+            [id_user, id_post]
+        );
+
+        res.status(201).json({ message: 'Post guardado exitosamente' });
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al guardar el post' });
+    }
+}
 
 
-module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost };
+
+module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost };
 
