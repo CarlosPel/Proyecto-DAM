@@ -242,14 +242,12 @@ const savePost = async (req, res) => {
 
         if (checkPost.rows.length > 0) {
             return res.status(200).json({ message: 'El post ya está guardado' });
-        }
-
-        // Guardar el post
-        await pool.query(
+        }else{
+            await pool.query(
             `INSERT INTO saved_post (id_user, id_post) VALUES ($1, $2)`,
             [id_user, id_post]
         );
-
+        }
         res.status(201).json({ message: 'Post guardado exitosamente' });
 
     } catch (error) {
@@ -270,12 +268,14 @@ const checkSaved = async (req, res) => {
         );
 
         if (checkPost.rows.length > 0) {
+            console.log("El post está guardado");
             saved = true;
             return res.status(200).json({ message: 'El post está guardado',
                 saved: saved
              });
             
         } else {
+            console.log("El post no está guardado");
             return res.status(200).json({ message: 'El post no está guardado',
                 saved: saved
              });
