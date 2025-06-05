@@ -244,7 +244,7 @@ const savePost = async (req, res) => {
 
         if (checkPost.rows.length > 0) {
             return res.status(666).json({ message: 'El post ya está guardado' });
-        }else{
+        } else {
             await pool.query(
                 `INSERT INTO saved_post (id_user, id_post) VALUES ($1, $2)`,
                 [id_user, id_post]
