@@ -344,6 +344,44 @@ const unSavePost = async (req, res) => {
     }
 }
 
+const getPostsByTopic = async (req, res) => {
+    let topics = req.body.topics; // Espera { "topics": ["tema1", "tema2"] }
+
+    if (typeof topics === 'string') {
+        topics = topics.split(',').map(t => t.trim()).filter(Boolean);
+    }
+    if (!Array.isArray(topics) || topics.length === 0) {
+        return res.status(400).json({ message: 'Debes enviar al menos un topic' });
+    }
+
+    const query = `
+    SELECT POST.*, 
+        post_topic.topic_name AS topic_name,
+        USERS.username AS user_name,
+        NOTICIA.title AS noticia_title,
+        NOTICIA.content AS noticia_content,
+        NOTICIA.source_name AS noticia_source,
+        NOTICIA.fecha AS noticia_fecha,
+        NOTICIA.link AS noticia_link
+        FROM POST
+        INNER JOIN post_topic ON POST.id_post = post_topic.id_post
+        LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia
+        INNER JOIN USERS ON POST.id_user = USERS.id_user 
+        WHERE post_topic.topic_name = ANY($1::text[])
+        ORDER BY POST.post_date DESC
+`;
+    try {
+        const resultado = await pool.query(query, [topics]);
+        res.status(200).json({
+            message: 'Posts extraídos correctamente',
+            data: resultado.rows,
+        });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al obtener los posts por tema' });
+    }
+}
+
 
 module.exports = { createPost, getPost, getComments, getFollowedPosts, getParentPost, savePost, checkSaved, unSavePost };
 
