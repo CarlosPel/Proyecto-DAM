@@ -178,7 +178,8 @@ const getFollowedPosts = async (req, res) => {
             NOTICIA.link AS noticia_link
             FROM POST INNER JOIN USERS ON POST.id_user = USERS.id_user
             LEFT JOIN NOTICIA ON POST.noticia = NOTICIA.id_noticia 
-            WHERE USERS.id_user = ANY($1::int[]) ORDER BY POST.post_date DESC`,
+            WHERE USERS.id_user = ANY($1::int[]) AND POST.parent_post is null
+            ORDER BY POST.post_date DESC`,
             [followedIds]
         );
 
