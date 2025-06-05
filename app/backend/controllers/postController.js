@@ -57,7 +57,9 @@ const createPost = async (req, res) => {
         );
 
         const id_post = newPost.rows[0].id_post;
-
+        if (typeof topics === 'string') {
+            topics = topics.split(',').map(t => t.trim()).filter(Boolean);
+        }
         // Insertar temas en la tabla post_topic
         if (Array.isArray(topics) && topics.length > 0) {
             const insertTopicQueries = topics.map(topic => {
