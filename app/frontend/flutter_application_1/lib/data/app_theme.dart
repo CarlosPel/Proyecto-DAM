@@ -24,11 +24,15 @@ class AppTheme {
       ),
       textTheme: GoogleFonts.ptSerifTextTheme().copyWith(
         bodyLarge: TextStyle(color: lightBlack, fontSize: 20),
-        bodyMedium: TextStyle(color: lightBlack),
+        bodyMedium: TextStyle(color: lightBlack, fontSize: 17),
         titleLarge: TextStyle(
           color: lightBlack,
           fontWeight: FontWeight.bold,
           fontSize: 22,
+        ),
+        titleMedium: TextStyle(
+          color: lightBlack,
+          fontSize: 20,
         ),
         headlineLarge: TextStyle(
           color: darkBrown,

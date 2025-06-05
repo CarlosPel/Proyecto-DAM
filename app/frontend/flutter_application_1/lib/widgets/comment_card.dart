@@ -48,6 +48,7 @@ class CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     final Post comment = widget.comment;
 
     return Card(
@@ -59,8 +60,13 @@ class CommentCardState extends State<CommentCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: comment.author != null ? Text(comment.author!) : null,
-                subtitle: Text(comment.content),
+                title: comment.author != null
+                    ? Text(
+                        comment.author!,
+                        style: textTheme.titleMedium,
+                      )
+                    : null,
+                subtitle: Text(comment.content, style: textTheme.bodyMedium,),
                 trailing: widget.canBeAnswered
                     ? IconButton(
                         icon: const Icon(Icons.comment),

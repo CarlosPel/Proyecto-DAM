@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
+import 'package:flutter_application_1/enums/topic.dart';
 import 'package:flutter_application_1/models/post.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/services/handle_respones.dart';
@@ -97,6 +98,23 @@ Future<List<dynamic>> getFollowingPosts(BuildContext context) async {
           'Authorization': 'Bearer $userToken',
           'Content-Type': 'application/json'
         },
+      ));
+}
+
+Future<List<dynamic>> getTopicsPosts(
+    BuildContext context, List<Topic> topics) async {
+  final String routeUrl = '$backendUrl/posts/getfollowed';
+  final String userToken = (await getToken())!;
+
+  return await _fetchFromReq(
+      context,
+      http.post(
+        Uri.parse(routeUrl),
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Content-Type': 'application/json'
+        },
+        body: {'topics': topics.map((t) => t.name).toList()},
       ));
 }
 

@@ -13,6 +13,7 @@ class IconDropdownButtonState extends State<IconDropdownButton> {
   static const String yourEnv = 'Tu entorno';
   static const String following = 'Siguiendo';
   static const String explore = 'Explorar';
+  static const String seeTopics = 'Ver temas';
 
   String _selectedOption = yourEnv;
 
@@ -20,6 +21,7 @@ class IconDropdownButtonState extends State<IconDropdownButton> {
     yourEnv: Icons.place,
     following: Icons.people,
     explore: Icons.public,
+    seeTopics: Icons.filter_alt,
   };
 
   @override

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/app_theme.dart';
+import 'package:flutter_application_1/enums/topic.dart';
 import 'package:flutter_application_1/models/posts_notifier.dart';
 import 'package:flutter_application_1/models/posts_state.dart';
 import 'package:flutter_application_1/data/app_data.dart';
@@ -24,6 +26,7 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
   late Future<List<dynamic>> _postsFuture;
   bool isOpen = false;
   late Future<List<dynamic>> Function() _postsSource;
+  final List<Topic> _selectedTopics = [];
 
   @override
   void initState() {
@@ -40,6 +43,10 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
     _postsSource = _getLocalPosts;
     // Inicializa el Future para evitar errores de inicialización tardía
     _postsFuture = _loadPosts();
+  }
+
+  Future<List<dynamic>> _getTopicsPosts() async {
+    return getTopicsPosts(context, _selectedTopics);
   }
 
   Future<List<dynamic>> _getLocalPosts() async {
@@ -127,9 +134,74 @@ class PostsScrollScreenState extends State<PostsScrollScreen> {
                                   _postsSource = _getGlobalPosts;
                                   break;
                               }
-                              _postsFuture =
-                                  _loadPosts();
+                              _postsFuture = _loadPosts();
                             });
+                            if (selectedOption ==
+                                IconDropdownButtonState.seeTopics) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Elegir temas'),
+                                    content: SizedBox(
+                                      height: 200,
+                                      child: SingleChildScrollView(
+                                        child: Wrap(
+                                          spacing: 8.0,
+                                          runSpacing: 4.0,
+                                          children: Topic.values.map((topic) {
+                                            final isSelected =
+                                                _selectedTopics.contains(topic);
+                                            return FilterChip(
+                                              label: Text(topic.name),
+                                              selected: isSelected,
+                                              onSelected: (bool selected) {
+                                                setState(() {
+                                                  if (selected) {
+                                                    _selectedTopics.add(topic);
+                                                  } else {
+                                                    _selectedTopics
+                                                        .remove(topic);
+                                                  }
+                                                });
+                                              },
+                                              selectedColor:
+                                                  AppTheme.accentGold,
+                                              checkmarkColor: Colors.white,
+                                              shape: StadiumBorder(
+                                                side: BorderSide(
+                                                  color: isSelected
+                                                      ? AppTheme.accentGold
+                                                      : Colors.grey,
+                                                  width: 1.2,
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _selectedTopics.clear();
+                                            _postsSource = _getTopicsPosts;
+                                          });
+                                        },
+                                        child: Text('Aceptar'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
                             _refreshPosts();
                           },
                         ),
