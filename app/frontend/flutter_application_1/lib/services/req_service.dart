@@ -212,12 +212,12 @@ Future<List<dynamic>> _fetchFromReq(
   final response = await req;
 
   if (handleResponse(
-    context: context,
-    response: response,
-    onSuccess: (responseData) async {
-      return true;
-    },
-  )) {
+      context: context,
+      response: response,
+      onSuccess: (responseData) async {
+        return true;
+      },
+      showErrMessage: false)) {
     return jsonDecode(response.body)['data'];
   } else {
     return [];

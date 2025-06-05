@@ -16,7 +16,7 @@ Future<void> createPost(
   final String backendUrl = '${AppData.backendUrl}/posts/create';
   final Map<String, String> userData = await getUserData();
   final Article? article = post.article;
-
+  
   try {
     // Guarda la respuesta (de tipo Response) de la solicitud HTTP POST
     final response = await http.post(
@@ -33,7 +33,7 @@ Future<void> createPost(
         'title': post.title,
         'content': post.content,
         'nation': userData['countryCode'],
-        'topics': post.topics,
+        'topics': post.topics?.map((t) => t.name).toList(),
         'parent_post': post.parentPostId,
         'noticia_title': article?.title,
         'noticia_content': article?.snippet,
@@ -42,7 +42,7 @@ Future<void> createPost(
         'noticia_source': article?.source,
       }),
     );
-    
+
     // Verifica si la respuesta es exitosa (código 200)
     if (response.statusCode == 201) {
       // Decodifica la respuesta JSON

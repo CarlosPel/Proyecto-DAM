@@ -8,7 +8,8 @@ bool handleResponse(
     {required BuildContext context,
     required http.Response response,
     required Function(dynamic) onSuccess,
-    bool showMessage = false}) {
+    bool showMessage = false,
+    bool showErrMessage = true}) {
   if (response.statusCode == 200) {
     // Si la respuesta es exitosa, se puede procesar el cuerpo de la respuesta
     final responseData = jsonDecode(response.body);
@@ -34,9 +35,11 @@ bool handleResponse(
     return false;
   } else {
     // Si hay un error, se muestra un mensaje al usuario
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(response.body)),
-    );
+    if (showErrMessage) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.body)),
+      );
+    }
     return false;
   }
 }
