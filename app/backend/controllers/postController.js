@@ -16,7 +16,7 @@ const createPost = async (req, res) => {
         noticia_datetime,
         noticia_source
     } = req.body;
-
+    console.log(topics.toString())
     const id_user = req.user.id_user;
     const nation_user = req.user.nation;
 
