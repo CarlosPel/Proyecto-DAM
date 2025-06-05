@@ -257,7 +257,7 @@ const savePost = async (req, res) => {
 }
 
 const checkSaved = async (req, res) => {
-    const { id_post } = req.body.id_post;
+    const { id_post } = req.body;
     const id_user = req.user.id_user;
     let saved = false
     try {
