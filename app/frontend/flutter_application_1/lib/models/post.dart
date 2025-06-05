@@ -16,7 +16,7 @@ class Post {
   // Noticia referenciada. Los comentarios no tienen
   Article? article;
   // Tema con el que se identifica. Los comentarios no tienen
-  Topic? topic;
+  List<Topic>? topics;
   // Si es un comentario contiene el número de identificación
   // de la publicación padre
   int? parentPostId;
@@ -30,7 +30,7 @@ class Post {
     this.datetime,
     this.author,
     this.article,
-    this.topic,
+    this.topics,
     this.parentPostId,
   });
 }
