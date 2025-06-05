@@ -21,8 +21,7 @@ Future<bool> checkIfSaved(BuildContext context, int id) async {
     if (handleResponse(
         context: context,
         response: response,
-        onSuccess: (response) {},
-        showMessage: true)) {
+        onSuccess: (response) {})) {
       return jsonDecode(response.body)['saved'];
     }
     return false;

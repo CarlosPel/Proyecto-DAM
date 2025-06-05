@@ -182,7 +182,7 @@ class PostScreenState extends State<PostScreen> {
                     future: _isSaved,
                     builder: (context, snap) {
                       IconData iconData = Icons.bookmark_outline;
-
+                    
                       if (snap.connectionState == ConnectionState.done &&
                           snap.hasData) {
                         iconData = snap.data!

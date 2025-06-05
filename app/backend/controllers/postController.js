@@ -261,7 +261,6 @@ const checkSaved = async (req, res) => {
     const id_user = req.user.id_user;
     let saved = false
     try {
-        console.log(id_post.toString());
         // Verificar si el post está guardado
         const checkPost = await pool.query(
             `SELECT * FROM saved_post WHERE id_user = $1 AND id_post = $2`,
