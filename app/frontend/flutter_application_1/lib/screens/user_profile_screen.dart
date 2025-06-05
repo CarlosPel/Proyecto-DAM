@@ -33,6 +33,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   bool _isUserDataLoaded = false;
   late Future<List<dynamic>> _postsFuture;
   late Future<List<dynamic>> _commentsFuture;
+  late Future<List<dynamic>> _savedFuture;
   late String beName;
   late String beEmail;
   late String beCountry;
@@ -46,6 +47,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     // Siempre inicializa _postsFuture para evitar LateInitializationError
     _postsFuture = _loadPosts();
     _commentsFuture = _loadComments();
+    _savedFuture = _loadSaved();
   }
 
   bool _shouldEdit() {
@@ -59,6 +61,12 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     beName = _nameController.text;
     beEmail = _emailController.text;
     beCountry = _countryCodeController;
+  }
+
+  Future<List<dynamic>> _loadSaved() async {
+    final posts = await getUserSavedPosts(context);
+
+    return posts;
   }
 
   Future<List<dynamic>> _loadPosts() async {
@@ -136,7 +144,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
         title: const Text('Mi Perfil'),
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: !_isUserDataLoaded
             ? const Center(child: CircularProgressIndicator())
             : RefreshIndicator(
@@ -345,32 +353,23 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               const TabBar(tabs: [
                                 Tab(
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                      Icon(Icons.article),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text('Publicaciones'),
-                                    ])),
+                                  icon: Icon(Icons.article),
+                                  text: 'Publicaciones',
+                                ),
                                 Tab(
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                      Icon(Icons.comment),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text('Comentarios'),
-                                    ])),
+                                  icon: Icon(Icons.comment),
+                                  text: 'Comentarios',
+                                ),
+                                Tab(
+                                  icon: Icon(Icons.bookmark),
+                                  text: 'Guardados',
+                                ),
                               ]),
                               Expanded(
                                   child: TabBarView(children: [
                                 _buildPostList(),
                                 _buildCommentList(),
+                                _buildSavedList(),
                               ])),
                             ],
                           ),
@@ -426,7 +425,34 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-//_commentsFuture
+  Widget _buildSavedList() {
+    return FutureBuilder<List<dynamic>>(
+      future: _savedFuture,
+      builder: (c, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snap.hasError) {
+          return Center(child: Text('Error: ${snap.error}'));
+        } else if (snap.hasData) {
+          final posts = snap.data!;
+
+          return ScrollContainer(
+            child: posts.isEmpty
+                ? Center(
+                    child: const Text(
+                      'No has guardado ninguna publicación...',
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : postsList(context, posts, username: _userName),
+          );
+        } else {
+          return const Center(child: Text('No hay publicaciones'));
+        }
+      },
+    );
+  }
+
   Widget _buildCommentList() {
     return FutureBuilder<List<dynamic>>(
       future: _commentsFuture,
@@ -440,18 +466,10 @@ class UserProfileScreenState extends State<UserProfileScreen> {
 
           return ScrollContainer(
             child: posts.isEmpty
-                ? SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'No has comentado nada...',
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 24),
-                        const Icon(Icons.refresh),
-                      ],
+                ? Center(
+                    child: const Text(
+                      'No has comentado nada...',
+                      textAlign: TextAlign.center,
                     ),
                   )
                 : postsList(context, posts, areComments: true),
@@ -476,18 +494,10 @@ class UserProfileScreenState extends State<UserProfileScreen> {
 
           return ScrollContainer(
             child: posts.isEmpty
-                ? SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'No has publicado nada...',
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 24),
-                        const Icon(Icons.refresh),
-                      ],
+                ? Center(
+                    child: const Text(
+                      'No has publicado nada...',
+                      textAlign: TextAlign.center,
                     ),
                   )
                 : postsList(context, posts, username: _userName),
