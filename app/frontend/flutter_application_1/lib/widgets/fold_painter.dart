@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/app_data.dart';
 
 class FoldPainter extends CustomPainter {
+  final Color color;
+
+  FoldPainter(this.color, {super.repaint});
+
   @override
   void paint(Canvas canvas, Size size) {
     const foldSize = AppData.foldSize;
@@ -39,12 +43,7 @@ class FoldPainter extends CustomPainter {
     canvas.drawPath(path3, paint3);
 
     // Doblez de la hoja
-    final Paint paintFill_0 = Paint()
-      ..color = const Color.fromARGB(255, 231, 222, 222)
-      ..style = PaintingStyle.fill
-      ..strokeWidth = size.width * 0.00
-      ..strokeCap = StrokeCap.butt
-      ..strokeJoin = StrokeJoin.miter;
+     final paint_0 = Paint()..color = color;
     final Path path_0 = Path()
       ..moveTo(size.width - foldSize, size.height)
       ..lineTo(size.width - foldSize * 0.85, size.height - foldSize * 0.20)
@@ -58,7 +57,7 @@ class FoldPainter extends CustomPainter {
       ..lineTo(size.width - foldSize * 0.80, size.height - foldSize * 0.10)
       ..close();
 
-    canvas.drawPath(path_0, paintFill_0);
+    canvas.drawPath(path_0, paint_0);
 
     // Borde del doblez de la hoja
     final Paint paintBorder = Paint()
